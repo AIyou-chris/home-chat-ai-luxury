@@ -12,6 +12,8 @@ import { BottomNavigation } from '@/components/BottomNavigation';
 const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState('');
 
   const propertyData = {
     id: '1',
@@ -43,6 +45,11 @@ const Index = () => {
     ]
   };
 
+  const handleOpenLightbox = (imageUrl: string) => {
+    setLightboxImage(imageUrl);
+    setLightboxOpen(true);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'home':
@@ -53,7 +60,10 @@ const Index = () => {
               onChatOpen={() => setIsChatOpen(true)} 
             />
             <div className="relative z-10 pb-20">
-              <PropertyGallery images={propertyData.images} />
+              <PropertyGallery 
+                images={propertyData.images} 
+                onImageClick={handleOpenLightbox} 
+              />
               <PropertyDetails property={propertyData} />
             </div>
           </>
@@ -61,7 +71,10 @@ const Index = () => {
       case 'gallery':
         return (
           <div className="pt-4 pb-20">
-            <PropertyGallery images={propertyData.images} />
+            <PropertyGallery 
+              images={propertyData.images} 
+              onImageClick={handleOpenLightbox} 
+            />
           </div>
         );
       case 'info':
@@ -83,7 +96,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-black text-white relative">
+    <div className="min-h-screen bg-white text-gray-900 relative">
       {renderContent()}
       
       <BottomNavigation 
@@ -97,8 +110,46 @@ const Index = () => {
         onClose={() => setIsChatOpen(false)}
         property={propertyData}
       />
+
+      {/* Lightbox */}
+      {lightboxOpen && (
+        <Lightbox 
+          imageUrl={lightboxImage} 
+          onClose={() => setLightboxOpen(false)} 
+        />
+      )}
     </div>
   );
 };
 
 export default Index;
+
+// Create a Lightbox component inline
+const Lightbox = ({ imageUrl, onClose }: { imageUrl: string; onClose: () => void }) => {
+  return (
+    <div 
+      className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center"
+      onClick={onClose}
+    >
+      <div 
+        className="relative max-w-7xl max-h-full p-4"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 z-10 bg-white/20 backdrop-blur-md rounded-full p-2 text-white hover:bg-white/40 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+        <img 
+          src={imageUrl}
+          alt="Enlarged property view" 
+          className="max-w-full max-h-[85vh] object-contain rounded-lg"
+        />
+      </div>
+    </div>
+  );
+};

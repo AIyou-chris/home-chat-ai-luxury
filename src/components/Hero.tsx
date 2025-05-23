@@ -44,7 +44,7 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
       <div className="relative z-10 flex flex-col justify-between h-full p-6 md:p-8">
         {/* Top Section */}
         <div className="flex justify-between items-start">
-          <Badge variant="secondary" className="bg-white/10 text-white border-white/20 backdrop-blur-md">
+          <Badge variant="secondary" className="bg-white/80 text-gray-800 border-gray-300 backdrop-blur-md">
             New Listing
           </Badge>
           <div className="flex space-x-2">
@@ -63,12 +63,12 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
         {/* Bottom Section */}
         <div className="space-y-6">
           <div className="space-y-4">
-            <div className="flex items-center space-x-2 text-white/80">
+            <div className="flex items-center space-x-2 text-white/90">
               <MapPin size={16} />
               <span className="text-sm">{property.address}</span>
             </div>
             
-            <h1 className="text-4xl md:text-6xl font-light leading-tight">
+            <h1 className="text-4xl md:text-6xl font-light leading-tight text-white">
               {property.title}
             </h1>
             
@@ -76,7 +76,7 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
               {property.price}
             </div>
 
-            <div className="flex space-x-6 text-sm">
+            <div className="flex space-x-6 text-sm text-white">
               <span>{property.beds} beds</span>
               <span>{property.baths} baths</span>
               <span>{property.sqft} sq ft</span>

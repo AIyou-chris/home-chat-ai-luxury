@@ -5,9 +5,10 @@ import { Button } from '@/components/ui/button';
 
 interface PropertyGalleryProps {
   images: string[];
+  onImageClick?: (imageUrl: string) => void;
 }
 
-export const PropertyGallery = ({ images }: PropertyGalleryProps) => {
+export const PropertyGallery = ({ images, onImageClick }: PropertyGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState(0);
   const [isZoomed, setIsZoomed] = useState(false);
   const [touchStart, setTouchStart] = useState<{ x: number; y: number } | null>(null);
@@ -59,20 +60,28 @@ export const PropertyGallery = ({ images }: PropertyGalleryProps) => {
     setIsZoomed(!isZoomed);
   };
 
+  const handleImageClick = () => {
+    if (onImageClick) {
+      onImageClick(images[selectedImage]);
+    } else {
+      toggleZoom();
+    }
+  };
+
   return (
     <section className="py-8 px-4 md:px-8 max-w-7xl mx-auto">
       <div className="mb-6">
-        <h2 className="text-2xl md:text-3xl font-light mb-2">Property Gallery</h2>
-        <p className="text-gray-400 text-sm">Swipe to explore • Tap to zoom</p>
+        <h2 className="text-2xl md:text-3xl font-light mb-2 text-gray-800">Property Gallery</h2>
+        <p className="text-gray-500 text-sm">Swipe to explore • Tap to view</p>
       </div>
 
       {/* Main Image */}
       <div className="relative group mb-4">
         <div 
-          className="aspect-[4/3] md:aspect-[16/9] rounded-2xl overflow-hidden bg-gray-900 cursor-pointer"
+          className="aspect-[4/3] md:aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100 cursor-pointer shadow-md"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          onClick={toggleZoom}
+          onClick={handleImageClick}
         >
           <img
             ref={imageRef}
@@ -88,16 +97,16 @@ export const PropertyGallery = ({ images }: PropertyGalleryProps) => {
         <Button
           variant="outline"
           size="icon"
-          onClick={prevImage}
-          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={(e) => { e.stopPropagation(); prevImage(); }}
+          className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 bg-white/70 border-gray-200 text-gray-800 hover:bg-white backdrop-blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <ChevronLeft size={20} />
         </Button>
         <Button
           variant="outline"
           size="icon"
-          onClick={nextImage}
-          className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
+          onClick={(e) => { e.stopPropagation(); nextImage(); }}
+          className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 bg-white/70 border-gray-200 text-gray-800 hover:bg-white backdrop-blur-md rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
         >
           <ChevronRight size={20} />
         </Button>
@@ -107,16 +116,16 @@ export const PropertyGallery = ({ images }: PropertyGalleryProps) => {
           <Button
             variant="outline"
             size="icon"
-            onClick={toggleZoom}
-            className="bg-white/10 border-white/20 text-white hover:bg-white/20 backdrop-blur-md rounded-full"
+            onClick={(e) => { e.stopPropagation(); toggleZoom(); }}
+            className="bg-white/70 border-gray-200 text-gray-800 hover:bg-white backdrop-blur-md rounded-full"
           >
             {isZoomed ? <ZoomOut size={16} /> : <ZoomIn size={16} />}
           </Button>
         </div>
 
         {/* Image Counter */}
-        <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-md rounded-full px-3 py-1">
-          <span className="text-sm text-white">
+        <div className="absolute bottom-4 left-4 bg-white/70 backdrop-blur-md rounded-full px-3 py-1">
+          <span className="text-sm text-gray-800">
             {selectedImage + 1} / {images.length}
           </span>
         </div>
@@ -131,7 +140,7 @@ export const PropertyGallery = ({ images }: PropertyGalleryProps) => {
               setSelectedImage(index);
               setIsZoomed(false);
             }}
-            className={`aspect-square rounded-lg md:rounded-xl overflow-hidden transition-all duration-300 ${
+            className={`aspect-square rounded-lg md:rounded-xl overflow-hidden transition-all duration-300 shadow-sm hover:shadow-md ${
               selectedImage === index
                 ? 'ring-2 ring-amber-400 scale-105'
                 : 'hover:scale-105 opacity-70 hover:opacity-100'

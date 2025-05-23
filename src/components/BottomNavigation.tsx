@@ -27,7 +27,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
       </Button>
 
       {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-black/90 backdrop-blur-md border-t border-gray-800">
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg border-t border-gray-200">
         <div className="flex items-center justify-around py-2 px-4 safe-area-bottom">
           {tabs.map((tab) => {
             const Icon = tab.icon;
@@ -39,8 +39,8 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
                 onClick={() => onTabChange(tab.id)}
                 className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-200 ${
                   isActive 
-                    ? 'text-amber-400 bg-amber-400/10' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/5'
+                    ? 'text-amber-500 bg-amber-50' 
+                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
                 }`}
               >
                 <Icon size={24} className="mb-1" />
