@@ -2,7 +2,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { X, Send, MessageSquare } from 'lucide-react';
+import { X, Send, MessageSquare, Mic, MicOff, Volume2 } from 'lucide-react';
 import { Card } from '@/components/ui/card';
 
 interface AIChatProps {
@@ -22,12 +22,14 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: `Hello! I'm the voice of ${property.title}. I can tell you everything about my stunning features, the neighborhood, pricing, and answer any questions you might have. What would you like to know?`,
+      text: `Hello! I'm the voice of ${property.title}. I can tell you everything about my stunning features, the neighborhood, pricing, and answer any questions you might have. Would you like to chat with me or speak directly?`,
       sender: 'ai',
       timestamp: new Date()
     }
   ]);
   const [inputValue, setInputValue] = useState('');
+  const [isListening, setIsListening] = useState(false);
+  const [isConnected, setIsConnected] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -63,6 +65,27 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
     }, 1000);
   };
 
+  const startVoiceChat = async () => {
+    try {
+      setIsListening(true);
+      setIsConnected(true);
+      // TODO: Initialize Ultravox SDK
+      console.log('Starting Ultravox voice chat...');
+      // This would connect to Ultravox API
+    } catch (error) {
+      console.error('Failed to start voice chat:', error);
+      setIsListening(false);
+      setIsConnected(false);
+    }
+  };
+
+  const stopVoiceChat = () => {
+    setIsListening(false);
+    setIsConnected(false);
+    // TODO: Disconnect from Ultravox
+    console.log('Stopping voice chat...');
+  };
+
   const generateAIResponse = (input: string): string => {
     const lowerInput = input.toLowerCase();
     
@@ -96,16 +119,18 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
-      <div className="absolute right-0 top-0 h-full w-full md:w-96 bg-black border-l border-gray-800">
+      <div className="absolute right-0 top-0 h-full w-full bg-black">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-800">
+        <div className="flex items-center justify-between p-4 border-b border-gray-800 safe-area-top">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-amber-400 rounded-full flex items-center justify-center">
               <MessageSquare size={20} className="text-black" />
             </div>
             <div>
-              <h3 className="font-medium">Chat with Home</h3>
-              <p className="text-sm text-gray-400">AI Assistant</p>
+              <h3 className="font-medium">Talk with Home</h3>
+              <p className="text-sm text-gray-400">
+                {isConnected ? 'Voice connected' : 'AI Assistant'}
+              </p>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose}>
@@ -113,14 +138,43 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
           </Button>
         </div>
 
+        {/* Voice Controls */}
+        <div className="p-4 border-b border-gray-800">
+          <div className="flex items-center justify-center space-x-4">
+            <Button
+              onClick={isListening ? stopVoiceChat : startVoiceChat}
+              className={`flex-1 py-4 rounded-xl transition-all duration-300 ${
+                isListening 
+                  ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
+                  : 'bg-amber-400 hover:bg-amber-500 text-black'
+              }`}
+            >
+              {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+              <span className="ml-2">
+                {isListening ? 'Stop Voice Chat' : 'Start Voice Chat'}
+              </span>
+            </Button>
+            {isConnected && (
+              <Button variant="outline" size="icon" className="border-gray-700">
+                <Volume2 size={20} />
+              </Button>
+            )}
+          </div>
+          {isConnected && (
+            <p className="text-center text-sm text-amber-400 mt-2">
+              Powered by Ultravox • Speak naturally
+            </p>
+          )}
+        </div>
+
         {/* Messages */}
-        <div className="flex-1 h-[calc(100vh-140px)] overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 h-[calc(100vh-240px)] overflow-y-auto p-4 space-y-4">
           {messages.map((message) => (
             <div
               key={message.id}
               className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
             >
-              <Card className={`max-w-[80%] p-3 ${
+              <Card className={`max-w-[85%] p-3 ${
                 message.sender === 'user'
                   ? 'bg-amber-400 text-black'
                   : 'bg-gray-900 border-gray-800'
@@ -151,17 +205,21 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
           <div ref={messagesEndRef} />
         </div>
 
-        {/* Input */}
-        <div className="border-t border-gray-800 p-4">
+        {/* Text Input */}
+        <div className="border-t border-gray-800 p-4 safe-area-bottom">
           <div className="flex space-x-2">
             <Input
               value={inputValue}
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-              placeholder="Ask about this home..."
-              className="bg-gray-900 border-gray-700"
+              placeholder="Type your message..."
+              className="bg-gray-900 border-gray-700 rounded-xl"
             />
-            <Button onClick={sendMessage} size="icon" className="bg-amber-400 hover:bg-amber-500 text-black">
+            <Button 
+              onClick={sendMessage} 
+              size="icon" 
+              className="bg-amber-400 hover:bg-amber-500 text-black rounded-xl"
+            >
               <Send size={16} />
             </Button>
           </div>
