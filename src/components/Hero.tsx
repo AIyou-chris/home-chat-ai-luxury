@@ -42,11 +42,18 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
 
       {/* Content Overlay */}
       <div className="relative z-10 flex flex-col justify-between h-full p-6 md:p-8">
-        {/* Top Section */}
+        {/* Top Section with Logo */}
         <div className="flex justify-between items-start">
-          <Badge variant="secondary" className="bg-white/80 text-gray-800 border-gray-300 backdrop-blur-md">
-            New Listing
-          </Badge>
+          <div className="flex items-center space-x-4">
+            <img 
+              src="/lovable-uploads/048050fe-4c91-45f2-b375-e5ec05e397c5.png" 
+              alt="Home Listing AI" 
+              className="h-12 md:h-16 w-auto"
+            />
+            <Badge variant="secondary" className="bg-white/80 text-gray-800 border-gray-300 backdrop-blur-md">
+              New Listing
+            </Badge>
+          </div>
           <div className="flex space-x-2">
             {property.images.map((_: any, index: number) => (
               <button
@@ -72,7 +79,7 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
               {property.title}
             </h1>
             
-            <div className="text-3xl md:text-4xl font-light text-amber-400">
+            <div className="text-3xl md:text-4xl font-light text-orange-400">
               {property.price}
             </div>
 
@@ -87,7 +94,7 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
           <Button
             onClick={onChatOpen}
             size="lg"
-            className="bg-amber-400 hover:bg-amber-500 text-black font-medium px-8 py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
+            className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-8 py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
           >
             <MessageSquare className="mr-2" size={20} />
             Chat with this Home

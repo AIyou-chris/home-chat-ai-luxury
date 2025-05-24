@@ -21,7 +21,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
       {/* Floating Voice Chat Button */}
       <Button
         onClick={onChatOpen}
-        className="fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full bg-amber-400 hover:bg-amber-500 text-black shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
+        className="fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
       >
         <MessageSquare size={24} />
       </Button>
@@ -39,7 +39,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
                 onClick={() => onTabChange(tab.id)}
                 className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-200 ${
                   isActive 
-                    ? 'text-amber-500 bg-amber-50' 
+                    ? 'text-blue-600 bg-blue-50' 
                     : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
                 }`}
               >
