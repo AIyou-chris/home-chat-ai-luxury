@@ -1,4 +1,3 @@
-
 import { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -123,17 +122,17 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-gray-800 safe-area-top">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-amber-400 rounded-full flex items-center justify-center">
-              <MessageSquare size={20} className="text-black" />
+            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+              <MessageSquare size={20} className="text-white" />
             </div>
             <div>
-              <h3 className="font-medium">Talk with Home</h3>
+              <h3 className="font-medium text-white">Talk with Home</h3>
               <p className="text-sm text-gray-400">
                 {isConnected ? 'Voice connected' : 'AI Assistant'}
               </p>
             </div>
           </div>
-          <Button variant="ghost" size="icon" onClick={onClose}>
+          <Button variant="ghost" size="icon" onClick={onClose} className="text-white hover:bg-gray-800">
             <X size={20} />
           </Button>
         </div>
@@ -146,7 +145,7 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
               className={`flex-1 py-4 rounded-xl transition-all duration-300 ${
                 isListening 
                   ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
-                  : 'bg-amber-400 hover:bg-amber-500 text-black'
+                  : 'bg-orange-500 hover:bg-orange-600 text-white'
               }`}
             >
               {isListening ? <MicOff size={20} /> : <Mic size={20} />}
@@ -155,13 +154,13 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
               </span>
             </Button>
             {isConnected && (
-              <Button variant="outline" size="icon" className="border-gray-700">
+              <Button variant="outline" size="icon" className="border-gray-700 text-white hover:bg-gray-800">
                 <Volume2 size={20} />
               </Button>
             )}
           </div>
           {isConnected && (
-            <p className="text-center text-sm text-amber-400 mt-2">
+            <p className="text-center text-sm text-orange-400 mt-2">
               Powered by Ultravox • Speak naturally
             </p>
           )}
@@ -176,8 +175,8 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
             >
               <Card className={`max-w-[85%] p-3 ${
                 message.sender === 'user'
-                  ? 'bg-amber-400 text-black'
-                  : 'bg-gray-900 border-gray-800'
+                  ? 'bg-orange-500 text-white border-orange-500'
+                  : 'bg-gray-900 border-gray-800 text-white'
               }`}>
                 <p className="text-sm">{message.text}</p>
               </Card>
@@ -194,7 +193,7 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
                   variant="outline"
                   size="sm"
                   onClick={() => setInputValue(prompt)}
-                  className="w-full justify-start text-left bg-gray-900 border-gray-700 hover:bg-gray-800"
+                  className="w-full justify-start text-left bg-gray-900 border-gray-700 hover:bg-gray-800 text-white"
                 >
                   {prompt}
                 </Button>
@@ -213,12 +212,12 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
               onChange={(e) => setInputValue(e.target.value)}
               onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
               placeholder="Type your message..."
-              className="bg-gray-900 border-gray-700 rounded-xl"
+              className="bg-gray-900 border-gray-700 rounded-xl text-white placeholder:text-gray-400"
             />
             <Button 
               onClick={sendMessage} 
               size="icon" 
-              className="bg-amber-400 hover:bg-amber-500 text-black rounded-xl"
+              className="bg-orange-500 hover:bg-orange-600 text-white rounded-xl"
             >
               <Send size={16} />
             </Button>

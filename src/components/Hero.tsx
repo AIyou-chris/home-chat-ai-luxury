@@ -97,7 +97,7 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
             className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-8 py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
           >
             <MessageSquare className="mr-2" size={20} />
-            Chat with this Home
+            Talk with this Home
           </Button>
         </div>
       </div>
