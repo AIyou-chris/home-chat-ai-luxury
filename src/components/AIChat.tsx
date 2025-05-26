@@ -5,6 +5,7 @@ import { X, MessageSquare, Mic, MicOff } from 'lucide-react';
 import { PropertyChatBot } from './PropertyChatBot';
 import { useVoiceChat } from '@/hooks/useVoiceChat';
 import { VoiceControls } from './voice/VoiceControls';
+import { VoiceAnimation } from './voice/VoiceAnimation';
 
 interface AIChatProps {
   isOpen: boolean;
@@ -60,9 +61,16 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
             </div>
             <div>
               <h3 className="font-medium text-gray-800">Talk with Home</h3>
-              <p className="text-sm text-gray-500">
-                {isListening ? 'Listening...' : isSpeaking ? 'Speaking...' : 'AI Assistant'}
-              </p>
+              <div className="flex items-center space-x-2">
+                <VoiceAnimation 
+                  isListening={isListening} 
+                  isSpeaking={isSpeaking}
+                  className="min-h-[20px]"
+                />
+                {!isListening && !isSpeaking && (
+                  <p className="text-sm text-gray-500">AI Assistant</p>
+                )}
+              </div>
             </div>
           </div>
           <Button variant="ghost" size="icon" onClick={onClose} className="text-gray-600 hover:bg-gray-100">
@@ -78,7 +86,7 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
                 onClick={handleVoiceToggle}
                 className={`flex-1 py-4 rounded-xl transition-all duration-300 ${
                   isListening 
-                    ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
+                    ? 'bg-red-500 hover:bg-red-600 text-white' 
                     : 'bg-orange-500 hover:bg-orange-600 text-white'
                 }`}
               >
@@ -87,6 +95,15 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
                   {isListening ? 'Stop Listening' : 'Start Voice Input'}
                 </span>
               </Button>
+            </div>
+
+            {/* Voice Animation in Controls Area */}
+            <div className="flex justify-center mb-4">
+              <VoiceAnimation 
+                isListening={isListening} 
+                isSpeaking={isSpeaking}
+                className="bg-gray-50 px-4 py-2 rounded-lg border"
+              />
             </div>
 
             <VoiceControls
