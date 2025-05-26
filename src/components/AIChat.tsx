@@ -1,9 +1,8 @@
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { X, MessageSquare, Mic, MicOff } from 'lucide-react';
 import { PropertyChatBot } from './PropertyChatBot';
-import { useVoiceChat } from '@/hooks/useVoiceChat';
+import { useEnhancedVoiceChat } from '@/hooks/useEnhancedVoiceChat';
 import { VoiceControls } from './voice/VoiceControls';
 import { VoiceAnimation } from './voice/VoiceAnimation';
 
@@ -19,21 +18,27 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
   const {
     isListening,
     isSpeaking,
+    isConnected,
     isSupported,
+    error,
     startListening,
     stopListening,
+    voiceMode,
+    switchVoiceMode,
     speak,
     stopSpeaking,
     availableVoices,
     voiceSettings,
     updateVoiceSettings
-  } = useVoiceChat({
+  } = useEnhancedVoiceChat({
     onTranscript: (text) => {
       setPendingVoiceMessage(text);
     },
-    onSpeakText: (text) => {
-      console.log('Speaking:', text);
-    }
+    onAIResponse: (text) => {
+      console.log('AI Response:', text);
+    },
+    property,
+    useUltravox: true
   });
 
   const handleVoiceToggle = () => {
@@ -45,7 +50,9 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
   };
 
   const handleTestVoice = () => {
-    speak("Hello! This is how my voice sounds with the current settings. You can adjust the speed, pitch, and voice to your preference.");
+    if (voiceMode === 'browser' && speak) {
+      speak("Hello! This is how my voice sounds with the current settings. You can adjust the speed, pitch, and voice to your preference.");
+    }
   };
 
   if (!isOpen) return null;
@@ -68,7 +75,14 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
                   className="min-h-[20px]"
                 />
                 {!isListening && !isSpeaking && (
-                  <p className="text-sm text-gray-500">AI Assistant</p>
+                  <div className="flex items-center space-x-2">
+                    <p className="text-sm text-gray-500">
+                      AI Assistant ({voiceMode === 'ultravox' ? 'Ultravox' : 'Browser'})
+                    </p>
+                    {voiceMode === 'ultravox' && (
+                      <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
+                    )}
+                  </div>
                 )}
               </div>
             </div>
@@ -81,9 +95,45 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
         {/* Voice Controls */}
         {isSupported && (
           <div className="p-4 border-b border-gray-200">
+            {/* Voice Mode Switcher */}
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <Button
+                variant={voiceMode === 'ultravox' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => switchVoiceMode('ultravox')}
+                className="text-xs"
+              >
+                Ultravox AI
+              </Button>
+              <Button
+                variant={voiceMode === 'browser' ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => switchVoiceMode('browser')}
+                className="text-xs"
+              >
+                Browser Voice
+              </Button>
+            </div>
+
+            {/* Error Display */}
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <p className="text-sm text-red-800">{error}</p>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => switchVoiceMode('browser')}
+                  className="mt-2 text-xs"
+                >
+                  Switch to Browser Voice
+                </Button>
+              </div>
+            )}
+
             <div className="flex items-center justify-center space-x-4 mb-4">
               <Button
                 onClick={handleVoiceToggle}
+                disabled={voiceMode === 'ultravox' && !isConnected}
                 className={`flex-1 py-4 rounded-xl transition-all duration-300 ${
                   isListening 
                     ? 'bg-red-500 hover:bg-red-600 text-white' 
@@ -106,15 +156,18 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
               />
             </div>
 
-            <VoiceControls
-              isSupported={isSupported}
-              isSpeaking={isSpeaking}
-              availableVoices={availableVoices}
-              settings={voiceSettings}
-              onSettingsChange={updateVoiceSettings}
-              onStop={stopSpeaking}
-              onTestVoice={handleTestVoice}
-            />
+            {/* Browser Voice Controls (only show for browser mode) */}
+            {voiceMode === 'browser' && availableVoices && voiceSettings && (
+              <VoiceControls
+                isSupported={isSupported}
+                isSpeaking={isSpeaking}
+                availableVoices={availableVoices}
+                settings={voiceSettings}
+                onSettingsChange={updateVoiceSettings}
+                onStop={stopSpeaking}
+                onTestVoice={handleTestVoice}
+              />
+            )}
             
             {pendingVoiceMessage && (
               <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
@@ -143,9 +196,9 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
             )}
             
             <p className="text-center text-sm text-orange-600 mt-2">
-              {isSupported 
-                ? 'Enhanced voice chat enabled • Customize settings above' 
-                : 'Voice chat not supported in this browser'
+              {voiceMode === 'ultravox' 
+                ? `${isConnected ? 'Connected to' : 'Connecting to'} Ultravox AI voice system`
+                : 'Using browser voice system • Customize settings above'
               }
             </p>
           </div>
@@ -158,8 +211,9 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
             pendingVoiceMessage={pendingVoiceMessage}
             onVoiceMessageSent={() => setPendingVoiceMessage('')}
             onAIResponse={(text) => {
-              // Auto-speak AI responses when voice mode is active
-              if (isListening || isSpeaking) {
+              // For Ultravox, AI responses come through the voice system automatically
+              // For browser mode, we need to speak them manually
+              if (voiceMode === 'browser' && (isListening || isSpeaking) && speak) {
                 speak(text);
               }
             }}
