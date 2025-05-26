@@ -1,5 +1,6 @@
 
 import { useState, useRef, useCallback } from 'react';
+import { useEnhancedVoice } from './useEnhancedVoice';
 
 interface UseVoiceChatProps {
   onTranscript: (text: string) => void;
@@ -8,10 +9,22 @@ interface UseVoiceChatProps {
 
 export const useVoiceChat = ({ onTranscript, onSpeakText }: UseVoiceChatProps) => {
   const [isListening, setIsListening] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
-  const synthesisRef = useRef<SpeechSynthesisUtterance | null>(null);
+
+  const {
+    speak: enhancedSpeak,
+    stop: stopSpeaking,
+    isSpeaking,
+    isSupported: voiceSupported,
+    availableVoices,
+    settings: voiceSettings,
+    updateSettings: updateVoiceSettings
+  } = useEnhancedVoice({
+    onSpeakStart: () => console.log('Voice started'),
+    onSpeakEnd: () => console.log('Voice ended'),
+    onError: (error) => console.error('Voice error:', error)
+  });
 
   const initializeRecognition = useCallback(() => {
     if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
@@ -73,48 +86,21 @@ export const useVoiceChat = ({ onTranscript, onSpeakText }: UseVoiceChatProps) =
   }, []);
 
   const speak = useCallback((text: string) => {
-    if (!('speechSynthesis' in window)) {
-      console.error('Speech synthesis not supported');
-      return;
-    }
-
-    // Stop any current speech
-    window.speechSynthesis.cancel();
-
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.9;
-    utterance.pitch = 1;
-    utterance.volume = 1;
-
-    utterance.onstart = () => {
-      setIsSpeaking(true);
-    };
-
-    utterance.onend = () => {
-      setIsSpeaking(false);
-    };
-
-    utterance.onerror = () => {
-      setIsSpeaking(false);
-    };
-
-    synthesisRef.current = utterance;
-    window.speechSynthesis.speak(utterance);
+    enhancedSpeak(text);
     onSpeakText(text);
-  }, [onSpeakText]);
-
-  const stopSpeaking = useCallback(() => {
-    window.speechSynthesis.cancel();
-    setIsSpeaking(false);
-  }, []);
+  }, [enhancedSpeak, onSpeakText]);
 
   return {
     isListening,
     isSpeaking,
-    isSupported,
+    isSupported: isSupported && voiceSupported,
     startListening,
     stopListening,
     speak,
-    stopSpeaking
+    stopSpeaking,
+    // Enhanced voice features
+    availableVoices,
+    voiceSettings,
+    updateVoiceSettings
   };
 };
