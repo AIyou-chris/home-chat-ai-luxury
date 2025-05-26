@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Send, Bot, User, Sparkles } from 'lucide-react';
+import { Send, Bot, User, Sparkles, AlertTriangle } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface Message {
@@ -24,7 +24,7 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: `Hi! I'm the AI assistant for ${property.title}. I know everything about this amazing property - from the luxurious features to the neighborhood details. I'm here to answer your questions and help you discover why this could be your perfect home. What would you like to know?`,
+      text: `Hi! I'm the AI assistant for ${property.title}. I have comprehensive knowledge about this property including all legal restrictions, HOA rules, zoning information, and building codes. I can help you understand what you can and cannot do with this home, along with all the amazing features it offers. What would you like to know?`,
       sender: 'ai',
       timestamp: new Date()
     }
@@ -93,13 +93,22 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
     }
   };
 
-  const quickPrompts = [
+  const generalPrompts = [
     "Tell me about the neighborhood",
     "What are the best features?",
     "Can I schedule a tour?",
     "What's the price range?",
     "Tell me about schools nearby",
     "What's included in the sale?"
+  ];
+
+  const restraintPrompts = [
+    "What are the HOA rules and fees?",
+    "Can I renovate or add onto this home?",
+    "What are the zoning restrictions?",
+    "Are there any deed restrictions?",
+    "What permits would I need for changes?",
+    "Are there environmental considerations?"
   ];
 
   return (
@@ -112,7 +121,7 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
           </div>
           <div>
             <h3 className="font-semibold text-gray-800">Property AI Assistant</h3>
-            <p className="text-sm text-gray-500">Ask me anything about this home</p>
+            <p className="text-sm text-gray-500">Expert on features, restrictions & regulations</p>
           </div>
         </div>
         {totalLeadScore > 0 && (
@@ -174,25 +183,58 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
 
         {/* Quick Prompts */}
         {messages.length === 1 && (
-          <div className="space-y-2">
-            <p className="text-xs text-gray-500 px-2">Quick questions to get started:</p>
-            <div className="grid grid-cols-2 gap-2">
-              {quickPrompts.map((prompt, index) => (
-                <Button
-                  key={index}
-                  variant="outline"
-                  size="sm"
-                  onClick={() => setInputValue(prompt)}
-                  className="justify-start text-left bg-white border-gray-200 hover:bg-gray-50 text-gray-700 h-auto py-2 px-3"
-                >
-                  <span className="text-xs">{prompt}</span>
-                </Button>
-              ))}
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <p className="text-xs text-gray-500 px-2">General questions:</p>
+              <div className="grid grid-cols-2 gap-2">
+                {generalPrompts.map((prompt, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setInputValue(prompt)}
+                    className="justify-start text-left bg-white border-gray-200 hover:bg-gray-50 text-gray-700 h-auto py-2 px-3"
+                  >
+                    <span className="text-xs">{prompt}</span>
+                  </Button>
+                ))}
+              </div>
+            </div>
+            
+            <div className="space-y-2">
+              <div className="flex items-center space-x-2 px-2">
+                <AlertTriangle size={14} className="text-amber-500" />
+                <p className="text-xs text-amber-700 font-medium">Legal & regulatory questions:</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                {restraintPrompts.map((prompt, index) => (
+                  <Button
+                    key={index}
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setInputValue(prompt)}
+                    className="justify-start text-left bg-amber-50 border-amber-200 hover:bg-amber-100 text-amber-800 h-auto py-2 px-3"
+                  >
+                    <span className="text-xs">{prompt}</span>
+                  </Button>
+                ))}
+              </div>
             </div>
           </div>
         )}
         
         <div ref={messagesEndRef} />
+      </div>
+
+      {/* Legal Disclaimer */}
+      <div className="bg-amber-50 border-t border-amber-200 px-4 py-2">
+        <div className="flex items-start space-x-2">
+          <AlertTriangle size={14} className="text-amber-600 mt-0.5 flex-shrink-0" />
+          <p className="text-xs text-amber-800">
+            <strong>Legal Disclaimer:</strong> Property restrictions and regulations can change. 
+            Always verify information with real estate attorneys, title companies, and local planning departments before making decisions.
+          </p>
+        </div>
       </div>
 
       {/* Input */}
@@ -202,7 +244,7 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
             value={inputValue}
             onChange={(e) => setInputValue(e.target.value)}
             onKeyPress={(e) => e.key === 'Enter' && sendMessage()}
-            placeholder="Ask me about this property..."
+            placeholder="Ask about features, restrictions, HOA rules, zoning..."
             className="flex-1 border-gray-300 focus:border-blue-500"
             disabled={isLoading}
           />
@@ -215,7 +257,7 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
           </Button>
         </div>
         <p className="text-xs text-gray-500 mt-2 text-center">
-          Powered by AI • Trained on this property's specific details
+          Powered by AI • Expert knowledge on property restrictions & regulations
         </p>
       </div>
     </div>

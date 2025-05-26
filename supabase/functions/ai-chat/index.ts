@@ -45,7 +45,7 @@ serve(async (req) => {
       ).join('\n\n');
     }
 
-    // Create property context
+    // Create comprehensive property context including restraints
     const propertyContext = property ? `
 PROPERTY DETAILS:
 - Title: ${property.title}
@@ -56,39 +56,77 @@ PROPERTY DETAILS:
 - Square Feet: ${property.sqft}
 - Description: ${property.description}
 - Features: ${property.features?.join(', ') || 'No features listed'}
-- Neighborhood Data: ${JSON.stringify(property.neighborhood_data || {})}
+
+NEIGHBORHOOD & RESTRAINTS DATA:
+${property.neighborhood_data?.restraints ? `
+HOA INFORMATION:
+- HOA Name: ${property.neighborhood_data.restraints.hoa?.name}
+- Monthly Fee: ${property.neighborhood_data.restraints.hoa?.monthlyFee}
+- Yearly Fee: ${property.neighborhood_data.restraints.hoa?.yearlyFee}
+- HOA Rules: ${property.neighborhood_data.restraints.hoa?.rules?.join('; ') || 'None specified'}
+- HOA Amenities: ${property.neighborhood_data.restraints.hoa?.amenities?.join('; ') || 'None specified'}
+
+ZONING INFORMATION:
+- Zoning: ${property.neighborhood_data.restraints.zoning?.designation}
+- Description: ${property.neighborhood_data.restraints.zoning?.description}
+- Zoning Restrictions: ${property.neighborhood_data.restraints.zoning?.restrictions?.join('; ') || 'None specified'}
+- Allowed Uses: ${property.neighborhood_data.restraints.zoning?.allowedUses?.join('; ') || 'None specified'}
+
+DEED RESTRICTIONS:
+${property.neighborhood_data.restraints.deedRestrictions?.join('; ') || 'None specified'}
+
+BUILDING CODES & PERMITS:
+- Required Permits: ${property.neighborhood_data.restraints.buildingCodes?.permits?.join('; ') || 'None specified'}
+- Code Requirements: ${property.neighborhood_data.restraints.buildingCodes?.requirements?.join('; ') || 'None specified'}
+
+ENVIRONMENTAL CONSIDERATIONS:
+${property.neighborhood_data.restraints.environmental?.join('; ') || 'None specified'}
+` : 'Detailed restraint information not available'}
+
+- Other Neighborhood Data: ${JSON.stringify(property.neighborhood_data || {})}
 - Market Data: ${JSON.stringify(property.market_data || {})}
     ` : '';
 
-    const systemPrompt = `You are an AI real estate assistant representing this specific property. Your goal is to:
+    const systemPrompt = `You are an expert AI real estate assistant with comprehensive knowledge about this specific property and all its legal, regulatory, and community restraints. Your goal is to:
 
-1. Answer questions about the property using the provided details
-2. Highlight the property's best features and benefits
-3. Address concerns and objections professionally
+1. Answer detailed questions about property restrictions, HOA rules, zoning laws, and deed restrictions
+2. Explain what buyers can and cannot do with the property
+3. Highlight important legal and regulatory considerations
 4. Guide conversations toward scheduling tours or contacting the agent
 5. Qualify leads by understanding their needs, timeline, and budget
-6. Create excitement and urgency about the property
+6. Create excitement about the property while being transparent about restrictions
+
+IMPORTANT LEGAL DISCLAIMER: Always remind users that property restrictions can change and should be verified with professionals including real estate attorneys, title companies, and local planning departments before making decisions.
 
 ${propertyContext}
 
+RESTRAINTS EXPERTISE:
+- Provide specific details about HOA fees, rules, and amenities
+- Explain zoning restrictions and what can be built on the property
+- Discuss deed restrictions and their implications
+- Clarify permit requirements for modifications
+- Address environmental considerations and disclosures
+- Always recommend professional verification of restrictions
+
 CONVERSATION GUIDELINES:
-- Be enthusiastic but professional
+- Be thorough and specific when discussing restraints and restrictions
+- Use the exact details from the property data
+- Explain complex legal concepts in simple terms
+- Always include the legal disclaimer when discussing restrictions
 - Ask qualifying questions naturally in conversation
-- Suggest next steps like tours, agent contact, or neighborhood visits
-- Use the property's specific details in your responses
-- If you don't have specific information, acknowledge it and offer to connect them with the agent
+- If asked about restrictions not in the data, clearly state what information is missing
 
 LEAD QUALIFICATION FOCUS:
 - Timeline for purchasing
-- Budget range
-- Specific needs/requirements
-- Current housing situation
-- Interest level in this property
+- Budget range and financing plans
+- Specific renovation or modification plans
+- Understanding of HOA requirements
+- Comfort level with property restrictions
 
 Previous conversation:
 ${conversationHistory}
 
-Respond as the voice of this property, helping the potential buyer while gathering lead information.`;
+Respond as the expert voice for this property, providing comprehensive restraint information while helping potential buyers and gathering lead information.`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -103,7 +141,7 @@ Respond as the voice of this property, helping the potential buyer while gatheri
           { role: 'user', content: message }
         ],
         temperature: 0.7,
-        max_tokens: 500
+        max_tokens: 600
       }),
     });
 
@@ -116,7 +154,7 @@ Respond as the voice of this property, helping the potential buyer while gatheri
       session_id: sessionId,
       user_message: message,
       ai_response: aiResponse,
-      lead_score: calculateLeadScore(message), // Simple scoring
+      lead_score: calculateLeadScore(message),
     });
 
     // Check if this looks like a qualified lead
@@ -161,11 +199,16 @@ function calculateLeadScore(message: string): number {
   if (lowerMessage.includes('timeline') || lowerMessage.includes('when')) score += 10;
   if (lowerMessage.includes('mortgage') || lowerMessage.includes('financing')) score += 15;
   
+  // Restraint-related interest indicators
+  if (lowerMessage.includes('hoa') || lowerMessage.includes('restrictions') || lowerMessage.includes('rules')) score += 12;
+  if (lowerMessage.includes('renovate') || lowerMessage.includes('modify') || lowerMessage.includes('build')) score += 18;
+  if (lowerMessage.includes('zoning') || lowerMessage.includes('permits')) score += 10;
+  
   return Math.min(score, 100);
 }
 
 function checkForLeadSignals(userMessage: string, aiResponse: string): boolean {
-  const signals = ['tour', 'visit', 'contact', 'agent', 'buy', 'purchase', 'serious', 'interested'];
+  const signals = ['tour', 'visit', 'contact', 'agent', 'buy', 'purchase', 'serious', 'interested', 'renovate', 'modify'];
   const combined = (userMessage + ' ' + aiResponse).toLowerCase();
   return signals.some(signal => combined.includes(signal));
 }
