@@ -19,8 +19,8 @@ export const useVoiceChat = ({ onTranscript, onSpeakText }: UseVoiceChatProps) =
       return null;
     }
 
-    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-    const recognition = new SpeechRecognition();
+    const SpeechRecognitionAPI = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognitionAPI() as SpeechRecognition;
     
     recognition.continuous = false;
     recognition.interimResults = false;
@@ -30,12 +30,12 @@ export const useVoiceChat = ({ onTranscript, onSpeakText }: UseVoiceChatProps) =
       setIsListening(true);
     };
 
-    recognition.onresult = (event) => {
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
       const transcript = event.results[0][0].transcript;
       onTranscript(transcript);
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: SpeechRecognitionErrorEvent) => {
       console.error('Speech recognition error:', event.error);
       setIsListening(false);
     };
