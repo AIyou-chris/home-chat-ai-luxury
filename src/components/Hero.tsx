@@ -2,7 +2,8 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, MapPin } from 'lucide-react';
+import { MessageSquare, MapPin, Calendar } from 'lucide-react';
+import { AppointmentModal } from './appointment/AppointmentModal';
 
 interface HeroProps {
   property: any;
@@ -11,6 +12,7 @@ interface HeroProps {
 
 export const Hero = ({ property, onChatOpen }: HeroProps) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [isAppointmentOpen, setIsAppointmentOpen] = useState(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -90,17 +92,35 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
             </div>
           </div>
 
-          {/* CTA Button */}
-          <Button
-            onClick={onChatOpen}
-            size="lg"
-            className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-8 py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
-          >
-            <MessageSquare className="mr-2" size={20} />
-            Talk with this Home
-          </Button>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Button
+              onClick={onChatOpen}
+              size="lg"
+              className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-8 py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              <MessageSquare className="mr-2" size={20} />
+              Talk with this Home
+            </Button>
+            
+            <Button
+              onClick={() => setIsAppointmentOpen(true)}
+              size="lg"
+              variant="outline"
+              className="bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/20 font-medium px-8 py-4 text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
+            >
+              <Calendar className="mr-2" size={20} />
+              Schedule Showing
+            </Button>
+          </div>
         </div>
       </div>
+
+      <AppointmentModal
+        isOpen={isAppointmentOpen}
+        onClose={() => setIsAppointmentOpen(false)}
+        property={property}
+      />
     </div>
   );
 };

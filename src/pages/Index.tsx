@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Hero } from '@/components/Hero';
 import { PropertyGallery } from '@/components/PropertyGallery';
@@ -85,7 +84,7 @@ const Index = () => {
         return (
           <div className="pt-4 pb-20">
             <NeighborhoodInfo />
-            <AgentProfile />
+            <AgentProfile property={propertyData} />
           </div>
         );
       case 'contact':
