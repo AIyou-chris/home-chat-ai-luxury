@@ -45,7 +45,7 @@ serve(async (req) => {
       ).join('\n\n');
     }
 
-    // Create comprehensive property context including restraints
+    // Create comprehensive property context
     const propertyContext = property ? `
 PROPERTY DETAILS:
 - Title: ${property.title}
@@ -87,46 +87,40 @@ ${property.neighborhood_data.restraints.environmental?.join('; ') || 'None speci
 - Market Data: ${JSON.stringify(property.market_data || {})}
     ` : '';
 
-    const systemPrompt = `You are an expert AI real estate assistant with comprehensive knowledge about this specific property and all its legal, regulatory, and community restraints. Your goal is to:
+    const systemPrompt = `You are an expert AI real estate assistant with comprehensive knowledge about this specific property and the ability to schedule appointments directly through the chat interface.
 
+CORE CAPABILITIES:
 1. Answer detailed questions about property restrictions, HOA rules, zoning laws, and deed restrictions
 2. Explain what buyers can and cannot do with the property
 3. Highlight important legal and regulatory considerations
-4. Guide conversations toward scheduling tours or contacting the agent
+4. SCHEDULE APPOINTMENTS directly when users express interest
 5. Qualify leads by understanding their needs, timeline, and budget
 6. Create excitement about the property while being transparent about restrictions
+
+APPOINTMENT SCHEDULING:
+When users express interest in touring, viewing, visiting, or scheduling an appointment, you should:
+- Enthusiastically offer to help them schedule immediately
+- Explain that you can set up the appointment right in the chat
+- Ask for their contact information (name, phone, email)
+- Offer both in-person and virtual tour options
+- If they agree, respond with "I'd be happy to help you schedule a showing right now! Let me set up the appointment interface for you." and include the trigger phrase: "TRIGGER_APPOINTMENT_WIDGET"
 
 IMPORTANT LEGAL DISCLAIMER: Always remind users that property restrictions can change and should be verified with professionals including real estate attorneys, title companies, and local planning departments before making decisions.
 
 ${propertyContext}
 
-RESTRAINTS EXPERTISE:
-- Provide specific details about HOA fees, rules, and amenities
-- Explain zoning restrictions and what can be built on the property
-- Discuss deed restrictions and their implications
-- Clarify permit requirements for modifications
-- Address environmental considerations and disclosures
-- Always recommend professional verification of restrictions
-
 CONVERSATION GUIDELINES:
-- Be thorough and specific when discussing restraints and restrictions
+- Be proactive about scheduling when users show interest
 - Use the exact details from the property data
 - Explain complex legal concepts in simple terms
 - Always include the legal disclaimer when discussing restrictions
 - Ask qualifying questions naturally in conversation
 - If asked about restrictions not in the data, clearly state what information is missing
 
-LEAD QUALIFICATION FOCUS:
-- Timeline for purchasing
-- Budget range and financing plans
-- Specific renovation or modification plans
-- Understanding of HOA requirements
-- Comfort level with property restrictions
-
 Previous conversation:
 ${conversationHistory}
 
-Respond as the expert voice for this property, providing comprehensive restraint information while helping potential buyers and gathering lead information.`;
+Respond as the expert voice for this property with the ability to schedule appointments directly.`;
 
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
@@ -148,12 +142,16 @@ Respond as the expert voice for this property, providing comprehensive restraint
     const aiData = await response.json();
     const aiResponse = aiData.choices[0].message.content;
 
+    // Check if AI wants to trigger appointment widget
+    const triggerAppointment = aiResponse.includes('TRIGGER_APPOINTMENT_WIDGET');
+    const cleanResponse = aiResponse.replace('TRIGGER_APPOINTMENT_WIDGET', '').trim();
+
     // Store conversation in database
     await supabase.from('conversations').insert({
       property_id: propertyId,
       session_id: sessionId,
       user_message: message,
-      ai_response: aiResponse,
+      ai_response: cleanResponse,
       lead_score: calculateLeadScore(message),
     });
 
@@ -172,8 +170,9 @@ Respond as the expert voice for this property, providing comprehensive restraint
     }
 
     return new Response(JSON.stringify({ 
-      response: aiResponse,
-      leadScore: calculateLeadScore(message)
+      response: cleanResponse,
+      leadScore: calculateLeadScore(message),
+      triggerAppointment: triggerAppointment
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
@@ -198,6 +197,7 @@ function calculateLeadScore(message: string): number {
   if (lowerMessage.includes('budget') || lowerMessage.includes('afford') || lowerMessage.includes('price')) score += 10;
   if (lowerMessage.includes('timeline') || lowerMessage.includes('when')) score += 10;
   if (lowerMessage.includes('mortgage') || lowerMessage.includes('financing')) score += 15;
+  if (lowerMessage.includes('schedule') || lowerMessage.includes('appointment')) score += 25;
   
   // Restraint-related interest indicators
   if (lowerMessage.includes('hoa') || lowerMessage.includes('restrictions') || lowerMessage.includes('rules')) score += 12;
@@ -208,7 +208,7 @@ function calculateLeadScore(message: string): number {
 }
 
 function checkForLeadSignals(userMessage: string, aiResponse: string): boolean {
-  const signals = ['tour', 'visit', 'contact', 'agent', 'buy', 'purchase', 'serious', 'interested', 'renovate', 'modify'];
+  const signals = ['tour', 'visit', 'contact', 'agent', 'buy', 'purchase', 'serious', 'interested', 'renovate', 'modify', 'schedule', 'appointment'];
   const combined = (userMessage + ' ' + aiResponse).toLowerCase();
   return signals.some(signal => combined.includes(signal));
 }

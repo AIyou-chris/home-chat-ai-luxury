@@ -7,6 +7,7 @@ import { ChatLoadingIndicator } from './chat/ChatLoadingIndicator';
 import { ChatPrompts } from './chat/ChatPrompts';
 import { ChatInput } from './chat/ChatInput';
 import { LegalDisclaimer } from './chat/LegalDisclaimer';
+import { ChatAppointmentIntegration } from './chat/ChatAppointmentIntegration';
 
 interface Message {
   id: string;
@@ -14,18 +15,28 @@ interface Message {
   sender: 'user' | 'ai';
   timestamp: Date;
   leadScore?: number;
+  triggerAppointment?: boolean;
 }
 
 interface PropertyChatBotProps {
   property: any;
   sessionId?: string;
+  pendingVoiceMessage?: string;
+  onVoiceMessageSent?: () => void;
+  onAIResponse?: (text: string) => void;
 }
 
-export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: PropertyChatBotProps) => {
+export const PropertyChatBot = ({ 
+  property, 
+  sessionId = crypto.randomUUID(),
+  pendingVoiceMessage,
+  onVoiceMessageSent,
+  onAIResponse
+}: PropertyChatBotProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: `Hi! I'm the AI assistant for ${property.title}. I have comprehensive knowledge about this property including all legal restrictions, HOA rules, zoning information, and building codes. I can help you understand what you can and cannot do with this home, along with all the amazing features it offers. What would you like to know?`,
+      text: `Hi! I'm the AI assistant for ${property.title}. I have comprehensive knowledge about this property including all legal restrictions, HOA rules, zoning information, and building codes. I can help you understand what you can and cannot do with this home, schedule showings, and answer all your questions. What would you like to know?`,
       sender: 'ai',
       timestamp: new Date()
     }
@@ -33,6 +44,7 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [totalLeadScore, setTotalLeadScore] = useState(0);
+  const [showAppointmentWidget, setShowAppointmentWidget] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -43,24 +55,38 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
     scrollToBottom();
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+  // Handle voice message input
+  useEffect(() => {
+    if (pendingVoiceMessage) {
+      setInputValue(pendingVoiceMessage);
+    }
+  }, [pendingVoiceMessage]);
+
+  const sendMessage = async (messageText?: string) => {
+    const textToSend = messageText || inputValue;
+    if (!textToSend.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputValue,
+      text: textToSend,
       sender: 'user',
       timestamp: new Date()
     };
 
     setMessages(prev => [...prev, userMessage]);
     setInputValue('');
+    
+    // Clear voice message if it was sent
+    if (pendingVoiceMessage && onVoiceMessageSent) {
+      onVoiceMessageSent();
+    }
+    
     setIsLoading(true);
 
     try {
       const { data, error } = await supabase.functions.invoke('ai-chat', {
         body: {
-          message: inputValue,
+          message: textToSend,
           propertyId: property.id,
           sessionId: sessionId
         }
@@ -73,13 +99,26 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
         text: data.response,
         sender: 'ai',
         timestamp: new Date(),
-        leadScore: data.leadScore
+        leadScore: data.leadScore,
+        triggerAppointment: data.triggerAppointment
       };
 
       setMessages(prev => [...prev, aiResponse]);
+      
       if (data.leadScore) {
         setTotalLeadScore(prev => prev + data.leadScore);
       }
+
+      // Show appointment widget if AI triggers it
+      if (data.triggerAppointment) {
+        setShowAppointmentWidget(true);
+      }
+
+      // Trigger voice response callback
+      if (onAIResponse) {
+        onAIResponse(data.response);
+      }
+
     } catch (error) {
       console.error('Chat error:', error);
       const errorMessage: Message = {
@@ -94,6 +133,17 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
     }
   };
 
+  const handleAppointmentSuccess = () => {
+    setShowAppointmentWidget(false);
+    const successMessage: Message = {
+      id: Date.now().toString(),
+      text: "Great! I've helped you schedule your appointment. You should receive a confirmation email shortly with all the details. Is there anything else you'd like to know about the property?",
+      sender: 'ai',
+      timestamp: new Date()
+    };
+    setMessages(prev => [...prev, successMessage]);
+  };
+
   return (
     <div className="flex flex-col h-full max-w-4xl mx-auto">
       <ChatHeader propertyTitle={property.title} totalLeadScore={totalLeadScore} />
@@ -104,6 +154,13 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
         ))}
 
         {isLoading && <ChatLoadingIndicator />}
+
+        {showAppointmentWidget && (
+          <ChatAppointmentIntegration 
+            property={property}
+            onScheduleSuccess={handleAppointmentSuccess}
+          />
+        )}
 
         {messages.length === 1 && (
           <ChatPrompts onPromptSelect={setInputValue} />
@@ -116,8 +173,10 @@ export const PropertyChatBot = ({ property, sessionId = crypto.randomUUID() }: P
       <ChatInput 
         value={inputValue}
         onChange={setInputValue}
-        onSend={sendMessage}
+        onSend={() => sendMessage()}
         isLoading={isLoading}
+        voiceMessage={pendingVoiceMessage}
+        onSendVoiceMessage={() => sendMessage(pendingVoiceMessage)}
       />
     </div>
   );

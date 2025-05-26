@@ -1,8 +1,9 @@
 
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { X, MessageSquare, Mic, MicOff, Volume2 } from 'lucide-react';
+import { X, MessageSquare, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
 import { PropertyChatBot } from './PropertyChatBot';
+import { useVoiceChat } from '@/hooks/useVoiceChat';
 
 interface AIChatProps {
   isOpen: boolean;
@@ -11,26 +12,40 @@ interface AIChatProps {
 }
 
 export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
-  const [isListening, setIsListening] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+  const [pendingVoiceMessage, setPendingVoiceMessage] = useState<string>('');
 
-  const startVoiceChat = async () => {
-    try {
-      setIsListening(true);
-      setIsConnected(true);
-      // TODO: Initialize Ultravox SDK for voice
-      console.log('Starting voice chat...');
-    } catch (error) {
-      console.error('Failed to start voice chat:', error);
-      setIsListening(false);
-      setIsConnected(false);
+  const {
+    isListening,
+    isSpeaking,
+    isSupported,
+    startListening,
+    stopListening,
+    speak,
+    stopSpeaking
+  } = useVoiceChat({
+    onTranscript: (text) => {
+      setPendingVoiceMessage(text);
+    },
+    onSpeakText: (text) => {
+      console.log('Speaking:', text);
+    }
+  });
+
+  const handleVoiceToggle = () => {
+    if (isListening) {
+      stopListening();
+    } else {
+      startListening();
     }
   };
 
-  const stopVoiceChat = () => {
-    setIsListening(false);
-    setIsConnected(false);
-    console.log('Stopping voice chat...');
+  const handleSpeakToggle = () => {
+    if (isSpeaking) {
+      stopSpeaking();
+    } else {
+      // This would speak the last AI response - implementation depends on chat state
+      speak("Voice feature activated. You can now speak to ask questions about the property.");
+    }
   };
 
   if (!isOpen) return null;
@@ -47,7 +62,7 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
             <div>
               <h3 className="font-medium text-gray-800">Talk with Home</h3>
               <p className="text-sm text-gray-500">
-                {isConnected ? 'Voice connected' : 'AI Assistant'}
+                {isListening ? 'Listening...' : isSpeaking ? 'Speaking...' : 'AI Assistant'}
               </p>
             </div>
           </div>
@@ -57,37 +72,84 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
         </div>
 
         {/* Voice Controls */}
-        <div className="p-4 border-b border-gray-200">
-          <div className="flex items-center justify-center space-x-4">
-            <Button
-              onClick={isListening ? stopVoiceChat : startVoiceChat}
-              className={`flex-1 py-4 rounded-xl transition-all duration-300 ${
-                isListening 
-                  ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
-                  : 'bg-orange-500 hover:bg-orange-600 text-white'
-              }`}
-            >
-              {isListening ? <MicOff size={20} /> : <Mic size={20} />}
-              <span className="ml-2">
-                {isListening ? 'Stop Voice Chat' : 'Start Voice Chat'}
-              </span>
-            </Button>
-            {isConnected && (
-              <Button variant="outline" size="icon" className="border-gray-300 text-gray-600 hover:bg-gray-50">
-                <Volume2 size={20} />
+        {isSupported && (
+          <div className="p-4 border-b border-gray-200">
+            <div className="flex items-center justify-center space-x-4">
+              <Button
+                onClick={handleVoiceToggle}
+                className={`flex-1 py-4 rounded-xl transition-all duration-300 ${
+                  isListening 
+                    ? 'bg-red-500 hover:bg-red-600 text-white animate-pulse' 
+                    : 'bg-orange-500 hover:bg-orange-600 text-white'
+                }`}
+              >
+                {isListening ? <MicOff size={20} /> : <Mic size={20} />}
+                <span className="ml-2">
+                  {isListening ? 'Stop Listening' : 'Start Voice Input'}
+                </span>
               </Button>
+              
+              <Button 
+                onClick={handleSpeakToggle}
+                variant="outline" 
+                size="icon" 
+                className={`border-gray-300 hover:bg-gray-50 ${
+                  isSpeaking ? 'bg-blue-100 text-blue-600' : 'text-gray-600'
+                }`}
+              >
+                {isSpeaking ? <VolumeX size={20} /> : <Volume2 size={20} />}
+              </Button>
+            </div>
+            
+            {pendingVoiceMessage && (
+              <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                <p className="text-sm text-blue-800">
+                  <strong>Voice Input:</strong> {pendingVoiceMessage}
+                </p>
+                <div className="flex gap-2 mt-2">
+                  <Button 
+                    size="sm" 
+                    onClick={() => {
+                      // This would send the voice message to chat
+                      setPendingVoiceMessage('');
+                    }}
+                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Send
+                  </Button>
+                  <Button 
+                    size="sm" 
+                    variant="outline"
+                    onClick={() => setPendingVoiceMessage('')}
+                  >
+                    Clear
+                  </Button>
+                </div>
+              </div>
             )}
-          </div>
-          {isConnected && (
+            
             <p className="text-center text-sm text-orange-600 mt-2">
-              Voice chat coming soon • Use text chat below
+              {isSupported 
+                ? 'Voice chat enabled • Click microphone to speak' 
+                : 'Voice chat not supported in this browser'
+              }
             </p>
-          )}
-        </div>
+          </div>
+        )}
 
         {/* Chat Component */}
         <div className="h-[calc(100vh-140px)] safe-area-bottom">
-          <PropertyChatBot property={property} />
+          <PropertyChatBot 
+            property={property} 
+            pendingVoiceMessage={pendingVoiceMessage}
+            onVoiceMessageSent={() => setPendingVoiceMessage('')}
+            onAIResponse={(text) => {
+              // Auto-speak AI responses when voice mode is active
+              if (isListening || isSpeaking) {
+                speak(text);
+              }
+            }}
+          />
         </div>
       </div>
     </div>

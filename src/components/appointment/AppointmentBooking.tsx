@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Calendar } from '@/components/ui/calendar';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -7,13 +7,23 @@ import { Badge } from '@/components/ui/badge';
 import { Clock, Calendar as CalendarIcon, User, Phone, Mail } from 'lucide-react';
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
+import { appointmentService } from '@/services/appointmentService';
 
 interface AppointmentBookingProps {
   property: any;
   onClose?: () => void;
+  prefilledContact?: {
+    name: string;
+    phone: string;
+    email: string;
+  };
 }
 
-export const AppointmentBooking = ({ property, onClose }: AppointmentBookingProps) => {
+export const AppointmentBooking = ({ 
+  property, 
+  onClose, 
+  prefilledContact 
+}: AppointmentBookingProps) => {
   const [selectedDate, setSelectedDate] = useState<Date>();
   const [selectedTime, setSelectedTime] = useState<string>('');
   const [contactInfo, setContactInfo] = useState({
@@ -22,7 +32,15 @@ export const AppointmentBooking = ({ property, onClose }: AppointmentBookingProp
     email: ''
   });
   const [showingType, setShowingType] = useState<'in-person' | 'virtual'>('in-person');
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const { toast } = useToast();
+
+  // Pre-fill contact information if provided
+  useEffect(() => {
+    if (prefilledContact) {
+      setContactInfo(prefilledContact);
+    }
+  }, [prefilledContact]);
 
   const availableTimes = [
     '9:00 AM', '10:00 AM', '11:00 AM', '12:00 PM',
@@ -41,21 +59,38 @@ export const AppointmentBooking = ({ property, onClose }: AppointmentBookingProp
       return;
     }
 
-    // Here you would typically send this to your backend
-    console.log('Appointment request:', {
-      property: property.id,
-      date: selectedDate,
-      time: selectedTime,
-      contact: contactInfo,
-      type: showingType
-    });
+    setIsSubmitting(true);
 
-    toast({
-      title: 'Appointment Requested!',
-      description: 'Your showing request has been submitted. An agent will contact you shortly to confirm.',
-    });
+    try {
+      await appointmentService.createAppointment({
+        propertyId: property.id,
+        contactName: contactInfo.name,
+        contactPhone: contactInfo.phone,
+        contactEmail: contactInfo.email,
+        appointmentDate: selectedDate.toISOString().split('T')[0],
+        appointmentTime: selectedTime,
+        showingType: showingType,
+        notes: `Scheduled via ${prefilledContact ? 'AI Chat' : 'Direct Booking'}`
+      });
 
-    if (onClose) onClose();
+      toast({
+        title: 'Appointment Scheduled!',
+        description: contactInfo.email 
+          ? 'Your showing has been scheduled and a confirmation email has been sent.'
+          : 'Your showing has been scheduled. An agent will contact you to confirm.',
+      });
+
+      if (onClose) onClose();
+    } catch (error) {
+      console.error('Error scheduling appointment:', error);
+      toast({
+        title: 'Booking Failed',
+        description: 'There was an error scheduling your appointment. Please try again.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -64,6 +99,11 @@ export const AppointmentBooking = ({ property, onClose }: AppointmentBookingProp
         <h3 className="text-xl font-semibold mb-2">Schedule a Showing</h3>
         <p className="text-gray-600">{property.title}</p>
         <p className="text-sm text-gray-500">{property.address}</p>
+        {prefilledContact && (
+          <Badge variant="outline" className="mt-2 bg-blue-50 text-blue-700 border-blue-200">
+            Scheduled via AI Chat Assistant
+          </Badge>
+        )}
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
@@ -100,7 +140,7 @@ export const AppointmentBooking = ({ property, onClose }: AppointmentBookingProp
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
-              disabled={(date) => date < new Date() || date.getDay() === 0} // Disable past dates and Sundays
+              disabled={(date) => date < new Date() || date.getDay() === 0}
               className="mx-auto"
             />
           </div>
@@ -168,6 +208,9 @@ export const AppointmentBooking = ({ property, onClose }: AppointmentBookingProp
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="your.email@example.com"
             />
+            <p className="text-xs text-gray-500 mt-1">
+              Email address for confirmation and reminders
+            </p>
           </div>
         </div>
 
@@ -200,8 +243,12 @@ export const AppointmentBooking = ({ property, onClose }: AppointmentBookingProp
               Cancel
             </Button>
           )}
-          <Button type="submit" className="flex-1 bg-orange-500 hover:bg-orange-600">
-            Request Appointment
+          <Button 
+            type="submit" 
+            className="flex-1 bg-orange-500 hover:bg-orange-600"
+            disabled={isSubmitting}
+          >
+            {isSubmitting ? 'Scheduling...' : 'Schedule Appointment'}
           </Button>
         </div>
       </form>
