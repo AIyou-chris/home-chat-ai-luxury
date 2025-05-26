@@ -8,6 +8,7 @@ import { NeighborhoodInfo } from '@/components/NeighborhoodInfo';
 import { AgentProfile } from '@/components/AgentProfile';
 import { ContactSection } from '@/components/ContactSection';
 import { BottomNavigation } from '@/components/BottomNavigation';
+import { useSampleProperty } from '@/hooks/useSampleProperty';
 
 const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -15,8 +16,11 @@ const Index = () => {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [lightboxImage, setLightboxImage] = useState('');
 
+  // Initialize sample property data
+  useSampleProperty();
+
   const propertyData = {
-    id: '1',
+    id: 'sample-property-id', // This will be replaced with real ID from database
     title: 'Luxury Modern Estate',
     price: '$4,750,000',
     address: '1247 Beverly Hills Drive, Beverly Hills, CA 90210',

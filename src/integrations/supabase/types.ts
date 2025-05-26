@@ -9,7 +9,145 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      conversations: {
+        Row: {
+          ai_response: string
+          created_at: string
+          id: string
+          lead_score: number | null
+          property_id: string | null
+          session_id: string
+          user_info: Json | null
+          user_message: string
+        }
+        Insert: {
+          ai_response: string
+          created_at?: string
+          id?: string
+          lead_score?: number | null
+          property_id?: string | null
+          session_id: string
+          user_info?: Json | null
+          user_message: string
+        }
+        Update: {
+          ai_response?: string
+          created_at?: string
+          id?: string
+          lead_score?: number | null
+          property_id?: string | null
+          session_id?: string
+          user_info?: Json | null
+          user_message?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "conversations_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      leads: {
+        Row: {
+          contact_info: Json | null
+          created_at: string
+          id: string
+          interest_level: string | null
+          notes: string | null
+          property_id: string | null
+          qualified_status: string | null
+          session_id: string
+          updated_at: string
+        }
+        Insert: {
+          contact_info?: Json | null
+          created_at?: string
+          id?: string
+          interest_level?: string | null
+          notes?: string | null
+          property_id?: string | null
+          qualified_status?: string | null
+          session_id: string
+          updated_at?: string
+        }
+        Update: {
+          contact_info?: Json | null
+          created_at?: string
+          id?: string
+          interest_level?: string | null
+          notes?: string | null
+          property_id?: string | null
+          qualified_status?: string | null
+          session_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "leads_property_id_fkey"
+            columns: ["property_id"]
+            isOneToOne: false
+            referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      properties: {
+        Row: {
+          address: string
+          baths: number | null
+          beds: number | null
+          created_at: string
+          description: string | null
+          features: string[] | null
+          id: string
+          images: string[] | null
+          listing_url: string | null
+          market_data: Json | null
+          neighborhood_data: Json | null
+          price: string | null
+          sqft: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          address: string
+          baths?: number | null
+          beds?: number | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          images?: string[] | null
+          listing_url?: string | null
+          market_data?: Json | null
+          neighborhood_data?: Json | null
+          price?: string | null
+          sqft?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string
+          baths?: number | null
+          beds?: number | null
+          created_at?: string
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          images?: string[] | null
+          listing_url?: string | null
+          market_data?: Json | null
+          neighborhood_data?: Json | null
+          price?: string | null
+          sqft?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
