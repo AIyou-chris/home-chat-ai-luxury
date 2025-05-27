@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -33,6 +32,10 @@ export const VoiceConversationInterface = ({
     if (savedVoiceId && savedVoiceName) {
       setSelectedVoiceId(savedVoiceId);
       setSelectedVoiceName(savedVoiceName);
+    } else {
+      // Default to OpenAI voice
+      setSelectedVoiceId('alloy');
+      setSelectedVoiceName('Alloy');
     }
   }, []);
 
@@ -53,7 +56,12 @@ export const VoiceConversationInterface = ({
     startListening,
     stopListening,
     voiceMode,
-    switchVoiceMode
+    switchVoiceMode,
+    speak,
+    stopSpeaking,
+    availableVoices,
+    voiceSettings,
+    updateVoiceSettings
   } = useEnhancedVoiceChat({
     onTranscript: (text) => {
       setTranscript(prev => [...prev, `You: ${text}`]);
@@ -62,7 +70,7 @@ export const VoiceConversationInterface = ({
       setTranscript(prev => [...prev, `AI: ${text}`]);
     },
     property,
-    useUltravox: true,
+    useUltravox: false, // Default to OpenAI TTS
     voiceId: selectedVoiceId
   });
 
@@ -73,6 +81,11 @@ export const VoiceConversationInterface = ({
     // Save preference to localStorage
     localStorage.setItem('preferred-voice-id', voiceId);
     localStorage.setItem('preferred-voice-name', voiceName);
+    
+    // Update voice settings if using OpenAI TTS
+    if (voiceMode === 'openai' && updateVoiceSettings) {
+      updateVoiceSettings({ voice: { id: voiceId, name: voiceName } });
+    }
     
     setShowVoicePopup(false);
     setConversationStarted(true);
@@ -148,19 +161,27 @@ export const VoiceConversationInterface = ({
         {showSettings && selectedVoiceId && (
           <div className="p-4 bg-gray-50 border-b border-gray-200">
             <div className="max-w-md mx-auto">
-              <VoiceSelector
-                selectedVoice={selectedVoiceId}
-                onVoiceChange={(voiceId) => {
-                  setSelectedVoiceId(voiceId);
-                  if (isConnected) {
-                    stopListening();
-                  }
-                }}
-                customVoiceId={selectedVoiceId}
-                onCustomVoiceSubmit={(voiceId) => setSelectedVoiceId(voiceId)}
-              />
+              {voiceMode === 'openai' && availableVoices && (
+                <VoiceControls
+                  isSupported={isSupported}
+                  isSpeaking={isSpeaking}
+                  availableVoices={availableVoices}
+                  settings={voiceSettings || {}}
+                  onSettingsChange={updateVoiceSettings || (() => {})}
+                  onStop={stopSpeaking || (() => {})}
+                  onTestVoice={() => speak?.('This is a test of the selected voice.')}
+                />
+              )}
               
               <div className="flex items-center justify-center space-x-2 mt-4">
+                <Button
+                  variant={voiceMode === 'openai' ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => switchVoiceMode('openai')}
+                  className="text-xs"
+                >
+                  OpenAI TTS
+                </Button>
                 <Button
                   variant={voiceMode === 'ultravox' ? 'default' : 'outline'}
                   size="sm"
@@ -168,14 +189,6 @@ export const VoiceConversationInterface = ({
                   className="text-xs"
                 >
                   Ultravox AI
-                </Button>
-                <Button
-                  variant={voiceMode === 'browser' ? 'default' : 'outline'}
-                  size="sm"
-                  onClick={() => switchVoiceMode('browser')}
-                  className="text-xs"
-                >
-                  Browser Voice
                 </Button>
               </div>
             </div>

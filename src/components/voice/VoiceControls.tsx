@@ -1,6 +1,5 @@
 
 import { Button } from '@/components/ui/button';
-import { Slider } from '@/components/ui/slider';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Volume2, VolumeX, Settings } from 'lucide-react';
@@ -9,12 +8,10 @@ import { useState } from 'react';
 interface VoiceControlsProps {
   isSupported: boolean;
   isSpeaking: boolean;
-  availableVoices: SpeechSynthesisVoice[];
+  availableVoices: Array<{ id: string; name: string; description: string; }>;
   settings: {
-    rate: number;
-    pitch: number;
-    volume: number;
-    voice: SpeechSynthesisVoice | null;
+    selectedVoice?: string;
+    voice?: { id: string; name: string; };
   };
   onSettingsChange: (settings: any) => void;
   onStop: () => void;
@@ -40,7 +37,7 @@ export const VoiceControls = ({
     );
   }
 
-  const englishVoices = availableVoices.filter(voice => voice.lang.startsWith('en'));
+  const currentVoiceId = settings.selectedVoice || settings.voice?.id || 'alloy';
 
   return (
     <div className="space-y-3">
@@ -86,78 +83,37 @@ export const VoiceControls = ({
       {showSettings && (
         <Card className="border-gray-200">
           <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">Voice Configuration</CardTitle>
+            <CardTitle className="text-sm font-medium">OpenAI Voice Configuration</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Voice Selection */}
             <div className="space-y-2">
               <label className="text-xs font-medium text-gray-700">Voice</label>
               <Select
-                value={settings.voice?.name || ''}
-                onValueChange={(voiceName) => {
-                  const voice = availableVoices.find(v => v.name === voiceName);
-                  onSettingsChange({ voice });
+                value={currentVoiceId}
+                onValueChange={(voiceId) => {
+                  const voice = availableVoices.find(v => v.id === voiceId);
+                  onSettingsChange({ voice: voice || { id: voiceId } });
                 }}
               >
                 <SelectTrigger className="h-8 text-xs">
                   <SelectValue placeholder="Select voice" />
                 </SelectTrigger>
                 <SelectContent>
-                  {englishVoices.map((voice) => (
-                    <SelectItem key={voice.name} value={voice.name} className="text-xs">
-                      {voice.name} ({voice.lang})
+                  {availableVoices.map((voice) => (
+                    <SelectItem key={voice.id} value={voice.id} className="text-xs">
+                      <div className="flex flex-col items-start">
+                        <span className="font-medium">{voice.name}</span>
+                        <span className="text-xs text-gray-500">{voice.description}</span>
+                      </div>
                     </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
             </div>
 
-            {/* Speed Control */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="text-xs font-medium text-gray-700">Speed</label>
-                <span className="text-xs text-gray-500">{settings.rate.toFixed(1)}x</span>
-              </div>
-              <Slider
-                value={[settings.rate]}
-                onValueChange={(value) => onSettingsChange({ rate: value[0] })}
-                min={0.5}
-                max={2}
-                step={0.1}
-                className="w-full"
-              />
-            </div>
-
-            {/* Pitch Control */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="text-xs font-medium text-gray-700">Pitch</label>
-                <span className="text-xs text-gray-500">{settings.pitch.toFixed(1)}</span>
-              </div>
-              <Slider
-                value={[settings.pitch]}
-                onValueChange={(value) => onSettingsChange({ pitch: value[0] })}
-                min={0.5}
-                max={2}
-                step={0.1}
-                className="w-full"
-              />
-            </div>
-
-            {/* Volume Control */}
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="text-xs font-medium text-gray-700">Volume</label>
-                <span className="text-xs text-gray-500">{Math.round(settings.volume * 100)}%</span>
-              </div>
-              <Slider
-                value={[settings.volume]}
-                onValueChange={(value) => onSettingsChange({ volume: value[0] })}
-                min={0}
-                max={1}
-                step={0.1}
-                className="w-full"
-              />
+            <div className="text-xs text-gray-500 bg-blue-50 p-2 rounded">
+              <strong>Note:</strong> OpenAI voices have optimized speed and pitch settings built-in for natural conversation.
             </div>
           </CardContent>
         </Card>

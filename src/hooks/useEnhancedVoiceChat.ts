@@ -15,12 +15,12 @@ export const useEnhancedVoiceChat = ({
   onTranscript, 
   onAIResponse, 
   property,
-  useUltravox = true,
+  useUltravox = false, // Default to false since OpenAI TTS is more reliable
   voiceId 
 }: UseEnhancedVoiceChatProps) => {
-  const [voiceMode, setVoiceMode] = useState<'ultravox' | 'browser'>(useUltravox ? 'ultravox' : 'browser');
+  const [voiceMode, setVoiceMode] = useState<'ultravox' | 'openai'>(useUltravox ? 'ultravox' : 'openai');
 
-  // Ultravox voice system
+  // Ultravox voice system (kept for compatibility)
   const ultravoxVoice = useUltravoxVoice({
     onTranscript,
     onAIResponse,
@@ -28,27 +28,27 @@ export const useEnhancedVoiceChat = ({
     voiceId,
   });
 
-  // Browser-based voice system (fallback)
-  const browserVoice = useVoiceChat({
+  // OpenAI TTS + Browser STT system (new default)
+  const openaiVoice = useVoiceChat({
     onTranscript,
     onSpeakText: onAIResponse,
   });
 
   // Switch between voice systems
-  const switchVoiceMode = useCallback((mode: 'ultravox' | 'browser') => {
+  const switchVoiceMode = useCallback((mode: 'ultravox' | 'openai') => {
     // Stop current system
     if (voiceMode === 'ultravox') {
       ultravoxVoice.disconnect();
     } else {
-      browserVoice.stopListening();
-      browserVoice.stopSpeaking();
+      openaiVoice.stopListening();
+      openaiVoice.stopSpeaking();
     }
     
     setVoiceMode(mode);
-  }, [voiceMode, ultravoxVoice, browserVoice]);
+  }, [voiceMode, ultravoxVoice, openaiVoice]);
 
   // Unified interface
-  const currentVoice = voiceMode === 'ultravox' ? ultravoxVoice : browserVoice;
+  const currentVoice = voiceMode === 'ultravox' ? ultravoxVoice : openaiVoice;
   
   return {
     // Voice state
@@ -67,13 +67,13 @@ export const useEnhancedVoiceChat = ({
     voiceMode,
     switchVoiceMode,
     
-    // Browser-specific features (for fallback)
-    ...(voiceMode === 'browser' && {
-      speak: browserVoice.speak,
-      stopSpeaking: browserVoice.stopSpeaking,
-      availableVoices: browserVoice.availableVoices,
-      voiceSettings: browserVoice.voiceSettings,
-      updateVoiceSettings: browserVoice.updateVoiceSettings,
+    // OpenAI TTS features (for new default mode)
+    ...(voiceMode === 'openai' && {
+      speak: openaiVoice.speak,
+      stopSpeaking: openaiVoice.stopSpeaking,
+      availableVoices: openaiVoice.availableVoices,
+      voiceSettings: openaiVoice.voiceSettings,
+      updateVoiceSettings: openaiVoice.updateVoiceSettings,
     }),
   };
 };

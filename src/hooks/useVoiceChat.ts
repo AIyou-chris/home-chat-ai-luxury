@@ -1,6 +1,6 @@
 
 import { useState, useRef, useCallback } from 'react';
-import { useEnhancedVoice } from './useEnhancedVoice';
+import { useOpenAITTS } from './useOpenAITTS';
 
 interface UseVoiceChatProps {
   onTranscript: (text: string) => void;
@@ -13,17 +13,19 @@ export const useVoiceChat = ({ onTranscript, onSpeakText }: UseVoiceChatProps) =
   const recognitionRef = useRef<SpeechRecognition | null>(null);
 
   const {
-    speak: enhancedSpeak,
+    speak: openaiSpeak,
     stop: stopSpeaking,
     isSpeaking,
-    isSupported: voiceSupported,
+    isSupported: ttsSupported,
     availableVoices,
+    selectedVoice,
+    setVoice,
     settings: voiceSettings,
     updateSettings: updateVoiceSettings
-  } = useEnhancedVoice({
-    onSpeakStart: () => console.log('Voice started'),
-    onSpeakEnd: () => console.log('Voice ended'),
-    onError: (error) => console.error('Voice error:', error)
+  } = useOpenAITTS({
+    onSpeakStart: () => console.log('OpenAI TTS started'),
+    onSpeakEnd: () => console.log('OpenAI TTS ended'),
+    onError: (error) => console.error('OpenAI TTS error:', error)
   });
 
   const initializeRecognition = useCallback(() => {
@@ -86,21 +88,29 @@ export const useVoiceChat = ({ onTranscript, onSpeakText }: UseVoiceChatProps) =
   }, []);
 
   const speak = useCallback((text: string) => {
-    enhancedSpeak(text);
+    openaiSpeak(text);
     onSpeakText(text);
-  }, [enhancedSpeak, onSpeakText]);
+  }, [openaiSpeak, onSpeakText]);
 
   return {
     isListening,
     isSpeaking,
-    isSupported: isSupported && voiceSupported,
+    isSupported: isSupported && ttsSupported,
     startListening,
     stopListening,
     speak,
     stopSpeaking,
-    // Enhanced voice features
+    // OpenAI TTS features
     availableVoices,
-    voiceSettings,
-    updateVoiceSettings
+    voiceSettings: {
+      ...voiceSettings,
+      selectedVoice,
+    },
+    updateVoiceSettings: (settings: any) => {
+      updateVoiceSettings(settings);
+      if (settings.voice) {
+        setVoice(settings.voice.id || settings.voice);
+      }
+    }
   };
 };
