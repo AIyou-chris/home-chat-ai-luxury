@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -66,15 +67,35 @@ export const useOpenAITTS = ({
           throw new Error('No audio content received');
         }
 
+        console.log('🔊 Playing audio content...');
+        
+        // Create proper data URL for audio playback
+        const audioDataUrl = `data:audio/mp3;base64,${data.audioContent}`;
+        
         // Play the audio
         await new Promise<void>((resolve, reject) => {
-          const audio = new Audio(`data:audio/mp3;base64,${data.audioContent}`);
+          const audio = new Audio(audioDataUrl);
           audioRef.current = audio;
           
-          audio.onended = () => resolve();
-          audio.onerror = () => reject(new Error('Audio playback failed'));
+          audio.onended = () => {
+            console.log('🔊 Audio playback ended');
+            resolve();
+          };
           
-          audio.play().catch(reject);
+          audio.onerror = (e) => {
+            console.error('🔊 Audio playback error:', e);
+            reject(new Error('Audio playback failed'));
+          };
+          
+          audio.oncanplaythrough = () => {
+            console.log('🔊 Audio can play through, starting playback');
+          };
+          
+          console.log('🔊 Starting audio playback...');
+          audio.play().catch((playError) => {
+            console.error('🔊 Audio play() failed:', playError);
+            reject(playError);
+          });
         });
 
       } catch (error) {
