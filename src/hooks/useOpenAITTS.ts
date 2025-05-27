@@ -1,5 +1,4 @@
-
-import { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
 interface UseOpenAITTSProps {
