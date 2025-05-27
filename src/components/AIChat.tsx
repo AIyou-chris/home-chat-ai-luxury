@@ -28,6 +28,7 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
         <VoiceConversationInterface
           property={property}
           onSwitchToChat={handleSwitchToChat}
+          onClose={onClose}
           isOpen={isOpen}
         />
       ) : (

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { MessageSquare, Settings } from 'lucide-react';
+import { MessageSquare, Settings, X } from 'lucide-react';
 import { VoiceAnimation } from './VoiceAnimation';
 import { VoiceSelectionPopup } from './VoiceSelectionPopup';
 import { useEnhancedVoiceChat } from '@/hooks/useEnhancedVoiceChat';
@@ -11,12 +11,14 @@ import { supabase } from '@/integrations/supabase/client';
 interface VoiceConversationInterfaceProps {
   property: any;
   onSwitchToChat: () => void;
+  onClose: () => void;
   isOpen: boolean;
 }
 
 export const VoiceConversationInterface = ({ 
   property, 
   onSwitchToChat, 
+  onClose,
   isOpen 
 }: VoiceConversationInterfaceProps) => {
   const [transcript, setTranscript] = useState('');
@@ -104,6 +106,14 @@ export const VoiceConversationInterface = ({
             className="text-orange-600 border-orange-200 hover:bg-orange-50"
           >
             Switch to Text Chat
+          </Button>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={onClose}
+            className="text-gray-600 hover:bg-gray-100"
+          >
+            <X size={20} />
           </Button>
         </div>
       </div>
