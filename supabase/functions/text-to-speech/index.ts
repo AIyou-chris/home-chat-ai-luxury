@@ -47,9 +47,21 @@ serve(async (req) => {
       throw new Error(`OpenAI TTS error: ${response.status} ${errorText}`);
     }
 
-    // Convert audio to base64
+    // Convert audio to base64 using proper method
     const arrayBuffer = await response.arrayBuffer();
-    const base64Audio = btoa(String.fromCharCode(...new Uint8Array(arrayBuffer)));
+    const uint8Array = new Uint8Array(arrayBuffer);
+    
+    // Convert to base64 efficiently
+    let binary = '';
+    const chunkSize = 8192;
+    for (let i = 0; i < uint8Array.length; i += chunkSize) {
+      const chunk = uint8Array.subarray(i, Math.min(i + chunkSize, uint8Array.length));
+      binary += String.fromCharCode.apply(null, Array.from(chunk));
+    }
+    
+    const base64Audio = btoa(binary);
+
+    console.log('🎵 Audio generated successfully, size:', base64Audio.length);
 
     return new Response(
       JSON.stringify({ audioContent: base64Audio }),
