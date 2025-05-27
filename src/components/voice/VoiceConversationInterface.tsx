@@ -2,10 +2,11 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { MessageSquare, X, Settings } from 'lucide-react';
+import { MessageSquare, Settings } from 'lucide-react';
 import { VoiceAnimation } from './VoiceAnimation';
 import { VoiceSelectionPopup } from './VoiceSelectionPopup';
 import { useEnhancedVoiceChat } from '@/hooks/useEnhancedVoiceChat';
+import { supabase } from '@/integrations/supabase/client';
 
 interface VoiceConversationInterfaceProps {
   property: any;
@@ -21,18 +22,47 @@ export const VoiceConversationInterface = ({
   const [transcript, setTranscript] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [showVoicePopup, setShowVoicePopup] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
 
   const voice = useEnhancedVoiceChat({
-    onTranscript: (text) => {
-      console.log('Voice transcript:', text);
+    onTranscript: async (text) => {
+      console.log('Voice transcript received:', text);
       setTranscript(text);
+      setIsProcessing(true);
+
+      try {
+        // Send the transcript to AI chat
+        const { data, error } = await supabase.functions.invoke('ai-chat', {
+          body: {
+            message: text,
+            propertyId: property.id,
+            sessionId: crypto.randomUUID()
+          }
+        });
+
+        if (error) throw error;
+
+        console.log('AI response received:', data.response);
+        setAiResponse(data.response);
+        
+        // Speak the AI response if using OpenAI mode
+        if (voice.voiceMode === 'openai' && voice.speak) {
+          voice.speak(data.response);
+        }
+      } catch (error) {
+        console.error('Error processing voice message:', error);
+        const errorMessage = "I'm sorry, I'm having trouble processing your request right now.";
+        setAiResponse(errorMessage);
+        if (voice.voiceMode === 'openai' && voice.speak) {
+          voice.speak(errorMessage);
+        }
+      } finally {
+        setIsProcessing(false);
+      }
     },
     onAIResponse: (text) => {
       console.log('AI response for voice:', text);
       setAiResponse(text);
-      if (voice.voiceMode === 'openai') {
-        voice.speak?.(text);
-      }
     },
     property,
     useUltravox: false,
@@ -95,13 +125,13 @@ export const VoiceConversationInterface = ({
           <div className="flex justify-center my-12">
             <VoiceAnimation 
               isListening={voice.isListening}
-              isSpeaking={voice.isSpeaking}
+              isSpeaking={voice.isSpeaking || isProcessing}
             />
           </div>
 
           {/* Voice Controls */}
           <div className="space-y-4">
-            {!voice.isListening && !voice.isSpeaking && (
+            {!voice.isListening && !voice.isSpeaking && !isProcessing && (
               <Button
                 onClick={voice.startListening}
                 className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-medium shadow-lg transition-all duration-200 hover:scale-105"
@@ -118,6 +148,12 @@ export const VoiceConversationInterface = ({
               >
                 Stop Listening
               </Button>
+            )}
+
+            {isProcessing && (
+              <div className="text-center">
+                <div className="text-orange-600 font-medium">Processing your request...</div>
+              </div>
             )}
 
             {!voice.isSupported && (
