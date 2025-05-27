@@ -2,12 +2,10 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { MessageSquare, X } from 'lucide-react';
+import { MessageSquare, X, Settings } from 'lucide-react';
 import { VoiceAnimation } from './VoiceAnimation';
-import { VoiceControls } from './VoiceControls';
 import { VoiceSelectionPopup } from './VoiceSelectionPopup';
 import { useEnhancedVoiceChat } from '@/hooks/useEnhancedVoiceChat';
-import { PropertyChatBot } from '../PropertyChatBot';
 
 interface VoiceConversationInterfaceProps {
   property: any;
@@ -23,14 +21,11 @@ export const VoiceConversationInterface = ({
   const [transcript, setTranscript] = useState('');
   const [aiResponse, setAiResponse] = useState('');
   const [showVoicePopup, setShowVoicePopup] = useState(false);
-  const [sessionId] = useState(() => crypto.randomUUID());
-  const [pendingVoiceMessage, setPendingVoiceMessage] = useState<string>('');
 
   const voice = useEnhancedVoiceChat({
     onTranscript: (text) => {
       console.log('Voice transcript:', text);
       setTranscript(text);
-      setPendingVoiceMessage(text);
     },
     onAIResponse: (text) => {
       console.log('AI response for voice:', text);
@@ -44,99 +39,126 @@ export const VoiceConversationInterface = ({
     voiceId: 'alloy'
   });
 
-  const handleVoiceMessageSent = () => {
-    setPendingVoiceMessage('');
-    setTranscript('');
-  };
-
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-6xl h-[90vh] flex">
-        {/* Voice Interface - Left Side */}
-        <div className="w-1/2 p-6 flex flex-col items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 border-r">
-          <div className="text-center space-y-8">
-            <h2 className="text-2xl font-bold text-gray-800">
-              Voice Chat with AI Assistant
+    <div className="fixed inset-0 bg-white z-50 flex flex-col">
+      {/* Header */}
+      <div className="flex items-center justify-between p-6 border-b border-gray-100">
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+            <MessageSquare size={20} className="text-white" />
+          </div>
+          <div>
+            <h2 className="text-xl font-semibold text-gray-900">
+              Voice Assistant
             </h2>
-            
-            <p className="text-gray-600 max-w-md">
-              Ask me anything about {property.title}. I can help with property details, 
-              scheduling tours, and answering questions.
+            <p className="text-sm text-gray-600">
+              Ask about {property.title}
             </p>
-
-            {/* Colorful Soundwave Animation */}
-            <div className="flex justify-center my-8">
-              <VoiceAnimation 
-                isListening={voice.isListening}
-                isSpeaking={voice.isSpeaking}
-              />
-            </div>
-
-            {/* Voice Controls */}
-            <VoiceControls
-              isListening={voice.isListening}
-              isSpeaking={voice.isSpeaking}
-              isSupported={voice.isSupported}
-              onStartListening={voice.startListening}
-              onStopListening={voice.stopListening}
-              onOpenVoiceSettings={() => setShowVoicePopup(true)}
-            />
-
-            {/* Current transcript display */}
-            {transcript && (
-              <div className="bg-white p-4 rounded-lg shadow-sm border max-w-md">
-                <p className="text-sm text-gray-600 mb-2">You said:</p>
-                <p className="text-gray-800">{transcript}</p>
-              </div>
-            )}
-
-            {/* AI response display */}
-            {aiResponse && (
-              <div className="bg-blue-50 p-4 rounded-lg shadow-sm border max-w-md">
-                <p className="text-sm text-blue-600 mb-2">AI Assistant:</p>
-                <p className="text-gray-800">{aiResponse}</p>
-              </div>
-            )}
-
-            {/* Switch to Chat Button */}
-            <Button
-              onClick={onSwitchToChat}
-              variant="outline"
-              className="mt-6"
-            >
-              <MessageSquare className="w-4 h-4 mr-2" />
-              Switch to Text Chat
-            </Button>
           </div>
         </div>
-
-        {/* Chat Interface - Right Side */}
-        <div className="w-1/2 flex flex-col">
-          <PropertyChatBot
-            property={property}
-            sessionId={sessionId}
-            pendingVoiceMessage={pendingVoiceMessage}
-            onVoiceMessageSent={handleVoiceMessageSent}
-            onAIResponse={setAiResponse}
-          />
+        
+        <div className="flex items-center space-x-2">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setShowVoicePopup(true)}
+            className="text-gray-600 hover:bg-gray-100"
+          >
+            <Settings size={20} />
+          </Button>
+          <Button
+            onClick={onSwitchToChat}
+            variant="outline"
+            className="text-orange-600 border-orange-200 hover:bg-orange-50"
+          >
+            Switch to Text Chat
+          </Button>
         </div>
+      </div>
 
-        {/* Voice Selection Popup */}
-        {showVoicePopup && voice.voiceMode === 'openai' && (
-          <VoiceSelectionPopup
-            isOpen={showVoicePopup}
-            onClose={() => setShowVoicePopup(false)}
-            availableVoices={voice.availableVoices || []}
-            currentVoice={voice.voiceSettings?.selectedVoice}
-            onVoiceSelect={(voiceId) => {
-              voice.updateVoiceSettings?.({ voice: { id: voiceId } });
-              setShowVoicePopup(false);
-            }}
-          />
-        )}
-      </Card>
+      {/* Main Content */}
+      <div className="flex-1 flex flex-col items-center justify-center p-8 bg-white">
+        <div className="text-center space-y-8 max-w-2xl">
+          <div>
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Voice Chat with AI Assistant
+            </h3>
+            <p className="text-gray-600 text-lg">
+              Ask me anything about this property. I can help with details, 
+              scheduling tours, and answering questions.
+            </p>
+          </div>
+
+          {/* Voice Animation */}
+          <div className="flex justify-center my-12">
+            <VoiceAnimation 
+              isListening={voice.isListening}
+              isSpeaking={voice.isSpeaking}
+            />
+          </div>
+
+          {/* Voice Controls */}
+          <div className="space-y-4">
+            {!voice.isListening && !voice.isSpeaking && (
+              <Button
+                onClick={voice.startListening}
+                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-full text-lg font-medium shadow-lg transition-all duration-200 hover:scale-105"
+              >
+                Start Voice Chat
+              </Button>
+            )}
+            
+            {voice.isListening && (
+              <Button
+                onClick={voice.stopListening}
+                variant="outline"
+                className="border-red-500 text-red-600 hover:bg-red-50 px-8 py-4 rounded-full text-lg font-medium shadow-lg"
+              >
+                Stop Listening
+              </Button>
+            )}
+
+            {!voice.isSupported && (
+              <div className="text-center text-sm text-gray-500 p-4 bg-gray-50 rounded-lg">
+                Voice synthesis not supported in this browser
+              </div>
+            )}
+          </div>
+
+          {/* Transcript and Response Display */}
+          <div className="space-y-4 w-full max-w-lg">
+            {transcript && (
+              <Card className="p-4 bg-gray-50 border-gray-200">
+                <p className="text-sm text-gray-600 mb-2 font-medium">You said:</p>
+                <p className="text-gray-900">{transcript}</p>
+              </Card>
+            )}
+
+            {aiResponse && (
+              <Card className="p-4 bg-orange-50 border-orange-200">
+                <p className="text-sm text-orange-600 mb-2 font-medium">AI Assistant:</p>
+                <p className="text-gray-900">{aiResponse}</p>
+              </Card>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* Voice Selection Popup */}
+      {showVoicePopup && voice.voiceMode === 'openai' && (
+        <VoiceSelectionPopup
+          isOpen={showVoicePopup}
+          onClose={() => setShowVoicePopup(false)}
+          availableVoices={voice.availableVoices || []}
+          currentVoice={voice.voiceSettings?.selectedVoice}
+          onVoiceSelect={(voiceId) => {
+            voice.updateVoiceSettings?.({ voice: { id: voiceId } });
+            setShowVoicePopup(false);
+          }}
+        />
+      )}
     </div>
   );
 };
