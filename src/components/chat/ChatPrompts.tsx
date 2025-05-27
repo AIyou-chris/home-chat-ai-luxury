@@ -10,26 +10,19 @@ export const ChatPrompts = ({ onPromptSelect }: ChatPromptsProps) => {
   const generalPrompts = [
     "Tell me about the neighborhood",
     "What are the best features?",
-    "Can I schedule a tour?",
-    "What's the price range?",
-    "Tell me about schools nearby",
-    "What's included in the sale?"
+    "Can I schedule a tour?"
   ];
 
   const restraintPrompts = [
     "What are the HOA rules and fees?",
-    "Can I renovate or add onto this home?",
-    "What are the zoning restrictions?",
-    "Are there any deed restrictions?",
-    "What permits would I need for changes?",
-    "Are there environmental considerations?"
+    "Can I renovate or add onto this home?"
   ];
 
   return (
     <div className="space-y-4">
       <div className="space-y-2">
         <p className="text-xs text-gray-500 px-2">General questions:</p>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2">
           {generalPrompts.map((prompt, index) => (
             <Button
               key={index}
@@ -49,7 +42,7 @@ export const ChatPrompts = ({ onPromptSelect }: ChatPromptsProps) => {
           <AlertTriangle size={14} className="text-amber-500" />
           <p className="text-xs text-amber-700 font-medium">Legal & regulatory questions:</p>
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-1 gap-2">
           {restraintPrompts.map((prompt, index) => (
             <Button
               key={index}

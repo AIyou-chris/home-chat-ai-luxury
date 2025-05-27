@@ -10,7 +10,7 @@ interface AIChatProps {
 }
 
 export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
-  const [currentInterface, setCurrentInterface] = useState<'voice' | 'chat'>('voice');
+  const [currentInterface, setCurrentInterface] = useState<'voice' | 'chat'>('chat');
 
   const handleSwitchToChat = () => {
     setCurrentInterface('chat');
