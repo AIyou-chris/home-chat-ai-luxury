@@ -66,12 +66,11 @@ export const VoiceConversationInterface = ({
               scheduling tours, and answering questions.
             </p>
 
-            {/* Enhanced Voice Animation with Soundwave */}
+            {/* Colorful Soundwave Animation */}
             <div className="flex justify-center my-8">
               <VoiceAnimation 
                 isListening={voice.isListening}
                 isSpeaking={voice.isSpeaking}
-                className="scale-110"
               />
             </div>
 
