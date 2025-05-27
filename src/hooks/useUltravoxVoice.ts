@@ -40,43 +40,93 @@ export const useUltravoxVoice = ({ onTranscript, onAIResponse, propertyContext, 
       };
       
       console.log('📤 Calling Supabase function with:', JSON.stringify(requestBody, null, 2));
+      console.log('🌐 Supabase URL:', supabase.supabaseUrl);
+      console.log('🔑 API Key present:', !!supabase.supabaseKey);
 
-      const { data, error } = await supabase.functions.invoke('ultravox-session', {
-        body: requestBody,
-      });
+      // Add timeout and detailed error handling
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => {
+        controller.abort();
+        console.error('⏰ Request timeout after 30 seconds');
+      }, 30000);
 
-      console.log('📥 Supabase function response:', { data, error });
-
-      if (error) {
-        console.error('❌ Supabase function error:', error);
-        throw new Error(`Failed to create Ultravox session: ${error.message}`);
+      let response;
+      try {
+        response = await supabase.functions.invoke('ultravox-session', {
+          body: requestBody,
+          signal: controller.signal,
+        });
+        clearTimeout(timeoutId);
+      } catch (invokeError) {
+        clearTimeout(timeoutId);
+        console.error('💥 Supabase invoke error:', invokeError);
+        
+        // Check if it's a network error
+        if (invokeError.name === 'AbortError') {
+          throw new Error('Request timeout - please check your internet connection');
+        }
+        
+        // Check for CORS or network issues
+        if (invokeError.message?.includes('CORS') || invokeError.message?.includes('fetch')) {
+          throw new Error('Network error - unable to reach Ultravox service. Please try switching to browser voice mode.');
+        }
+        
+        throw new Error(`Connection failed: ${invokeError.message}`);
       }
 
-      if (!data) {
+      console.log('📥 Supabase function response:', { data: response.data, error: response.error });
+
+      if (response.error) {
+        console.error('❌ Supabase function error:', response.error);
+        
+        // Provide more specific error messages
+        if (response.error.message?.includes('ULTRAVOX_API_KEY')) {
+          throw new Error('Ultravox API key not configured. Please contact support.');
+        }
+        
+        if (response.error.message?.includes('CORS')) {
+          throw new Error('Connection blocked by browser security. Please try browser voice mode.');
+        }
+        
+        throw new Error(`Ultravox service error: ${response.error.message}`);
+      }
+
+      if (!response.data) {
         console.error('❌ No data received from Supabase function');
-        throw new Error('No data received from session creation');
+        throw new Error('No response from Ultravox service');
       }
 
-      if (!data.websocketUrl) {
-        console.error('❌ Invalid session data - missing websocketUrl:', data);
-        throw new Error('Invalid session data: missing websocketUrl');
+      if (!response.data.websocketUrl) {
+        console.error('❌ Invalid session data - missing websocketUrl:', response.data);
+        throw new Error('Invalid response from Ultravox service');
       }
 
-      if (!data.sessionId) {
-        console.error('❌ Invalid session data - missing sessionId:', data);
-        throw new Error('Invalid session data: missing sessionId');
+      if (!response.data.sessionId) {
+        console.error('❌ Invalid session data - missing sessionId:', response.data);
+        throw new Error('Invalid response from Ultravox service');
       }
 
       console.log('✅ Session created successfully:', {
-        sessionId: data.sessionId,
-        websocketUrl: data.websocketUrl ? 'URL present' : 'URL missing'
+        sessionId: response.data.sessionId,
+        websocketUrl: response.data.websocketUrl ? 'URL present' : 'URL missing'
       });
       
-      sessionRef.current = data;
-      return data;
+      sessionRef.current = response.data;
+      return response.data;
     } catch (error) {
       console.error('💥 Session creation failed:', error);
-      setError(`Failed to create voice session: ${error.message}`);
+      
+      // Set user-friendly error messages
+      if (error.message.includes('timeout')) {
+        setError('Connection timeout. Please check your internet and try again.');
+      } else if (error.message.includes('CORS') || error.message.includes('network')) {
+        setError('Connection blocked. Please try switching to browser voice mode.');
+      } else if (error.message.includes('API key')) {
+        setError('Service configuration issue. Please contact support.');
+      } else {
+        setError(`Voice service unavailable: ${error.message}`);
+      }
+      
       throw error;
     }
   }, [propertyContext, voiceId]);

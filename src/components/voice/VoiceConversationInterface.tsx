@@ -181,12 +181,12 @@ export const VoiceConversationInterface = ({
           </div>
         )}
 
-        {/* Error Display */}
+        {/* Enhanced Error Display */}
         {error && (
           <div className="p-4 bg-red-50 border-b border-red-200">
             <div className="max-w-md mx-auto">
-              <p className="text-sm text-red-800 text-center">{error}</p>
-              <div className="flex justify-center mt-2">
+              <p className="text-sm text-red-800 text-center mb-3">{error}</p>
+              <div className="flex flex-col space-y-2">
                 <Button
                   size="sm"
                   variant="outline"
@@ -194,6 +194,19 @@ export const VoiceConversationInterface = ({
                   className="text-xs"
                 >
                   Switch to Browser Voice
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => {
+                    setError(null);
+                    if (voiceMode === 'ultravox') {
+                      startListening();
+                    }
+                  }}
+                  className="text-xs"
+                >
+                  Try Again
                 </Button>
               </div>
             </div>
@@ -221,7 +234,7 @@ export const VoiceConversationInterface = ({
             <div className="flex items-center space-x-2 mb-6">
               <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
               <span className="text-sm text-gray-600">
-                {isConnected ? 'Connected to Ultravox' : 'Connecting...'}
+                {isConnected ? 'Connected to Ultravox' : 'Connecting to Ultravox...'}
               </span>
             </div>
           )}
