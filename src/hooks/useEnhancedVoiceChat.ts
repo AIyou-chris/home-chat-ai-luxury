@@ -16,7 +16,7 @@ export const useEnhancedVoiceChat = ({
   onAIResponse, 
   property,
   useUltravox = false, // Default to false since OpenAI TTS is more reliable
-  voiceId 
+  voiceId = 'alloy'
 }: UseEnhancedVoiceChatProps) => {
   const [voiceMode, setVoiceMode] = useState<'ultravox' | 'openai'>(useUltravox ? 'ultravox' : 'openai');
 
@@ -32,6 +32,7 @@ export const useEnhancedVoiceChat = ({
   const openaiVoice = useVoiceChat({
     onTranscript,
     onSpeakText: onAIResponse,
+    voiceId
   });
 
   // Switch between voice systems

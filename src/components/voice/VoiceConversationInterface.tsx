@@ -21,8 +21,8 @@ export const VoiceConversationInterface = ({
   onSwitchToChat, 
   isOpen 
 }: VoiceConversationInterfaceProps) => {
-  const [selectedVoiceId, setSelectedVoiceId] = useState<string>('');
-  const [selectedVoiceName, setSelectedVoiceName] = useState<string>('');
+  const [selectedVoiceId, setSelectedVoiceId] = useState<string>('alloy');
+  const [selectedVoiceName, setSelectedVoiceName] = useState<string>('Alloy');
   const [showVoicePopup, setShowVoicePopup] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
   const [conversationStarted, setConversationStarted] = useState(false);
@@ -35,21 +35,27 @@ export const VoiceConversationInterface = ({
     const savedVoiceId = localStorage.getItem('preferred-voice-id');
     const savedVoiceName = localStorage.getItem('preferred-voice-name');
     if (savedVoiceId && savedVoiceName) {
-      setSelectedVoiceId(savedVoiceId);
-      setSelectedVoiceName(savedVoiceName);
-    } else {
-      // Default to OpenAI voice
-      setSelectedVoiceId('alloy');
-      setSelectedVoiceName('Alloy');
+      // Ensure we only use valid OpenAI voice IDs
+      const validVoices = ['alloy', 'echo', 'fable', 'onyx', 'nova', 'shimmer'];
+      if (validVoices.includes(savedVoiceId)) {
+        setSelectedVoiceId(savedVoiceId);
+        setSelectedVoiceName(savedVoiceName);
+      } else {
+        // Reset to default if invalid voice ID found
+        setSelectedVoiceId('alloy');
+        setSelectedVoiceName('Alloy');
+        localStorage.setItem('preferred-voice-id', 'alloy');
+        localStorage.setItem('preferred-voice-name', 'Alloy');
+      }
     }
   }, []);
 
-  // Show voice popup when interface opens and no voice is selected
+  // Show voice popup when interface opens and no conversation started
   useEffect(() => {
-    if (isOpen && !selectedVoiceId) {
+    if (isOpen && !conversationStarted && !selectedVoiceId) {
       setShowVoicePopup(true);
     }
-  }, [isOpen, selectedVoiceId]);
+  }, [isOpen, conversationStarted, selectedVoiceId]);
 
   // Function to send message to AI and get response
   const sendToAI = async (message: string) => {
@@ -74,8 +80,9 @@ export const VoiceConversationInterface = ({
       // Add AI response to transcript
       setTranscript(prev => [...prev, `AI: ${data.response}`]);
       
-      // Speak the AI response
+      // Speak the AI response with the selected voice
       if (speak) {
+        console.log('Speaking with voice:', selectedVoiceId);
         speak(data.response);
       }
     } catch (error) {
@@ -123,6 +130,7 @@ export const VoiceConversationInterface = ({
   });
 
   const handleVoiceSelection = (voiceId: string, voiceName: string) => {
+    console.log('Voice selected:', voiceId, voiceName);
     setSelectedVoiceId(voiceId);
     setSelectedVoiceName(voiceName);
     
@@ -130,8 +138,8 @@ export const VoiceConversationInterface = ({
     localStorage.setItem('preferred-voice-id', voiceId);
     localStorage.setItem('preferred-voice-name', voiceName);
     
-    // Update voice settings if using OpenAI TTS
-    if (voiceMode === 'openai' && updateVoiceSettings) {
+    // Update voice settings for OpenAI TTS
+    if (updateVoiceSettings) {
       updateVoiceSettings({ voice: { id: voiceId, name: voiceName } });
     }
     
@@ -216,8 +224,15 @@ export const VoiceConversationInterface = ({
                   isSupported={isSupported}
                   isSpeaking={isSpeaking}
                   availableVoices={availableVoices}
-                  settings={voiceSettings || {}}
-                  onSettingsChange={updateVoiceSettings || (() => {})}
+                  settings={{
+                    voice: { id: selectedVoiceId, name: selectedVoiceName },
+                    selectedVoice: selectedVoiceId
+                  }}
+                  onSettingsChange={(settings) => {
+                    if (settings.voice?.id) {
+                      handleVoiceSelection(settings.voice.id, settings.voice.name || settings.voice.id);
+                    }
+                  }}
                   onStop={stopSpeaking || (() => {})}
                   onTestVoice={() => speak?.('This is a test of the selected voice.')}
                 />

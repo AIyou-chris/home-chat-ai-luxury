@@ -6,12 +6,18 @@ interface UseOpenAITTSProps {
   onSpeakStart?: () => void;
   onSpeakEnd?: () => void;
   onError?: (error: string) => void;
+  voiceId?: string;
 }
 
-export const useOpenAITTS = ({ onSpeakStart, onSpeakEnd, onError }: UseOpenAITTSProps = {}) => {
+export const useOpenAITTS = ({ 
+  onSpeakStart, 
+  onSpeakEnd, 
+  onError,
+  voiceId = 'alloy'
+}: UseOpenAITTSProps = {}) => {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
-  const [selectedVoice, setSelectedVoice] = useState<string>('alloy');
+  const [selectedVoice, setSelectedVoice] = useState<string>(voiceId);
   
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const audioQueueRef = useRef<string[]>([]);
@@ -25,6 +31,13 @@ export const useOpenAITTS = ({ onSpeakStart, onSpeakEnd, onError }: UseOpenAITTS
     { id: 'nova', name: 'Nova', description: 'Warm and engaging' },
     { id: 'shimmer', name: 'Shimmer', description: 'Bright and cheerful' }
   ];
+
+  // Update selected voice when voiceId prop changes
+  React.useEffect(() => {
+    if (voiceId && voiceId !== selectedVoice) {
+      setSelectedVoice(voiceId);
+    }
+  }, [voiceId, selectedVoice]);
 
   const processAudioQueue = useCallback(async () => {
     if (isProcessingRef.current || audioQueueRef.current.length === 0) {
@@ -40,6 +53,7 @@ export const useOpenAITTS = ({ onSpeakStart, onSpeakEnd, onError }: UseOpenAITTS
       
       try {
         console.log('🎵 Converting text to speech:', text.substring(0, 50) + '...');
+        console.log('🎤 Using voice ID:', selectedVoice);
         
         const { data, error } = await supabase.functions.invoke('text-to-speech', {
           body: { text, voice: selectedVoice }
@@ -79,10 +93,13 @@ export const useOpenAITTS = ({ onSpeakStart, onSpeakEnd, onError }: UseOpenAITTS
   const speak = useCallback((text: string) => {
     if (!text.trim()) return;
     
+    console.log('🗣️ Queueing text for speech:', text.substring(0, 50) + '...');
+    console.log('🎤 Current voice:', selectedVoice);
+    
     // Add to queue and process
     audioQueueRef.current.push(text);
     processAudioQueue();
-  }, [processAudioQueue]);
+  }, [processAudioQueue, selectedVoice]);
 
   const stop = useCallback(() => {
     // Clear queue and stop current audio
@@ -99,6 +116,7 @@ export const useOpenAITTS = ({ onSpeakStart, onSpeakEnd, onError }: UseOpenAITTS
   }, [onSpeakEnd]);
 
   const setVoice = useCallback((voiceId: string) => {
+    console.log('🎤 Setting voice to:', voiceId);
     setSelectedVoice(voiceId);
   }, []);
 

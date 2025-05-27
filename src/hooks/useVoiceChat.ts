@@ -5,9 +5,10 @@ import { useOpenAITTS } from './useOpenAITTS';
 interface UseVoiceChatProps {
   onTranscript: (text: string) => void;
   onSpeakText: (text: string) => void;
+  voiceId?: string;
 }
 
-export const useVoiceChat = ({ onTranscript, onSpeakText }: UseVoiceChatProps) => {
+export const useVoiceChat = ({ onTranscript, onSpeakText, voiceId }: UseVoiceChatProps) => {
   const [isListening, setIsListening] = useState(false);
   const [isSupported, setIsSupported] = useState(true);
   const recognitionRef = useRef<SpeechRecognition | null>(null);
@@ -23,6 +24,7 @@ export const useVoiceChat = ({ onTranscript, onSpeakText }: UseVoiceChatProps) =
     settings: voiceSettings,
     updateSettings: updateVoiceSettings
   } = useOpenAITTS({
+    voiceId,
     onSpeakStart: () => console.log('OpenAI TTS started'),
     onSpeakEnd: () => console.log('OpenAI TTS ended'),
     onError: (error) => console.error('OpenAI TTS error:', error)
