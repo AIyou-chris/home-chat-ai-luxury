@@ -8,6 +8,7 @@ import { VoiceSelectionPopup } from './VoiceSelectionPopup';
 import { VoiceSelector } from './VoiceSelector';
 import { VoiceControls } from './VoiceControls';
 import { useEnhancedVoiceChat } from '@/hooks/useEnhancedVoiceChat';
+import { supabase } from '@/integrations/supabase/client';
 
 interface VoiceConversationInterfaceProps {
   property: any;
@@ -26,6 +27,8 @@ export const VoiceConversationInterface = ({
   const [showSettings, setShowSettings] = useState(false);
   const [conversationStarted, setConversationStarted] = useState(false);
   const [transcript, setTranscript] = useState<string[]>([]);
+  const [isProcessingAI, setIsProcessingAI] = useState(false);
+  const sessionId = useState(() => crypto.randomUUID())[0];
 
   // Load saved voice preference on mount
   useEffect(() => {
@@ -48,6 +51,45 @@ export const VoiceConversationInterface = ({
     }
   }, [isOpen, selectedVoiceId]);
 
+  // Function to send message to AI and get response
+  const sendToAI = async (message: string) => {
+    if (isProcessingAI) return;
+    
+    setIsProcessingAI(true);
+    console.log('Sending to AI:', message);
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-chat', {
+        body: {
+          message: message,
+          propertyId: property.id,
+          sessionId: sessionId
+        }
+      });
+
+      if (error) throw error;
+
+      console.log('AI Response received:', data.response);
+      
+      // Add AI response to transcript
+      setTranscript(prev => [...prev, `AI: ${data.response}`]);
+      
+      // Speak the AI response
+      if (speak) {
+        speak(data.response);
+      }
+    } catch (error) {
+      console.error('AI chat error:', error);
+      const errorResponse = "I'm sorry, I'm having trouble responding right now. Please try again.";
+      setTranscript(prev => [...prev, `AI: ${errorResponse}`]);
+      if (speak) {
+        speak(errorResponse);
+      }
+    } finally {
+      setIsProcessingAI(false);
+    }
+  };
+
   const {
     isListening,
     isSpeaking,
@@ -66,9 +108,13 @@ export const VoiceConversationInterface = ({
     updateVoiceSettings
   } = useEnhancedVoiceChat({
     onTranscript: (text) => {
+      console.log('Transcript received:', text);
       setTranscript(prev => [...prev, `You: ${text}`]);
+      // Send the transcribed text to AI
+      sendToAI(text);
     },
     onAIResponse: (text) => {
+      console.log('AI Response callback:', text);
       setTranscript(prev => [...prev, `AI: ${text}`]);
     },
     property,
@@ -107,6 +153,7 @@ export const VoiceConversationInterface = ({
   const getAnimationMode = () => {
     if (isSpeaking) return 'speaking';
     if (isListening) return 'listening';
+    if (isProcessingAI) return 'thinking';
     if (isConnected && conversationStarted) return 'thinking';
     return 'idle';
   };
@@ -114,6 +161,7 @@ export const VoiceConversationInterface = ({
   const getStatusText = () => {
     if (!selectedVoiceId) return 'Select a voice to start';
     if (!isConnected && voiceMode === 'ultravox') return 'Connecting...';
+    if (isProcessingAI) return 'AI is thinking...';
     if (isSpeaking) return 'AI is speaking...';
     if (isListening) return 'Listening...';
     if (conversationStarted) return 'Tap to speak';
@@ -261,7 +309,7 @@ export const VoiceConversationInterface = ({
               {/* Main Voice Button */}
               <Button
                 onClick={handleVoiceToggle}
-                disabled={voiceMode === 'ultravox' && !isConnected}
+                disabled={(voiceMode === 'ultravox' && !isConnected) || isProcessingAI}
                 size="lg"
                 className={`w-20 h-20 rounded-full transition-all duration-300 ${
                   isListening 
