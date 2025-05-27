@@ -40,29 +40,27 @@ export const useUltravoxVoice = ({ onTranscript, onAIResponse, propertyContext, 
       };
       
       console.log('📤 Calling Supabase function with:', JSON.stringify(requestBody, null, 2));
-      console.log('🌐 Supabase URL:', supabase.supabaseUrl);
-      console.log('🔑 API Key present:', !!supabase.supabaseKey);
+      console.log('🌐 Attempting to call ultravox-session edge function...');
 
-      // Add timeout and detailed error handling
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => {
-        controller.abort();
-        console.error('⏰ Request timeout after 30 seconds');
-      }, 30000);
+      // Implement manual timeout using Promise.race
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(() => {
+          reject(new Error('Request timeout after 30 seconds'));
+        }, 30000);
+      });
+
+      const invokePromise = supabase.functions.invoke('ultravox-session', {
+        body: requestBody,
+      });
 
       let response;
       try {
-        response = await supabase.functions.invoke('ultravox-session', {
-          body: requestBody,
-          signal: controller.signal,
-        });
-        clearTimeout(timeoutId);
+        response = await Promise.race([invokePromise, timeoutPromise]);
       } catch (invokeError) {
-        clearTimeout(timeoutId);
         console.error('💥 Supabase invoke error:', invokeError);
         
-        // Check if it's a network error
-        if (invokeError.name === 'AbortError') {
+        // Check if it's a timeout error
+        if (invokeError.message?.includes('timeout')) {
           throw new Error('Request timeout - please check your internet connection');
         }
         
@@ -340,6 +338,7 @@ export const useUltravoxVoice = ({ onTranscript, onAIResponse, propertyContext, 
     isSpeaking,
     isSupported,
     error,
+    setError,
     startListening,
     stopListening,
     disconnect,

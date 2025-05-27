@@ -49,6 +49,7 @@ export const VoiceConversationInterface = ({
     isConnected,
     isSupported,
     error,
+    setError,
     startListening,
     stopListening,
     voiceMode,

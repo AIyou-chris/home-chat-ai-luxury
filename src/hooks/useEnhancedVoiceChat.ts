@@ -1,3 +1,4 @@
+
 import { useState, useCallback } from 'react';
 import { useUltravoxVoice } from './useUltravoxVoice';
 import { useVoiceChat } from './useVoiceChat';
@@ -56,6 +57,7 @@ export const useEnhancedVoiceChat = ({
     isConnected: voiceMode === 'ultravox' ? ultravoxVoice.isConnected : true,
     isSupported: currentVoice.isSupported,
     error: voiceMode === 'ultravox' ? ultravoxVoice.error : null,
+    setError: voiceMode === 'ultravox' ? ultravoxVoice.setError : () => {},
     
     // Voice controls
     startListening: currentVoice.startListening,
