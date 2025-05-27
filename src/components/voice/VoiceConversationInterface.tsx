@@ -80,9 +80,9 @@ export const VoiceConversationInterface = ({
       // Add AI response to transcript
       setTranscript(prev => [...prev, `AI: ${data.response}`]);
       
-      // Speak the AI response with the selected voice
+      // Speak the AI response with the selected voice - this was missing!
       if (speak) {
-        console.log('Speaking with voice:', selectedVoiceId);
+        console.log('Speaking AI response with voice:', selectedVoiceId);
         speak(data.response);
       }
     } catch (error) {
@@ -122,7 +122,7 @@ export const VoiceConversationInterface = ({
     },
     onAIResponse: (text) => {
       console.log('AI Response callback:', text);
-      setTranscript(prev => [...prev, `AI: ${text}`]);
+      // Don't add to transcript here since we do it in sendToAI
     },
     property,
     useUltravox: false, // Default to OpenAI TTS
@@ -180,9 +180,9 @@ export const VoiceConversationInterface = ({
 
   return (
     <>
-      <div className="fixed inset-0 z-50 bg-gradient-to-br from-gray-50 to-white flex flex-col">
+      <div className="fixed inset-0 z-50 bg-gradient-to-br from-gray-50 to-white flex flex-col h-screen">
         {/* Header */}
-        <div className="flex items-center justify-between p-6 border-b border-gray-200">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
               <Mic size={20} className="text-white" />
@@ -217,7 +217,7 @@ export const VoiceConversationInterface = ({
 
         {/* Settings Panel */}
         {showSettings && selectedVoiceId && (
-          <div className="p-4 bg-gray-50 border-b border-gray-200">
+          <div className="p-4 bg-gray-50 border-b border-gray-200 flex-shrink-0">
             <div className="max-w-md mx-auto">
               {voiceMode === 'openai' && availableVoices && (
                 <VoiceControls
@@ -262,7 +262,7 @@ export const VoiceConversationInterface = ({
 
         {/* Enhanced Error Display */}
         {error && (
-          <div className="p-4 bg-red-50 border-b border-red-200">
+          <div className="p-4 bg-red-50 border-b border-red-200 flex-shrink-0">
             <div className="max-w-md mx-auto">
               <p className="text-sm text-red-800 text-center mb-3">{error}</p>
               <div className="flex flex-col space-y-2">
@@ -292,10 +292,10 @@ export const VoiceConversationInterface = ({
           </div>
         )}
 
-        {/* Main Voice Interface */}
-        <div className="flex-1 flex flex-col items-center justify-center p-8">
-          {/* Animated Graph */}
-          <div className="mb-8">
+        {/* Main Voice Interface - Made flex-1 to take remaining space */}
+        <div className="flex-1 flex flex-col items-center justify-center p-4 min-h-0">
+          {/* Animated Graph - Reduced margin */}
+          <div className="mb-4">
             <CircularVoiceAnimation 
               isActive={true}
               mode={getAnimationMode()}
@@ -303,14 +303,14 @@ export const VoiceConversationInterface = ({
             />
           </div>
 
-          {/* Status Text */}
-          <p className="text-lg font-medium text-gray-700 mb-8 text-center">
+          {/* Status Text - Reduced margin */}
+          <p className="text-lg font-medium text-gray-700 mb-4 text-center">
             {getStatusText()}
           </p>
 
           {/* Connection Status */}
           {voiceMode === 'ultravox' && (
-            <div className="flex items-center space-x-2 mb-6">
+            <div className="flex items-center space-x-2 mb-4">
               <div className={`w-3 h-3 rounded-full ${isConnected ? 'bg-green-500' : 'bg-red-500'}`} />
               <span className="text-sm text-gray-600">
                 {isConnected ? 'Connected to Ultravox' : 'Connecting to Ultravox...'}
@@ -320,7 +320,7 @@ export const VoiceConversationInterface = ({
 
           {/* Voice Controls */}
           {selectedVoiceId && isSupported && (
-            <div className="flex items-center space-x-6">
+            <div className="flex items-center space-x-6 mb-4">
               {/* Main Voice Button */}
               <Button
                 onClick={handleVoiceToggle}
@@ -342,13 +342,13 @@ export const VoiceConversationInterface = ({
             </div>
           )}
 
-          {/* Transcript */}
+          {/* Transcript - Made scrollable and limited height */}
           {transcript.length > 0 && (
-            <Card className="mt-8 max-w-2xl w-full max-h-40 overflow-y-auto">
-              <CardContent className="p-4">
+            <Card className="w-full max-w-2xl flex-1 min-h-0">
+              <CardContent className="p-4 h-full overflow-y-auto">
                 <div className="space-y-2">
-                  {transcript.slice(-4).map((line, index) => (
-                    <p key={index} className="text-sm text-gray-600">
+                  {transcript.map((line, index) => (
+                    <p key={index} className="text-sm text-gray-600 break-words">
                       {line}
                     </p>
                   ))}
@@ -358,8 +358,8 @@ export const VoiceConversationInterface = ({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="p-4 border-t border-gray-200 text-center">
+        {/* Footer - Fixed at bottom */}
+        <div className="p-3 border-t border-gray-200 text-center flex-shrink-0">
           <p className="text-xs text-gray-400">
             {voiceMode === 'ultravox' 
               ? 'Powered by Ultravox AI • Real-time voice conversation'
