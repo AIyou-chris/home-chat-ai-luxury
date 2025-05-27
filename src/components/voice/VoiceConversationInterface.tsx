@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
@@ -5,6 +6,7 @@ import { Mic, MicOff, MessageSquare, Settings, VolumeX, Volume2 } from 'lucide-r
 import { CircularVoiceAnimation } from './CircularVoiceAnimation';
 import { VoiceSelectionPopup } from './VoiceSelectionPopup';
 import { VoiceSelector } from './VoiceSelector';
+import { VoiceControls } from './VoiceControls';
 import { useEnhancedVoiceChat } from '@/hooks/useEnhancedVoiceChat';
 
 interface VoiceConversationInterfaceProps {
@@ -204,16 +206,16 @@ export const VoiceConversationInterface = ({
                 <Button
                   size="sm"
                   variant="outline"
-                  onClick={() => switchVoiceMode('browser')}
+                  onClick={() => switchVoiceMode('openai')}
                   className="text-xs"
                 >
-                  Switch to Browser Voice
+                  Switch to OpenAI Voice
                 </Button>
                 <Button
                   size="sm"
                   variant="outline"
                   onClick={() => {
-                    setError(null);
+                    setError && setError(null);
                     if (voiceMode === 'ultravox') {
                       startListening();
                     }
@@ -298,7 +300,7 @@ export const VoiceConversationInterface = ({
           <p className="text-xs text-gray-400">
             {voiceMode === 'ultravox' 
               ? 'Powered by Ultravox AI • Real-time voice conversation'
-              : 'Using browser voice system'
+              : 'Using OpenAI Text-to-Speech'
             }
           </p>
         </div>
