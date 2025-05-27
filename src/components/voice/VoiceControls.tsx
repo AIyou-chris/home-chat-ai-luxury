@@ -6,29 +6,22 @@ import { Volume2, VolumeX, Settings } from 'lucide-react';
 import { useState } from 'react';
 
 interface VoiceControlsProps {
-  isSupported: boolean;
+  isListening: boolean;
   isSpeaking: boolean;
-  availableVoices: Array<{ id: string; name: string; description: string; }>;
-  settings: {
-    selectedVoice?: string;
-    voice?: { id: string; name: string; };
-  };
-  onSettingsChange: (settings: any) => void;
-  onStop: () => void;
-  onTestVoice: () => void;
+  isSupported: boolean;
+  onStartListening: () => void;
+  onStopListening: () => void;
+  onOpenVoiceSettings: () => void;
 }
 
 export const VoiceControls = ({
-  isSupported,
+  isListening,
   isSpeaking,
-  availableVoices,
-  settings,
-  onSettingsChange,
-  onStop,
-  onTestVoice
+  isSupported,
+  onStartListening,
+  onStopListening,
+  onOpenVoiceSettings
 }: VoiceControlsProps) => {
-  const [showSettings, setShowSettings] = useState(false);
-
   if (!isSupported) {
     return (
       <div className="text-center text-sm text-gray-500 p-2">
@@ -37,87 +30,39 @@ export const VoiceControls = ({
     );
   }
 
-  const currentVoiceId = settings.selectedVoice || settings.voice?.id || 'alloy';
-
   return (
     <div className="space-y-3">
-      {/* Quick Controls */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
+      {/* Main Voice Controls */}
+      <div className="flex items-center justify-center gap-4">
+        {!isListening && !isSpeaking && (
           <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setShowSettings(!showSettings)}
-            className="flex items-center gap-1"
+            onClick={onStartListening}
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-full shadow-lg transition-all duration-200 hover:scale-105"
           >
-            <Settings size={14} />
-            Voice Settings
+            Start Voice Chat
           </Button>
-          
-          {isSpeaking && (
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={onStop}
-              className="flex items-center gap-1 text-red-600 border-red-200"
-            >
-              <VolumeX size={14} />
-              Stop
-            </Button>
-          )}
-        </div>
+        )}
+        
+        {isListening && (
+          <Button
+            onClick={onStopListening}
+            variant="outline"
+            className="border-red-500 text-red-600 hover:bg-red-50 px-6 py-3 rounded-full shadow-lg"
+          >
+            Stop Listening
+          </Button>
+        )}
 
         <Button
           variant="outline"
           size="sm"
-          onClick={onTestVoice}
-          disabled={isSpeaking}
-          className="flex items-center gap-1"
+          onClick={onOpenVoiceSettings}
+          className="flex items-center gap-2"
         >
-          <Volume2 size={14} />
-          Test Voice
+          <Settings size={16} />
+          Settings
         </Button>
       </div>
-
-      {/* Advanced Settings */}
-      {showSettings && (
-        <Card className="border-gray-200">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-sm font-medium">OpenAI Voice Configuration</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Voice Selection */}
-            <div className="space-y-2">
-              <label className="text-xs font-medium text-gray-700">Voice</label>
-              <Select
-                value={currentVoiceId}
-                onValueChange={(voiceId) => {
-                  const voice = availableVoices.find(v => v.id === voiceId);
-                  onSettingsChange({ voice: voice || { id: voiceId } });
-                }}
-              >
-                <SelectTrigger className="h-8 text-xs">
-                  <SelectValue placeholder="Select voice" />
-                </SelectTrigger>
-                <SelectContent>
-                  {availableVoices.map((voice) => (
-                    <SelectItem key={voice.id} value={voice.id} className="text-xs">
-                      <div className="flex flex-col items-start">
-                        <span className="font-medium">{voice.name}</span>
-                        <span className="text-xs text-gray-500">{voice.description}</span>
-                      </div>
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="text-xs text-gray-500 bg-blue-50 p-2 rounded">
-              <strong>Note:</strong> OpenAI voices have optimized speed and pitch settings built-in for natural conversation.
-            </div>
-          </CardContent>
-        </Card>
-      )}
     </div>
   );
 };

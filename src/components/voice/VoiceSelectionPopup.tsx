@@ -7,18 +7,26 @@ import { CircularVoiceAnimation } from './CircularVoiceAnimation';
 
 interface VoiceSelectionPopupProps {
   isOpen: boolean;
-  onVoiceSelect: (voiceId: string, voiceName: string) => void;
   onClose: () => void;
+  availableVoices: Array<{ id: string; name: string; description: string; }>;
+  currentVoice?: string;
+  onVoiceSelect: (voiceId: string) => void;
 }
 
-export const VoiceSelectionPopup = ({ isOpen, onVoiceSelect, onClose }: VoiceSelectionPopupProps) => {
+export const VoiceSelectionPopup = ({ 
+  isOpen, 
+  onClose, 
+  availableVoices, 
+  currentVoice, 
+  onVoiceSelect 
+}: VoiceSelectionPopupProps) => {
   const [customVoiceId, setCustomVoiceId] = useState('');
   const [showCustomInput, setShowCustomInput] = useState(false);
 
   if (!isOpen) return null;
 
   const handleVoiceSelect = (voiceId: string, voiceName: string) => {
-    onVoiceSelect(voiceId, voiceName);
+    onVoiceSelect(voiceId);
     onClose();
   };
 
@@ -50,39 +58,29 @@ export const VoiceSelectionPopup = ({ isOpen, onVoiceSelect, onClose }: VoiceSel
 
           {/* Voice Options */}
           <div className="space-y-3 mb-6">
-            {/* Mary - Female Voice */}
-            <Button
-              onClick={() => handleVoiceSelect('b0e6b5c1-3100-44d5-8578-9015aa3023ae', 'Mary')}
-              className="w-full p-4 h-auto bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white border-0 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                  <User size={24} />
+            {availableVoices.map((voice) => (
+              <Button
+                key={voice.id}
+                onClick={() => handleVoiceSelect(voice.id, voice.name)}
+                className={`w-full p-4 h-auto ${
+                  currentVoice === voice.id 
+                    ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700' 
+                    : 'bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700'
+                } text-white border-0 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105`}
+              >
+                <div className="flex items-center space-x-4">
+                  <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
+                    <User size={24} />
+                  </div>
+                  <div className="text-left">
+                    <div className="font-semibold text-lg">{voice.name}</div>
+                    <div className="text-sm opacity-90">{voice.description}</div>
+                  </div>
                 </div>
-                <div className="text-left">
-                  <div className="font-semibold text-lg">Mary</div>
-                  <div className="text-sm opacity-90">Professional Female Voice</div>
-                </div>
-              </div>
-            </Button>
+              </Button>
+            ))}
 
-            {/* Tom - Male Voice */}
-            <Button
-              onClick={() => handleVoiceSelect('91fa9bcf-93c8-467c-8b29-973720e3f167', 'Tom')}
-              className="w-full p-4 h-auto bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white border-0 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
-            >
-              <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center">
-                  <UserCheck size={24} />
-                </div>
-                <div className="text-left">
-                  <div className="font-semibold text-lg">Tom</div>
-                  <div className="text-sm opacity-90">Professional Male Voice</div>
-                </div>
-              </div>
-            </Button>
-
-            {/* Own Voice */}
+            {/* Custom Voice Option */}
             <Button
               onClick={() => setShowCustomInput(!showCustomInput)}
               className="w-full p-4 h-auto bg-gradient-to-r from-purple-500 to-purple-600 hover:from-purple-600 hover:to-purple-700 text-white border-0 rounded-xl shadow-lg transition-all duration-300 hover:shadow-xl hover:scale-105"
@@ -103,7 +101,7 @@ export const VoiceSelectionPopup = ({ isOpen, onVoiceSelect, onClose }: VoiceSel
           {showCustomInput && (
             <div className="mt-4 p-4 bg-gray-50 rounded-xl space-y-3 animate-fade-in">
               <label className="text-sm font-medium text-gray-700">
-                Enter your Ultravox voice ID:
+                Enter your custom voice ID:
               </label>
               <div className="flex gap-2">
                 <input
@@ -123,7 +121,7 @@ export const VoiceSelectionPopup = ({ isOpen, onVoiceSelect, onClose }: VoiceSel
                 </Button>
               </div>
               <p className="text-xs text-gray-500">
-                Enter your Ultravox cloned voice ID to use your own voice.
+                Enter your custom voice ID to use your own voice.
               </p>
             </div>
           )}
@@ -131,7 +129,7 @@ export const VoiceSelectionPopup = ({ isOpen, onVoiceSelect, onClose }: VoiceSel
           {/* Footer */}
           <div className="mt-6 text-center">
             <p className="text-xs text-gray-400">
-              Powered by Ultravox AI • High-quality voice synthesis
+              Powered by OpenAI • High-quality voice synthesis
             </p>
           </div>
         </CardContent>
