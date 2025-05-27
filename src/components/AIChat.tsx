@@ -5,6 +5,7 @@ import { PropertyChatBot } from './PropertyChatBot';
 import { useEnhancedVoiceChat } from '@/hooks/useEnhancedVoiceChat';
 import { VoiceControls } from './voice/VoiceControls';
 import { VoiceAnimation } from './voice/VoiceAnimation';
+import { VoiceSelector } from './voice/VoiceSelector';
 
 interface AIChatProps {
   isOpen: boolean;
@@ -14,6 +15,8 @@ interface AIChatProps {
 
 export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
   const [pendingVoiceMessage, setPendingVoiceMessage] = useState<string>('');
+  const [selectedVoiceId, setSelectedVoiceId] = useState<string>('b0e6b5c1-3100-44d5-8578-9015aa3023ae'); // Default to female voice
+  const [customVoiceId, setCustomVoiceId] = useState<string>('');
 
   const {
     isListening,
@@ -38,8 +41,23 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
       console.log('AI Response:', text);
     },
     property,
-    useUltravox: true
+    useUltravox: true,
+    voiceId: selectedVoiceId
   });
+
+  const handleVoiceChange = (voiceId: string) => {
+    setSelectedVoiceId(voiceId);
+    // Disconnect current session to use new voice
+    if (isConnected) {
+      stopListening();
+      // Session will be recreated with new voice on next startListening
+    }
+  };
+
+  const handleCustomVoiceSubmit = (voiceId: string) => {
+    setCustomVoiceId(voiceId);
+    setSelectedVoiceId(voiceId);
+  };
 
   const handleVoiceToggle = () => {
     if (isListening) {
@@ -95,6 +113,16 @@ export const AIChat = ({ isOpen, onClose, property }: AIChatProps) => {
         {/* Voice Controls */}
         {isSupported && (
           <div className="p-4 border-b border-gray-200">
+            {/* Voice Selection */}
+            <div className="mb-4">
+              <VoiceSelector
+                selectedVoice={selectedVoiceId}
+                onVoiceChange={handleVoiceChange}
+                customVoiceId={customVoiceId}
+                onCustomVoiceSubmit={handleCustomVoiceSubmit}
+              />
+            </div>
+
             {/* Voice Mode Switcher */}
             <div className="flex items-center justify-center space-x-2 mb-4">
               <Button

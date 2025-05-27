@@ -1,4 +1,3 @@
-
 import { useState, useCallback } from 'react';
 import { useUltravoxVoice } from './useUltravoxVoice';
 import { useVoiceChat } from './useVoiceChat';
@@ -8,13 +7,15 @@ interface UseEnhancedVoiceChatProps {
   onAIResponse: (text: string) => void;
   property?: any;
   useUltravox?: boolean;
+  voiceId?: string;
 }
 
 export const useEnhancedVoiceChat = ({ 
   onTranscript, 
   onAIResponse, 
   property,
-  useUltravox = true 
+  useUltravox = true,
+  voiceId 
 }: UseEnhancedVoiceChatProps) => {
   const [voiceMode, setVoiceMode] = useState<'ultravox' | 'browser'>(useUltravox ? 'ultravox' : 'browser');
 
@@ -23,6 +24,7 @@ export const useEnhancedVoiceChat = ({
     onTranscript,
     onAIResponse,
     propertyContext: property ? `Property: ${property.title}, ${property.description}` : undefined,
+    voiceId,
   });
 
   // Browser-based voice system (fallback)

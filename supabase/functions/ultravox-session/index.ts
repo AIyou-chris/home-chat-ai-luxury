@@ -13,7 +13,7 @@ serve(async (req) => {
   }
 
   try {
-    const { systemPrompt } = await req.json();
+    const { systemPrompt, voiceId } = await req.json();
     
     const ultravoxApiKey = Deno.env.get('ULTRAVOX_API_KEY');
     if (!ultravoxApiKey) {
@@ -29,7 +29,7 @@ serve(async (req) => {
       },
       body: JSON.stringify({
         systemPrompt: systemPrompt || 'You are a helpful AI assistant.',
-        voice: 'terrence', // You can customize this
+        voice: voiceId || 'terrence', // Use provided voice ID or default
         model: 'fixie-ai/ultravox-v0_3',
         temperature: 0.7,
         maxDuration: 1800, // 30 minutes max

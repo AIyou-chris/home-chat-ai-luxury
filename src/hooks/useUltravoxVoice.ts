@@ -1,4 +1,3 @@
-
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -11,9 +10,10 @@ interface UseUltravoxVoiceProps {
   onTranscript: (text: string) => void;
   onAIResponse: (text: string) => void;
   propertyContext?: string;
+  voiceId?: string;
 }
 
-export const useUltravoxVoice = ({ onTranscript, onAIResponse, propertyContext }: UseUltravoxVoiceProps) => {
+export const useUltravoxVoice = ({ onTranscript, onAIResponse, propertyContext, voiceId }: UseUltravoxVoiceProps) => {
   const [isConnected, setIsConnected] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
@@ -28,10 +28,11 @@ export const useUltravoxVoice = ({ onTranscript, onAIResponse, propertyContext }
   // Create Ultravox session using Supabase edge function
   const createSession = useCallback(async () => {
     try {
-      console.log('Creating Ultravox session...');
+      console.log('Creating Ultravox session with voice:', voiceId);
       const { data, error } = await supabase.functions.invoke('ultravox-session', {
         body: {
           systemPrompt: `You are an AI assistant helping users with real estate property questions. ${propertyContext ? `Context about the current property: ${propertyContext}` : ''} Provide helpful, accurate information about properties, real estate processes, and answer questions naturally in a conversational manner.`,
+          voiceId: voiceId,
         },
       });
 
@@ -52,7 +53,7 @@ export const useUltravoxVoice = ({ onTranscript, onAIResponse, propertyContext }
       setError('Failed to create voice session');
       throw error;
     }
-  }, [propertyContext]);
+  }, [propertyContext, voiceId]);
 
   // Connect to Ultravox WebSocket
   const connectWebSocket = useCallback(async (session: UltravoxSession) => {
