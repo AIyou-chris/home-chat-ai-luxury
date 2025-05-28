@@ -18,16 +18,19 @@ export const DashboardStats = ({ agentId }: DashboardStatsProps) => {
         .select('*', { count: 'exact', head: true })
         .eq('agent_id', agentId);
 
+      // Get property IDs for the agent first
+      const { data: agentProperties } = await supabase
+        .from('properties')
+        .select('id')
+        .eq('agent_id', agentId);
+
+      const propertyIds = agentProperties?.map(p => p.id) || [];
+
       // Get leads count
       const { count: leadsCount } = await supabase
         .from('leads')
         .select('property_id', { count: 'exact', head: true })
-        .in('property_id', 
-          supabase
-            .from('properties')
-            .select('id')
-            .eq('agent_id', agentId)
-        );
+        .in('property_id', propertyIds);
 
       // Get submissions count
       const { count: submissionsCount } = await supabase
@@ -39,12 +42,7 @@ export const DashboardStats = ({ agentId }: DashboardStatsProps) => {
       const { count: appointmentsCount } = await supabase
         .from('appointments')
         .select('property_id', { count: 'exact', head: true })
-        .in('property_id',
-          supabase
-            .from('properties')
-            .select('id')
-            .eq('agent_id', agentId)
-        );
+        .in('property_id', propertyIds);
 
       return {
         properties: propertiesCount || 0,
