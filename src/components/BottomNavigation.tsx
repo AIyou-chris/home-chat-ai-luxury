@@ -1,6 +1,5 @@
-
 import { Button } from '@/components/ui/button';
-import { Home, Image, Info, Phone, MessageSquare } from 'lucide-react';
+import { Home, Image, Info, Phone, MessageSquare, MessageCircle } from 'lucide-react';
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -9,25 +8,37 @@ interface BottomNavigationProps {
 }
 
 export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomNavigationProps) => {
-  const tabs = [
-    { id: 'home', label: 'Home', icon: Home },
-    { id: 'gallery', label: 'Gallery', icon: Image },
-    { id: 'info', label: 'Info', icon: Info },
-    { id: 'contact', label: 'Contact', icon: Phone }
-  ];
-
   return (
     <>
-      {/* Floating Voice Chat Button */}
-      <Button
-        onClick={onChatOpen}
-        className="fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
-      >
-        <MessageSquare size={24} />
-      </Button>
+      {/* Desktop Navigation */}
+      <div className="hidden md:block fixed top-4 right-4 z-40">
+        <div className="flex items-center space-x-2">
+          <a
+            href="/realtor-submit"
+            className="bg-white/90 backdrop-blur-md border border-gray-200 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white hover:text-orange-600 transition-all duration-200"
+          >
+            Submit Listing
+          </a>
+          <button
+            onClick={onChatOpen}
+            className="bg-orange-600 text-white rounded-full p-3 shadow-lg hover:bg-orange-700 transition-colors"
+          >
+            <MessageCircle size={20} />
+          </button>
+        </div>
+      </div>
 
-      {/* Bottom Navigation */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white shadow-lg border-t border-gray-200">
+      {/* Mobile Navigation */}
+      <div className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
+        {/* Floating Voice Chat Button */}
+        <Button
+          onClick={onChatOpen}
+          className="fixed bottom-24 right-6 z-50 w-14 h-14 rounded-full bg-orange-500 hover:bg-orange-600 text-white shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110 active:scale-95"
+        >
+          <MessageSquare size={24} />
+        </Button>
+
+        {/* Bottom Navigation */}
         <div className="flex items-center justify-around py-2 px-4 safe-area-bottom">
           {tabs.map((tab) => {
             const Icon = tab.icon;

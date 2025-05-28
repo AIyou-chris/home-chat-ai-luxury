@@ -196,6 +196,39 @@ export type Database = {
         }
         Relationships: []
       }
+      realtor_submissions: {
+        Row: {
+          additional_notes: string | null
+          agent_email: string
+          call_logs: string | null
+          created_at: string
+          id: string
+          listing_url: string
+          processing_status: string
+          updated_at: string
+        }
+        Insert: {
+          additional_notes?: string | null
+          agent_email: string
+          call_logs?: string | null
+          created_at?: string
+          id?: string
+          listing_url: string
+          processing_status?: string
+          updated_at?: string
+        }
+        Update: {
+          additional_notes?: string | null
+          agent_email?: string
+          call_logs?: string | null
+          created_at?: string
+          id?: string
+          listing_url?: string
+          processing_status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       reminders: {
         Row: {
           appointment_id: string | null
@@ -230,6 +263,44 @@ export type Database = {
             columns: ["appointment_id"]
             isOneToOne: false
             referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      submission_documents: {
+        Row: {
+          created_at: string
+          file_name: string
+          file_type: string
+          file_url: string
+          id: string
+          submission_id: string | null
+          upload_type: string
+        }
+        Insert: {
+          created_at?: string
+          file_name: string
+          file_type: string
+          file_url: string
+          id?: string
+          submission_id?: string | null
+          upload_type: string
+        }
+        Update: {
+          created_at?: string
+          file_name?: string
+          file_type?: string
+          file_url?: string
+          id?: string
+          submission_id?: string | null
+          upload_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "submission_documents_submission_id_fkey"
+            columns: ["submission_id"]
+            isOneToOne: false
+            referencedRelation: "realtor_submissions"
             referencedColumns: ["id"]
           },
         ]
