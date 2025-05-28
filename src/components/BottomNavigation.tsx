@@ -1,3 +1,4 @@
+
 import { Button } from '@/components/ui/button';
 import { Home, Image, Info, Phone, MessageSquare, MessageCircle } from 'lucide-react';
 
@@ -6,6 +7,13 @@ interface BottomNavigationProps {
   onTabChange: (tab: string) => void;
   onChatOpen: () => void;
 }
+
+const tabs = [
+  { id: 'home', label: 'Home', icon: Home },
+  { id: 'gallery', label: 'Gallery', icon: Image },
+  { id: 'details', label: 'Details', icon: Info },
+  { id: 'contact', label: 'Contact', icon: Phone },
+];
 
 export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomNavigationProps) => {
   return (
