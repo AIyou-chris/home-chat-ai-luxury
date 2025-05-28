@@ -9,6 +9,71 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      agent_sessions: {
+        Row: {
+          agent_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          session_token: string
+        }
+        Insert: {
+          agent_id: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          session_token: string
+        }
+        Update: {
+          agent_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          session_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "agent_sessions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      agents: {
+        Row: {
+          avatar_url: string | null
+          created_at: string
+          email: string
+          id: string
+          name: string
+          phone: string | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string
+          email: string
+          id?: string
+          name: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string
+          email?: string
+          id?: string
+          name?: string
+          phone?: string | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       appointments: {
         Row: {
           appointment_date: string
@@ -145,6 +210,7 @@ export type Database = {
       properties: {
         Row: {
           address: string
+          agent_id: string | null
           baths: number | null
           beds: number | null
           created_at: string
@@ -162,6 +228,7 @@ export type Database = {
         }
         Insert: {
           address: string
+          agent_id?: string | null
           baths?: number | null
           beds?: number | null
           created_at?: string
@@ -179,6 +246,7 @@ export type Database = {
         }
         Update: {
           address?: string
+          agent_id?: string | null
           baths?: number | null
           beds?: number | null
           created_at?: string
@@ -194,40 +262,71 @@ export type Database = {
           title?: string
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "properties_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       realtor_submissions: {
         Row: {
           additional_notes: string | null
           agent_email: string
+          agent_id: string | null
           call_logs: string | null
+          contact_phone: string | null
           created_at: string
+          custom_build_interest: boolean | null
           id: string
           listing_url: string
+          preferred_call_time: string | null
           processing_status: string
+          social_media_links: Json | null
           updated_at: string
         }
         Insert: {
           additional_notes?: string | null
           agent_email: string
+          agent_id?: string | null
           call_logs?: string | null
+          contact_phone?: string | null
           created_at?: string
+          custom_build_interest?: boolean | null
           id?: string
           listing_url: string
+          preferred_call_time?: string | null
           processing_status?: string
+          social_media_links?: Json | null
           updated_at?: string
         }
         Update: {
           additional_notes?: string | null
           agent_email?: string
+          agent_id?: string | null
           call_logs?: string | null
+          contact_phone?: string | null
           created_at?: string
+          custom_build_interest?: boolean | null
           id?: string
           listing_url?: string
+          preferred_call_time?: string | null
           processing_status?: string
+          social_media_links?: Json | null
           updated_at?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "realtor_submissions_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       reminders: {
         Row: {
