@@ -1,10 +1,18 @@
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Play, TrendingUp } from 'lucide-react';
 
 export const SalesHero = () => {
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => setScrollY(window.scrollY);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
   const handleDemoClick = () => {
     window.location.href = '/';
   };
@@ -14,13 +22,14 @@ export const SalesHero = () => {
   };
 
   return (
-    <div className="relative min-h-screen w-screen overflow-hidden">
-      {/* Hero Background */}
+    <div className="relative h-screen w-screen overflow-hidden">
+      {/* Parallax Hero Background */}
       <div className="absolute inset-0">
         <div 
-          className="w-full h-full bg-cover bg-center bg-no-repeat"
+          className="w-full h-[120vh] bg-cover bg-center bg-no-repeat"
           style={{
             backgroundImage: `url(/lovable-uploads/8fee2013-89fc-47e0-ba14-1795e366cdc3.png)`,
+            transform: `translateY(${scrollY * 0.5}px)`,
           }}
         />
         {/* Dark overlay for better text readability */}
@@ -30,7 +39,7 @@ export const SalesHero = () => {
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
       
-      <div className="relative z-10 min-h-screen flex flex-col w-screen">
+      <div className="relative z-10 h-screen flex flex-col w-screen">
         {/* Fixed Header with Logo */}
         <header className="absolute top-0 left-0 w-full z-20 px-6 py-4">
           <div className="flex justify-start">
