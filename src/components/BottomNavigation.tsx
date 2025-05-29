@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { Home, Image, Info, Phone, MessageSquare, MessageCircle } from 'lucide-react';
+import { Home, Image, Info, Phone, MessageSquare, MessageCircle, Shield } from 'lucide-react';
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -13,9 +13,18 @@ const tabs = [
   { id: 'gallery', label: 'Gallery', icon: Image },
   { id: 'details', label: 'Details', icon: Info },
   { id: 'contact', label: 'Contact', icon: Phone },
+  { id: 'agent', label: 'Agent', icon: Shield },
 ];
 
 export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomNavigationProps) => {
+  const handleTabClick = (tabId: string) => {
+    if (tabId === 'agent') {
+      window.location.href = '/agent-dashboard';
+    } else {
+      onTabChange(tabId);
+    }
+  };
+
   return (
     <>
       {/* Desktop Navigation */}
@@ -53,7 +62,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
         </Button>
 
         {/* Bottom Navigation */}
-        <div className="flex items-center justify-around py-2 px-4 safe-area-bottom">
+        <div className="flex items-center justify-around py-2 px-2 safe-area-bottom">
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
@@ -61,14 +70,14 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
             return (
               <button
                 key={tab.id}
-                onClick={() => onTabChange(tab.id)}
-                className={`flex flex-col items-center py-2 px-3 rounded-xl transition-all duration-200 ${
+                onClick={() => handleTabClick(tab.id)}
+                className={`flex flex-col items-center py-2 px-2 rounded-xl transition-all duration-200 ${
                   isActive 
                     ? 'text-blue-600 bg-blue-50' 
                     : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
                 }`}
               >
-                <Icon size={24} className="mb-1" />
+                <Icon size={20} className="mb-1" />
                 <span className="text-xs font-medium">{tab.label}</span>
               </button>
             );

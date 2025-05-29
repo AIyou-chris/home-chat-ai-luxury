@@ -25,19 +25,19 @@ export const PropertyDetails = ({ property }: PropertyDetailsProps) => {
         <div className="space-y-6">
           <div>
             <h2 className="text-3xl md:text-4xl font-light mb-4 text-gray-800">About This Home</h2>
-            <p className="text-gray-600 leading-relaxed text-lg">
+            <p className="text-gray-600 leading-relaxed text-lg text-left">
               {property.description}
             </p>
           </div>
 
           {/* Features */}
           <div>
-            <h3 className="text-xl font-medium mb-4 text-blue-600">Premium Features</h3>
+            <h3 className="text-xl font-medium mb-4 text-blue-600 text-left">Premium Features</h3>
             <ul className="space-y-3">
               {property.features.map((feature: string, index: number) => (
-                <li key={index} className="flex items-start space-x-3">
+                <li key={index} className="flex items-start space-x-3 text-left">
                   <div className="w-2 h-2 bg-orange-400 rounded-full mt-2 flex-shrink-0" />
-                  <span className="text-gray-600">{feature}</span>
+                  <span className="text-gray-600 text-left">{feature}</span>
                 </li>
               ))}
             </ul>

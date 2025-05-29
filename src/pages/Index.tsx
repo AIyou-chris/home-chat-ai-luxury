@@ -8,6 +8,7 @@ import { NeighborhoodInfo } from '@/components/NeighborhoodInfo';
 import { AgentProfile } from '@/components/AgentProfile';
 import { ContactSection } from '@/components/ContactSection';
 import { BottomNavigation } from '@/components/BottomNavigation';
+import { DemoCTA } from '@/components/DemoCTA';
 import { useSampleProperty } from '@/hooks/useSampleProperty';
 
 const Index = () => {
@@ -81,7 +82,7 @@ const Index = () => {
             />
           </div>
         );
-      case 'info':
+      case 'details':
         return (
           <div className="pt-4 pb-20">
             <NeighborhoodInfo />
@@ -94,6 +95,10 @@ const Index = () => {
             <ContactSection property={propertyData} />
           </div>
         );
+      case 'agent':
+        // This case handles navigation to agent dashboard
+        window.location.href = '/agent-dashboard';
+        return null;
       default:
         return null;
     }
@@ -102,6 +107,8 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-white text-gray-900 relative">
       {renderContent()}
+      
+      <DemoCTA />
       
       <BottomNavigation 
         activeTab={activeTab} 
