@@ -1,4 +1,3 @@
-
 import './App.css';
 import { Toaster } from "@/components/ui/toaster";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -7,6 +6,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import RealtorSubmission from "./pages/RealtorSubmission";
 import AgentDashboard from "./pages/AgentDashboard";
+import SalesPage from "./pages/SalesPage";
 
 const queryClient = new QueryClient();
 
@@ -17,6 +17,7 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/sales" element={<SalesPage />} />
           <Route path="/realtor-submit" element={<RealtorSubmission />} />
           <Route path="/agent-dashboard" element={<AgentDashboard />} />
           <Route path="*" element={<NotFound />} />
