@@ -9,7 +9,7 @@ import { FinalCTA } from '@/components/sales/FinalCTA';
 
 const SalesPage = () => {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white w-full overflow-x-hidden">
       <SalesHero />
       <ProblemSolution />
       <FeaturesShowcase />

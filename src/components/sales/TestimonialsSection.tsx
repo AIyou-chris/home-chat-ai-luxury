@@ -30,22 +30,22 @@ export const TestimonialsSection = () => {
   ];
 
   return (
-    <div className="py-20 bg-white">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-4">
+    <div className="py-12 sm:py-16 lg:py-20 bg-white w-full">
+      <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12 sm:mb-16">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
             Trusted by Top Real Estate Professionals
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto">
             Join hundreds of successful agents who've already transformed their business with AI-powered listings.
           </p>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
           {testimonials.map((testimonial, index) => (
             <div 
               key={index}
-              className="bg-gray-50 rounded-2xl p-8 border border-gray-100 hover:shadow-lg transition-all duration-300"
+              className="bg-gray-50 rounded-2xl p-6 sm:p-8 border border-gray-100 hover:shadow-lg transition-all duration-300"
             >
               <div className="flex items-center mb-4">
                 {[...Array(testimonial.rating)].map((_, i) => (
@@ -55,7 +55,7 @@ export const TestimonialsSection = () => {
               
               <div className="relative mb-6">
                 <Quote className="absolute -top-2 -left-2 text-orange-200" size={32} />
-                <p className="text-gray-700 leading-relaxed relative z-10 pl-6">
+                <p className="text-gray-700 leading-relaxed relative z-10 pl-6 text-sm sm:text-base">
                   "{testimonial.content}"
                 </p>
               </div>
@@ -77,23 +77,23 @@ export const TestimonialsSection = () => {
         </div>
 
         {/* Trust Indicators */}
-        <div className="mt-16 text-center">
-          <div className="grid md:grid-cols-4 gap-8 items-center">
+        <div className="mt-12 sm:mt-16 text-center">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 items-center">
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">500+</div>
-              <p className="text-gray-600">Active Agents</p>
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">500+</div>
+              <p className="text-gray-600 text-sm sm:text-base">Active Agents</p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">50K+</div>
-              <p className="text-gray-600">Conversations</p>
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">50K+</div>
+              <p className="text-gray-600 text-sm sm:text-base">Conversations</p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">15K+</div>
-              <p className="text-gray-600">Leads Captured</p>
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">15K+</div>
+              <p className="text-gray-600 text-sm sm:text-base">Leads Captured</p>
             </div>
             <div className="text-center">
-              <div className="text-3xl font-bold text-gray-900">300%</div>
-              <p className="text-gray-600">Average ROI</p>
+              <div className="text-2xl sm:text-3xl font-bold text-gray-900">300%</div>
+              <p className="text-gray-600 text-sm sm:text-base">Average ROI</p>
             </div>
           </div>
         </div>
