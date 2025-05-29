@@ -108,8 +108,6 @@ const Index = () => {
     <div className="min-h-screen bg-white text-gray-900 relative">
       {renderContent()}
       
-      <DemoCTA />
-      
       <BottomNavigation 
         activeTab={activeTab} 
         onTabChange={setActiveTab}
