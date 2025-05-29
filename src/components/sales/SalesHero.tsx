@@ -33,7 +33,7 @@ export const SalesHero = () => {
       <div className="relative z-10 min-h-screen flex flex-col">
         {/* Header with Left-Justified Bigger Logo */}
         <div className="w-full px-4 py-6">
-          <div className="max-w-7xl mx-auto flex justify-start">
+          <div className="w-full flex justify-start">
             <img 
               src="/lovable-uploads/cb12bb65-883d-4a31-97ea-4169a51747eb.png" 
               alt="Home Listing AI" 
@@ -44,7 +44,7 @@ export const SalesHero = () => {
 
         {/* Main Content */}
         <div className="flex-1 flex items-center">
-          <div className="max-w-7xl mx-auto px-4 w-full">
+          <div className="w-full px-4">
             <div className="max-w-4xl">
               <Badge className="bg-orange-100 text-orange-800 border-orange-200 mb-6 inline-block">
                 🚀 Revolutionary AI Technology for Real Estate
