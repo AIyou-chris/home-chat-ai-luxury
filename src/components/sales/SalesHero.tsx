@@ -22,9 +22,9 @@ export const SalesHero = () => {
   };
 
   return (
-    <div className="relative h-screen w-screen overflow-hidden -mt-0 -mb-0" style={{ margin: 0, padding: 0 }}>
+    <div className="relative h-screen w-screen overflow-hidden" style={{ margin: 0, padding: 0, position: 'relative', top: 0 }}>
       {/* Parallax Hero Background */}
-      <div className="absolute inset-0 -top-0" style={{ top: 0, left: 0, right: 0 }}>
+      <div className="absolute inset-0" style={{ top: 0, left: 0, right: 0, bottom: 0 }}>
         <div 
           className="w-full h-[120vh] bg-cover bg-center bg-no-repeat"
           style={{
@@ -39,20 +39,9 @@ export const SalesHero = () => {
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
       
-      <div className="relative z-10 h-screen flex flex-col w-screen" style={{ margin: 0, padding: 0 }}>
-        {/* Fixed Header with Logo */}
-        <header className="absolute top-0 left-0 w-full z-20 px-6 py-4" style={{ margin: 0 }}>
-          <div className="flex justify-start">
-            <img 
-              src="/lovable-uploads/cb12bb65-883d-4a31-97ea-4169a51747eb.png" 
-              alt="Home Listing AI" 
-              className="h-12 sm:h-16 md:h-20 lg:h-24 w-auto"
-            />
-          </div>
-        </header>
-
+      <div className="relative z-10 h-screen flex flex-col w-screen justify-center" style={{ margin: 0, padding: 0 }}>
         {/* Main Content */}
-        <div className="flex-1 flex items-center w-screen pt-20 sm:pt-24 md:pt-28 lg:pt-32">
+        <div className="flex-1 flex items-center w-screen">
           <div className="w-screen px-6 sm:px-8 lg:px-12">
             <div className="w-full max-w-5xl">
               <Badge className="bg-orange-100 text-orange-800 border-orange-200 mb-4 sm:mb-6 inline-block text-xs sm:text-sm">
