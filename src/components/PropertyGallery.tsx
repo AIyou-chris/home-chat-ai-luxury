@@ -69,8 +69,8 @@ export const PropertyGallery = ({ images, onImageClick }: PropertyGalleryProps) 
   };
 
   return (
-    <section className="py-8 px-4 md:px-8 max-w-7xl mx-auto">
-      <div className="mb-6">
+    <section className="py-8 px-2 md:px-8 max-w-7xl md:mx-auto">
+      <div className="mb-6 px-2 md:px-0">
         <h2 className="text-2xl md:text-3xl font-light mb-2 text-gray-800">Property Gallery</h2>
         <p className="text-gray-500 text-sm">Swipe to explore • Tap to view</p>
       </div>
@@ -78,7 +78,7 @@ export const PropertyGallery = ({ images, onImageClick }: PropertyGalleryProps) 
       {/* Main Image */}
       <div className="relative group mb-4">
         <div 
-          className="aspect-[4/3] md:aspect-[16/9] rounded-2xl overflow-hidden bg-gray-100 cursor-pointer shadow-md"
+          className="aspect-[4/3] md:aspect-[16/9] rounded-none md:rounded-2xl overflow-hidden bg-gray-100 cursor-pointer shadow-md"
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
           onClick={handleImageClick}
@@ -132,7 +132,7 @@ export const PropertyGallery = ({ images, onImageClick }: PropertyGalleryProps) 
       </div>
 
       {/* Thumbnail Gallery */}
-      <div className="grid grid-cols-4 md:grid-cols-6 gap-2 md:gap-4">
+      <div className="grid grid-cols-4 md:grid-cols-6 gap-2 md:gap-4 px-2 md:px-0">
         {images.map((image, index) => (
           <button
             key={index}

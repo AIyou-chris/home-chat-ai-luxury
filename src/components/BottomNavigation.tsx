@@ -28,7 +28,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
   return (
     <>
       {/* Desktop Navigation */}
-      <div className="hidden md:block fixed top-4 right-4 z-40">
+      <div className="hidden md:block fixed top-4 right-4 z-40 safe-area-top">
         <div className="flex items-center space-x-2">
           <a
             href="/realtor-submit"
@@ -38,7 +38,7 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
           </a>
           <a
             href="/agent-dashboard"
-            className="bg-white/90 backdrop-blur-md border border-gray-200 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white hover:text-blue-600 transition-all duration-200"
+            className="bg-white/90 backdrop-blur-md border border-gray-200 rounded-full px-4 py-2 text-sm font-medium text-gray-700 hover:bg-white hover:text-orange-600 transition-all duration-200"
           >
             Agent Dashboard
           </a>
@@ -66,15 +66,18 @@ export const BottomNavigation = ({ activeTab, onTabChange, onChatOpen }: BottomN
           {tabs.map((tab) => {
             const Icon = tab.icon;
             const isActive = activeTab === tab.id;
+            const isAgent = tab.id === 'agent';
             
             return (
               <button
                 key={tab.id}
                 onClick={() => handleTabClick(tab.id)}
                 className={`flex flex-col items-center py-2 px-2 rounded-xl transition-all duration-200 ${
-                  isActive 
-                    ? 'text-blue-600 bg-blue-50' 
-                    : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
+                  isAgent
+                    ? 'text-white bg-orange-500 hover:bg-orange-600 shadow-md'
+                    : isActive 
+                      ? 'text-blue-600 bg-blue-50' 
+                      : 'text-gray-500 hover:text-gray-800 hover:bg-gray-50'
                 }`}
               >
                 <Icon size={20} className="mb-1" />

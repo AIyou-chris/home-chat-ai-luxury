@@ -8,8 +8,8 @@ export const DemoCTA = () => {
   };
 
   return (
-    <div className="px-6 md:px-8 max-w-7xl mx-auto py-8">
-      <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-lg p-6 shadow-lg border border-orange-400/20">
+    <div className="px-2 md:px-8 max-w-7xl md:mx-auto py-8">
+      <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-none md:rounded-lg p-6 shadow-lg border border-orange-400/20">
         <div className="flex items-center space-x-2 mb-3">
           <Sparkles className="text-white" size={20} />
           <span className="text-white font-semibold text-sm">Demo Mode</span>

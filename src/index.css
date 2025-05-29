@@ -1,3 +1,4 @@
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -49,6 +50,12 @@
     --sidebar-border: 220 13% 91%;
 
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    /* Safe area insets for modern phones */
+    --safe-area-inset-top: env(safe-area-inset-top);
+    --safe-area-inset-right: env(safe-area-inset-right);
+    --safe-area-inset-bottom: env(safe-area-inset-bottom);
+    --safe-area-inset-left: env(safe-area-inset-left);
   }
 
   .dark {
@@ -97,5 +104,13 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  .safe-area-bottom {
+    padding-bottom: calc(0.5rem + var(--safe-area-inset-bottom));
+  }
+
+  .safe-area-top {
+    padding-top: calc(0.5rem + var(--safe-area-inset-top));
   }
 }

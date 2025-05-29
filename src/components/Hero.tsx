@@ -43,7 +43,7 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
       </div>
 
       {/* Content Overlay */}
-      <div className="relative z-10 flex flex-col justify-between h-full p-6 md:p-8">
+      <div className="relative z-10 flex flex-col justify-between h-full p-4 md:p-8 safe-area-top">
         {/* Top Section with Logo */}
         <div className="flex justify-between items-start">
           <div className="flex items-center space-x-4">
