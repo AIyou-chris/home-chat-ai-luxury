@@ -3,7 +3,6 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Play, TrendingUp } from 'lucide-react';
-import { Carousel, CarouselContent, CarouselItem } from '@/components/ui/carousel';
 
 export const SalesHero = () => {
   const handleDemoClick = () => {
@@ -14,41 +13,18 @@ export const SalesHero = () => {
     window.location.href = '/realtor-submit';
   };
 
-  const slideshowImages = [
-    'https://images.unsplash.com/photo-1721322800607-8c38375eef04?auto=format&fit=crop&w=1920&h=1080&q=80',
-    'https://images.unsplash.com/photo-1487958449943-2429e8be8625?auto=format&fit=crop&w=1920&h=1080&q=80',
-    'https://images.unsplash.com/photo-1496307653780-42ee777d4833?auto=format&fit=crop&w=1920&h=1080&q=80',
-    'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1920&h=1080&q=80',
-    'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&w=1920&h=1080&q=80',
-    'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1920&h=1080&q=80'
-  ];
-
   return (
     <div className="relative min-h-screen overflow-hidden">
-      {/* Background Slideshow */}
+      {/* Hero Background */}
       <div className="absolute inset-0">
-        <Carousel
-          opts={{
-            align: "start",
-            loop: true,
+        <div 
+          className="w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{
+            backgroundImage: `url(/lovable-uploads/8fee2013-89fc-47e0-ba14-1795e366cdc3.png)`,
           }}
-          className="w-full h-full"
-        >
-          <CarouselContent className="h-screen">
-            {slideshowImages.map((image, index) => (
-              <CarouselItem key={index} className="relative h-full">
-                <div 
-                  className="w-full h-full bg-cover bg-center bg-no-repeat"
-                  style={{
-                    backgroundImage: `url(${image})`,
-                  }}
-                />
-                {/* Dark overlay for better text readability */}
-                <div className="absolute inset-0 bg-black/50" />
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-        </Carousel>
+        />
+        {/* Dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-black/60" />
       </div>
       
       {/* Gradient overlay */}
@@ -152,18 +128,6 @@ export const SalesHero = () => {
           </div>
         </div>
       </div>
-
-      {/* Auto-advance slideshow script */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            setInterval(() => {
-              const nextButton = document.querySelector('[data-carousel-next]');
-              if (nextButton) nextButton.click();
-            }, 5000);
-          `
-        }}
-      />
     </div>
   );
 };
