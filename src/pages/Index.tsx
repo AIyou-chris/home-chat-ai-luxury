@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Hero } from '@/components/Hero';
 import { PropertyGallery } from '@/components/PropertyGallery';
@@ -70,6 +69,7 @@ const Index = () => {
                 onImageClick={handleOpenLightbox} 
               />
               <PropertyDetails property={propertyData} />
+              <DemoCTA />
             </div>
           </>
         );
