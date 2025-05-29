@@ -14,7 +14,7 @@ export const SalesHero = () => {
   };
 
   return (
-    <div className="relative min-h-screen overflow-hidden w-full">
+    <div className="relative min-h-screen w-screen overflow-hidden">
       {/* Hero Background */}
       <div className="absolute inset-0">
         <div 
@@ -24,15 +24,15 @@ export const SalesHero = () => {
           }}
         />
         {/* Dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-black/30" />
+        <div className="absolute inset-0 bg-black/20" />
       </div>
       
       {/* Gradient overlay */}
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
       
-      <div className="relative z-10 min-h-screen flex flex-col w-full">
+      <div className="relative z-10 min-h-screen flex flex-col w-screen">
         {/* Header with Left-Justified Bigger Logo */}
-        <div className="w-full px-4 py-6">
+        <div className="w-screen px-4 py-6">
           <div className="w-full flex justify-start">
             <img 
               src="/lovable-uploads/cb12bb65-883d-4a31-97ea-4169a51747eb.png" 
@@ -43,8 +43,8 @@ export const SalesHero = () => {
         </div>
 
         {/* Main Content */}
-        <div className="flex-1 flex items-center w-full">
-          <div className="w-full px-4 sm:px-6 lg:px-8">
+        <div className="flex-1 flex items-center w-screen">
+          <div className="w-screen px-4 sm:px-6 lg:px-8">
             <div className="w-full">
               <Badge className="bg-orange-100 text-orange-800 border-orange-200 mb-4 sm:mb-6 inline-block text-xs sm:text-sm">
                 🚀 Revolutionary AI Technology for Real Estate
