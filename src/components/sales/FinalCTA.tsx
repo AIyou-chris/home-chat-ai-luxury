@@ -69,9 +69,9 @@ export const FinalCTA = () => {
             <img 
               src="/lovable-uploads/cb12bb65-883d-4a31-97ea-4169a51747eb.png" 
               alt="Home Listing AI" 
-              className="h-6 sm:h-8 w-auto"
+              className="h-8 sm:h-10 w-auto filter brightness-0 invert"
             />
-            <span className="text-white font-semibold">Home Listing AI</span>
+            <span className="text-white font-semibold text-lg">Home Listing AI</span>
           </div>
           
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-orange-100 text-center sm:text-left">

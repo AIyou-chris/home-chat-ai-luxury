@@ -40,6 +40,15 @@ export const SalesHero = () => {
       <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/50 to-transparent" />
       
       <div className="relative z-10 h-screen flex flex-col w-screen justify-center" style={{ margin: 0, padding: 0 }}>
+        {/* Logo Header */}
+        <div className="absolute top-6 left-6 sm:left-8 lg:left-12 z-20">
+          <img 
+            src="/lovable-uploads/cb12bb65-883d-4a31-97ea-4169a51747eb.png" 
+            alt="Home Listing AI" 
+            className="h-12 sm:h-16 md:h-20 w-auto"
+          />
+        </div>
+
         {/* Main Content */}
         <div className="flex-1 flex items-center w-screen">
           <div className="w-screen px-6 sm:px-8 lg:px-12">
