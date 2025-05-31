@@ -52,7 +52,7 @@ export const FinalCTA = () => {
             </div>
             <div className="flex items-center justify-center space-x-3">
               <Shield className="text-white" size={20} />
-              <span className="text-white font-medium">No Setup Fees</span>
+              <span className="text-white font-medium">Secure PayPal Billing</span>
             </div>
             <div className="flex items-center justify-center space-x-3">
               <Zap className="text-white" size={20} />
@@ -67,11 +67,10 @@ export const FinalCTA = () => {
         <div className="w-full px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row justify-between items-center">
           <div className="flex items-center space-x-4 mb-4 md:mb-0">
             <img 
-              src="/lovable-uploads/cb12bb65-883d-4a31-97ea-4169a51747eb.png" 
+              src="/lovable-uploads/fb2afea8-edfe-40f9-b8ce-9728d6cd7f40.png" 
               alt="Home Listing AI" 
-              className="h-8 sm:h-10 w-auto filter brightness-0 invert"
+              className="h-12 sm:h-14 w-auto"
             />
-            <span className="text-white font-semibold text-lg">Home Listing AI</span>
           </div>
           
           <div className="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-6 text-orange-100 text-center sm:text-left">

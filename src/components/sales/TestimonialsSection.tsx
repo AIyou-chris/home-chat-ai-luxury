@@ -43,7 +43,7 @@ export const TestimonialsSection = () => {
       icon: Smartphone
     },
     {
-      year: '2008',
+      year: '2005',
       title: 'Mortgage Pioneer',
       description: 'Created one of the first online mortgage agencies',
       icon: Calendar
@@ -110,8 +110,7 @@ export const TestimonialsSection = () => {
               Our Story: Built on Hustle. Proven by Results.
             </h2>
             <p className="text-lg sm:text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
-              From dial-up to downloads, from web forms to full-funnel automation—we've led the charge, 
-              helping thousands of families find funding, faster. We don't just close deals—we create lifetime clients.
+              In 1997, we launched our first online store—long before "e-commerce" became a buzzword. By 2005, we released our first mobile app, meeting customers where they lived: on the go. In 2005, we pioneered one of the industry's first online mortgage agencies, setting new standards for digital deal-making.
             </p>
           </div>
 
@@ -144,6 +143,9 @@ export const TestimonialsSection = () => {
                 And we haven't stopped innovating. Over the last 3 years, we've logged hundreds of hours mastering 
                 <span className="font-semibold text-orange-600"> AI prompting and automation</span>—blending human 
                 nuance with machine intelligence to amplify every touchpoint, every lead, every conversion.
+              </p>
+              <p className="text-gray-700 leading-relaxed mb-6 text-base sm:text-lg">
+                From dial-up to downloads, from web forms to full-funnel automation—we've led the charge, helping thousands of families find funding, faster. We don't just close deals—we create lifetime clients.
               </p>
               <div className="text-center">
                 <p className="text-xl sm:text-2xl font-bold text-gray-900">

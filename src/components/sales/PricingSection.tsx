@@ -7,7 +7,7 @@ export const PricingSection = () => {
   const plans = [
     {
       name: 'Starter',
-      price: '$49',
+      price: '$39',
       period: '/month',
       description: 'Perfect for new agents getting started',
       popular: false,
@@ -16,13 +16,14 @@ export const PricingSection = () => {
         'Basic chat functionality',
         'Lead capture & email notifications',
         'Mobile-responsive design',
-        'Basic analytics dashboard'
+        'Basic analytics dashboard',
+        'PayPal recurring billing'
       ],
       cta: 'Start Free Trial'
     },
     {
       name: 'Professional',
-      price: '$99',
+      price: '$59',
       period: '/month',
       description: 'For established agents serious about growth',
       popular: true,
@@ -33,14 +34,15 @@ export const PricingSection = () => {
         'CRM integration',
         'Detailed analytics & reporting',
         'Custom branding',
-        'Priority support'
+        'Priority support',
+        'PayPal recurring billing'
       ],
       cta: 'Most Popular'
     },
     {
-      name: 'Agency',
-      price: '$249',
-      period: '/month',
+      name: 'Enterprise',
+      price: 'Custom',
+      period: '',
       description: 'For teams and agencies scaling up',
       popular: false,
       features: [
@@ -50,7 +52,8 @@ export const PricingSection = () => {
         'API access',
         'Advanced integrations',
         'Custom AI training',
-        'Dedicated account manager'
+        'Dedicated account manager',
+        'Custom PayPal billing'
       ],
       cta: 'Contact Sales'
     }
@@ -64,7 +67,7 @@ export const PricingSection = () => {
             Simple, Transparent Pricing
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto">
-            Choose the plan that fits your business. All plans include a 14-day free trial with no commitment.
+            Choose the plan that fits your business. All plans include a 14-day free trial with secure PayPal billing.
           </p>
         </div>
 
@@ -125,7 +128,7 @@ export const PricingSection = () => {
         <div className="text-center mt-8 sm:mt-12">
           <div className="inline-flex items-center space-x-2 bg-green-50 border border-green-200 rounded-full px-6 py-3">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-green-800 font-medium">30-day money-back guarantee</span>
+            <span className="text-green-800 font-medium">14-day free trial • Secure PayPal billing • Cancel anytime</span>
           </div>
         </div>
       </div>

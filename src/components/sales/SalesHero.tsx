@@ -43,9 +43,9 @@ export const SalesHero = () => {
         {/* Logo Header */}
         <div className="absolute top-6 left-6 sm:left-8 lg:left-12 z-20">
           <img 
-            src="/lovable-uploads/cb12bb65-883d-4a31-97ea-4169a51747eb.png" 
+            src="/lovable-uploads/fb2afea8-edfe-40f9-b8ce-9728d6cd7f40.png" 
             alt="Home Listing AI" 
-            className="h-12 sm:h-16 md:h-20 w-auto"
+            className="h-16 sm:h-20 md:h-24 w-auto"
           />
         </div>
 
@@ -81,7 +81,7 @@ export const SalesHero = () => {
                   onClick={handleGetStartedClick}
                   size="lg"
                   variant="outline"
-                  className="border-2 border-white text-white hover:bg-white hover:text-gray-900 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300 w-full sm:w-auto"
+                  className="border-2 border-white text-blue-900 bg-white hover:bg-gray-100 hover:text-blue-800 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300 w-full sm:w-auto"
                 >
                   Get Started Free
                   <ArrowRight className="ml-2" size={18} />
