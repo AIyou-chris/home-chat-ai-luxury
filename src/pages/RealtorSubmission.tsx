@@ -1,5 +1,5 @@
 
-import { RealtorSubmissionForm } from '@/components/RealtorSubmissionForm';
+import RealtorSubmissionForm from '@/components/RealtorSubmissionForm';
 
 const RealtorSubmission = () => {
   return (

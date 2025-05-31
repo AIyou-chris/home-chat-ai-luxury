@@ -1,3 +1,4 @@
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -55,11 +56,14 @@ const RealtorSubmissionForm = () => {
     
     try {
       const { data, error } = await supabase
-        .from('property_submissions')
+        .from('realtor_submissions')
         .insert([
           {
-            ...values,
-            status: 'pending',
+            listing_url: values.listingUrl,
+            agent_email: values.agentEmail,
+            contact_phone: values.contactPhone,
+            additional_notes: values.additionalNotes,
+            processing_status: 'pending',
           },
         ])
         .select()
@@ -78,7 +82,7 @@ const RealtorSubmissionForm = () => {
       navigate('/checkout', { 
         state: { 
           formData: values,
-          submissionId: data?.id 
+          submissionId: data?.[0]?.id 
         } 
       });
 
