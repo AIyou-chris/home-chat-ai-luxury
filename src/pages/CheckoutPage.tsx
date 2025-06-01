@@ -20,7 +20,7 @@ const CheckoutPage = () => {
 
   const plans = {
     starter: { name: 'Starter', price: 39, features: ['1 AI-powered listing', 'Basic chat functionality', 'Lead capture & email notifications'] },
-    professional: { name: 'Professional', price: 59, features: ['5 AI-powered listings', 'Voice chat capabilities', 'Advanced appointment scheduling', 'CRM integration'] },
+    professional: { name: 'Professional', price: 49, features: ['Unlimited AI-powered listings', 'Voice chat capabilities', 'Advanced appointment scheduling', 'CRM integration'] },
     enterprise: { name: 'Enterprise', price: 'Custom', features: ['Unlimited AI listings', 'Team collaboration tools', 'White-label solutions'] }
   };
 
@@ -236,7 +236,7 @@ const CheckoutPage = () => {
                 ) : currentPlan.price === 'Custom' ? (
                   'Contact Sales Team'
                 ) : (
-                  `Start Free Trial - $${currentPlan.price}/month`
+                  `Start Listing - $${currentPlan.price}/month`
                 )}
               </Button>
 
@@ -250,7 +250,7 @@ const CheckoutPage = () => {
               <div className="text-center">
                 <div className="inline-flex items-center space-x-3 bg-green-50 border border-green-200 rounded-full px-8 py-4">
                   <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                  <span className="text-green-800 font-medium text-lg">14-day free trial • No setup fees • Cancel anytime</span>
+                  <span className="text-green-800 font-medium text-lg">15-day money back guarantee • No setup fees • Cancel anytime</span>
                 </div>
               </div>
             </CardContent>
@@ -258,7 +258,7 @@ const CheckoutPage = () => {
             <CardFooter className="text-center bg-gray-50 rounded-b-lg">
               <p className="text-sm text-gray-500 mx-auto leading-relaxed">
                 By continuing, you agree to our <a href="/terms" className="text-orange-500 hover:underline font-medium">Terms of Service</a> and <a href="/privacy" className="text-orange-500 hover:underline font-medium">Privacy Policy</a>. 
-                Your free trial starts today and you can cancel anytime.
+                Your 15-day money back guarantee starts today and you can cancel anytime.
               </p>
             </CardFooter>
           </Card>

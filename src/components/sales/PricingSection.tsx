@@ -1,7 +1,7 @@
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Star } from 'lucide-react';
+import { Check, Star, Shield, CreditCard } from 'lucide-react';
 
 export const PricingSection = () => {
   const plans = [
@@ -19,21 +19,20 @@ export const PricingSection = () => {
         'Basic analytics dashboard',
         'PayPal recurring billing'
       ],
-      cta: 'Start Free Trial'
+      cta: 'Start Your Listing'
     },
     {
       name: 'Professional',
-      price: '$59',
+      price: '$49',
       period: '/month',
       description: 'For established agents serious about growth',
       popular: true,
       features: [
-        '5 AI-powered listings',
+        'Unlimited AI-powered listings',
         'Voice chat capabilities',
         'Advanced appointment scheduling',
         'CRM integration',
         'Detailed analytics & reporting',
-        'Custom branding',
         'Priority support',
         'PayPal recurring billing'
       ],
@@ -67,8 +66,24 @@ export const PricingSection = () => {
             Simple, Transparent Pricing
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto">
-            Choose the plan that fits your business. All plans include a 14-day free trial with secure PayPal billing.
+            Choose the plan that fits your business. All plans include a 15-day money back guarantee with secure PayPal billing.
           </p>
+          
+          {/* Payment methods */}
+          <div className="flex items-center justify-center space-x-6 mt-6">
+            <div className="flex items-center space-x-2">
+              <img 
+                src="/lovable-uploads/cb12bb65-883d-4a31-97ea-4169a51747eb.png" 
+                alt="PayPal" 
+                className="h-8 w-auto"
+              />
+              <span className="text-gray-600 font-medium">Secure PayPal Billing</span>
+            </div>
+            <div className="flex items-center space-x-2">
+              <CreditCard className="text-blue-600" size={24} />
+              <span className="text-gray-600 font-medium">All Major Credit Cards</span>
+            </div>
+          </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -128,7 +143,7 @@ export const PricingSection = () => {
         <div className="text-center mt-8 sm:mt-12">
           <div className="inline-flex items-center space-x-2 bg-green-50 border border-green-200 rounded-full px-6 py-3">
             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-green-800 font-medium">14-day free trial • Secure PayPal billing • Cancel anytime</span>
+            <span className="text-green-800 font-medium">15-day satisfaction guarantee • Secure PayPal billing • Cancel anytime</span>
           </div>
         </div>
       </div>

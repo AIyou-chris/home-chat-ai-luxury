@@ -4,7 +4,7 @@ import { Star, Quote, Calendar, Smartphone, Home, Users, Zap, TrendingUp } from 
 export const TestimonialsSection = () => {
   const testimonials = [
     {
-      name: 'Sarah Johnson',
+      name: 'S Jones',
       title: 'Top Producer, Century 21',
       location: 'Los Angeles, CA',
       content: 'This AI system transformed my business overnight. I went from missing weekend leads to capturing 300% more qualified prospects. The voice chat feature is incredible - buyers love talking to the listings!',
@@ -12,7 +12,7 @@ export const TestimonialsSection = () => {
       avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?q=80&w=200&h=200&auto=format&fit=crop&crop=face'
     },
     {
-      name: 'Michael Chen',
+      name: 'M Sheen',
       title: 'Luxury Real Estate Specialist',
       location: 'San Francisco, CA',
       content: 'My luxury clients expect premium service. This AI delivers that 24/7. Last month alone, it scheduled 15 high-value appointments while I was showing other properties. ROI was immediate.',
@@ -20,7 +20,7 @@ export const TestimonialsSection = () => {
       avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?q=80&w=200&h=200&auto=format&fit=crop&crop=face'
     },
     {
-      name: 'Lisa Rodriguez',
+      name: 'El Rodriguez',
       title: 'Real Estate Team Leader',
       location: 'Miami, FL',
       content: 'Managing 20+ listings was overwhelming until we got this AI. Now every property has its own intelligent assistant. Our team productivity increased 400% and client satisfaction is through the roof.',
@@ -155,12 +155,8 @@ export const TestimonialsSection = () => {
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8 mt-12">
-            <div className="text-center">
-              <div className="text-2xl sm:text-3xl font-bold text-orange-600">500+</div>
-              <p className="text-gray-600 text-sm sm:text-base">Active Agents</p>
-            </div>
+          {/* Stats - Removed 500+ active agents */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-12">
             <div className="text-center">
               <div className="text-2xl sm:text-3xl font-bold text-orange-600">50K+</div>
               <p className="text-gray-600 text-sm sm:text-base">Conversations</p>

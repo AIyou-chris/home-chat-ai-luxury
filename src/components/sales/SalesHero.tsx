@@ -83,7 +83,7 @@ export const SalesHero = () => {
                   variant="outline"
                   className="border-2 border-white text-blue-900 bg-white hover:bg-gray-100 hover:text-blue-800 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300 w-full sm:w-auto"
                 >
-                  Get Started Free
+                  Start Your Listing in 5 Minutes
                   <ArrowRight className="ml-2" size={18} />
                 </Button>
               </div>

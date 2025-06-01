@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { Play, ExternalLink } from 'lucide-react';
+import { Play } from 'lucide-react';
 
 export const DemoSection = () => {
   return (
@@ -95,26 +95,14 @@ export const DemoSection = () => {
               </div>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button
-                onClick={() => window.location.href = '/'}
-                size="lg"
-                className="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
-              >
-                <Play className="mr-2" size={20} />
-                Try Live Demo
-              </Button>
-              
-              <Button
-                onClick={() => window.open('/', '_blank')}
-                size="lg"
-                variant="outline"
-                className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl transition-all duration-300 w-full sm:w-auto"
-              >
-                <ExternalLink className="mr-2" size={20} />
-                Open in New Tab
-              </Button>
-            </div>
+            <Button
+              onClick={() => window.location.href = '/'}
+              size="lg"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
+            >
+              <Play className="mr-2" size={20} />
+              Try Live Demo
+            </Button>
           </div>
         </div>
       </div>

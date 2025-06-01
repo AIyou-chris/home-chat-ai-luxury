@@ -79,7 +79,7 @@ export const FeaturesShowcase = () => {
               Ready to Transform Your Real Estate Business?
             </h3>
             <p className="text-gray-600 mb-6">
-              Join hundreds of successful agents who've already upgraded their listings with AI technology.
+              Start your listing in 5 minutes and join hundreds of successful agents who've already upgraded with AI technology.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
@@ -95,7 +95,7 @@ export const FeaturesShowcase = () => {
                 variant="outline"
                 className="border-orange-500 text-orange-600 hover:bg-orange-50 px-6 sm:px-8 py-3 w-full sm:w-auto"
               >
-                Start Your Free Trial
+                Start Your Listing
               </Button>
             </div>
           </div>
