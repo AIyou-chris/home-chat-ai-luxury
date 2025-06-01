@@ -1,4 +1,3 @@
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -56,21 +55,21 @@ const RealtorSubmissionForm = () => {
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      listingUrl: "",
-      agentEmail: "",
-      contactPhone: "",
-      propertyType: "",
-      propertyFeatures: [],
-      additionalNotes: "",
+      listingUrl: "https://www.zillow.com/homedetails/123-Beverly-Hills-Dr-Beverly-Hills-CA-90210/sample_zpid/",
+      agentEmail: "sarah.johnson@luxuryrealty.com",
+      contactPhone: "(555) 123-4567",
+      propertyType: "house",
+      propertyFeatures: ["pool", "garage", "garden"],
+      additionalNotes: "Luxury Beverly Hills estate with stunning city views. Recently renovated with high-end finishes throughout.",
       agentHeadshot: "",
       logoUpload: "",
       knowledgeBaseFiles: [],
       propertyPhotos: [],
-      videoLink: "",
-      facebookUrl: "",
-      instagramUrl: "",
-      linkedinUrl: "",
-      tiktokUrl: "",
+      videoLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      facebookUrl: "https://facebook.com/sarahjohnsonrealty",
+      instagramUrl: "https://instagram.com/sarahjohnsonrealty",
+      linkedinUrl: "https://linkedin.com/in/sarahjohnsonrealty",
+      tiktokUrl: "https://tiktok.com/@sarahjohnsonrealty",
       scheduleConsultation: false,
       consultationTime: "",
     },
@@ -203,6 +202,9 @@ const RealtorSubmissionForm = () => {
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Create Your AI-Powered Listing</h1>
             <p className="text-xl text-gray-600">Fill out the form below to generate your intelligent property assistant</p>
+            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-blue-800 font-medium">✨ Demo data has been pre-filled for testing purposes</p>
+            </div>
           </div>
 
           <Card className="shadow-lg border-0">
