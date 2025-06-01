@@ -1,8 +1,19 @@
 
 import { Button } from '@/components/ui/button';
 import { Play } from 'lucide-react';
+import { useState } from 'react';
 
 export const DemoSection = () => {
+  const [selectedImage, setSelectedImage] = useState(0);
+
+  const demoImages = [
+    "https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2940&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2940&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2940&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop",
+    "https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?q=80&w=2940&auto=format&fit=crop"
+  ];
+
   return (
     <div className="py-12 sm:py-16 lg:py-20 bg-white w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
@@ -16,7 +27,7 @@ export const DemoSection = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 items-center">
-          {/* Demo Preview */}
+          {/* Demo Preview with Gallery */}
           <div className="relative order-2 lg:order-1">
             <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-2xl">
               <div className="bg-orange-500 p-4 flex items-center justify-between">
@@ -29,11 +40,34 @@ export const DemoSection = () => {
               </div>
               
               <div className="p-4 sm:p-6">
+                {/* Main Image */}
                 <img 
-                  src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2940&auto=format&fit=crop"
+                  src={demoImages[selectedImage]}
                   alt="Luxury Property Demo"
-                  className="w-full h-32 sm:h-48 object-cover rounded-lg mb-4"
+                  className="w-full h-32 sm:h-48 object-cover rounded-lg mb-4 cursor-pointer"
+                  onClick={() => window.location.href = '/demo'}
                 />
+                
+                {/* Thumbnail Gallery */}
+                <div className="grid grid-cols-5 gap-2 mb-4">
+                  {demoImages.map((image, index) => (
+                    <button
+                      key={index}
+                      onClick={() => setSelectedImage(index)}
+                      className={`aspect-square rounded overflow-hidden transition-all duration-300 ${
+                        selectedImage === index
+                          ? 'ring-2 ring-orange-400 scale-105'
+                          : 'hover:scale-105 opacity-70 hover:opacity-100'
+                      }`}
+                    >
+                      <img
+                        src={image}
+                        alt={`Thumbnail ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </button>
+                  ))}
+                </div>
                 
                 <div className="space-y-3">
                   <div className="bg-gray-700 p-3 rounded-lg">
@@ -96,7 +130,7 @@ export const DemoSection = () => {
             </div>
 
             <Button
-              onClick={() => window.location.href = '/'}
+              onClick={() => window.location.href = '/demo'}
               size="lg"
               className="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
             >
