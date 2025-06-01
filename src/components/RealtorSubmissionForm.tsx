@@ -1,3 +1,4 @@
+
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -7,21 +8,23 @@ import { Button } from "@/components/ui/button"
 import {
   Form,
   FormControl,
-  FormDescription,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
 } from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
 import { useToast } from "@/hooks/use-toast"
 import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Checkbox } from "@/components/ui/checkbox"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { supabase } from "@/integrations/supabase/client";
-import { Upload, X, Facebook, Instagram, Linkedin, Video, Calendar, FileText, Camera, User } from "lucide-react";
+
+// Import the new section components
+import BasicInfoSection from "./form-sections/BasicInfoSection";
+import FileUploadSection from "./form-sections/FileUploadSection";
+import MediaLinksSection from "./form-sections/MediaLinksSection";
+import PropertyFeaturesSection from "./form-sections/PropertyFeaturesSection";
+import ConsultationSection from "./form-sections/ConsultationSection";
 
 const formSchema = z.object({
   listingUrl: z.string().url({ message: "Please enter a valid URL" }),
@@ -216,451 +219,28 @@ const RealtorSubmissionForm = () => {
               <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
                   {/* Basic Information */}
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="listingUrl"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-base font-semibold">Listing URL</FormLabel>
-                          <FormControl>
-                            <Input placeholder="https://example.com/listing" {...field} className="h-12" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="agentEmail"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-base font-semibold">Agent Email</FormLabel>
-                          <FormControl>
-                            <Input placeholder="agent@example.com" type="email" {...field} className="h-12" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
+                  <BasicInfoSection control={form.control} />
 
-                  <div className="grid md:grid-cols-2 gap-6">
-                    <FormField
-                      control={form.control}
-                      name="contactPhone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-base font-semibold">Contact Phone (Optional)</FormLabel>
-                          <FormControl>
-                            <Input placeholder="(123) 456-7890" type="tel" {...field} className="h-12" />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="propertyType"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className="text-base font-semibold">Property Type</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger className="h-12">
-                                <SelectValue placeholder="Select a type" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="house">House</SelectItem>
-                              <SelectItem value="apartment">Apartment</SelectItem>
-                              <SelectItem value="condo">Condo</SelectItem>
-                              <SelectItem value="townhouse">Townhouse</SelectItem>
-                              <SelectItem value="land">Land</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Agent Headshot Upload */}
-                  <FormField
+                  {/* File Uploads */}
+                  <FileUploadSection 
                     control={form.control}
-                    name="agentHeadshot"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-semibold flex items-center">
-                          <User className="mr-2" size={20} />
-                          Upload Your Headshot
-                        </FormLabel>
-                        <FormControl>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-orange-400 transition-colors">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => handleFileUpload('agentHeadshot', e.target.files, 1)}
-                              className="hidden"
-                              id="headshot-upload"
-                            />
-                            <label htmlFor="headshot-upload" className="cursor-pointer">
-                              <div className="text-center">
-                                <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                                <p className="text-gray-600">Click to upload your professional headshot</p>
-                                <p className="text-sm text-gray-400 mt-1">PNG, JPG up to 10MB</p>
-                              </div>
-                            </label>
-                            {uploadedFiles.agentHeadshot && uploadedFiles.agentHeadshot.length > 0 && (
-                              <div className="mt-4 flex items-center justify-between bg-gray-50 p-3 rounded">
-                                <span className="text-sm text-gray-600">{uploadedFiles.agentHeadshot[0].name}</span>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => removeFile('agentHeadshot', 0)}
-                                >
-                                  <X size={16} />
-                                </Button>
-                              </div>
-                            )}
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    uploadedFiles={uploadedFiles}
+                    onFileUpload={handleFileUpload}
+                    onRemoveFile={removeFile}
                   />
 
-                  {/* Logo Upload */}
-                  <FormField
-                    control={form.control}
-                    name="logoUpload"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-semibold">Add Your Logo (Optional)</FormLabel>
-                        <FormControl>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-orange-400 transition-colors">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              onChange={(e) => handleFileUpload('logoUpload', e.target.files, 1)}
-                              className="hidden"
-                              id="logo-upload"
-                            />
-                            <label htmlFor="logo-upload" className="cursor-pointer">
-                              <div className="text-center">
-                                <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                                <p className="text-gray-600">Upload your company logo</p>
-                                <p className="text-sm text-gray-400 mt-1">PNG, JPG up to 10MB</p>
-                              </div>
-                            </label>
-                            {uploadedFiles.logoUpload && uploadedFiles.logoUpload.length > 0 && (
-                              <div className="mt-4 flex items-center justify-between bg-gray-50 p-3 rounded">
-                                <span className="text-sm text-gray-600">{uploadedFiles.logoUpload[0].name}</span>
-                                <Button
-                                  type="button"
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() => removeFile('logoUpload', 0)}
-                                >
-                                  <X size={16} />
-                                </Button>
-                              </div>
-                            )}
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Knowledge Base Upload */}
-                  <FormField
-                    control={form.control}
-                    name="knowledgeBaseFiles"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-semibold flex items-center">
-                          <FileText className="mr-2" size={20} />
-                          Upload Docs to Power Your Listing's Knowledge Base
-                        </FormLabel>
-                        <FormControl>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-orange-400 transition-colors">
-                            <input
-                              type="file"
-                              accept=".pdf,.doc,.docx,.txt"
-                              multiple
-                              onChange={(e) => handleFileUpload('knowledgeBaseFiles', e.target.files, 10)}
-                              className="hidden"
-                              id="knowledge-upload"
-                            />
-                            <label htmlFor="knowledge-upload" className="cursor-pointer">
-                              <div className="text-center">
-                                <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                                <p className="text-gray-600">Upload property documents, brochures, or information</p>
-                                <p className="text-sm text-gray-400 mt-1">PDF, Word, Text files up to 10MB each</p>
-                              </div>
-                            </label>
-                            {uploadedFiles.knowledgeBaseFiles && uploadedFiles.knowledgeBaseFiles.length > 0 && (
-                              <div className="mt-4 space-y-2">
-                                {uploadedFiles.knowledgeBaseFiles.map((file, index) => (
-                                  <div key={index} className="flex items-center justify-between bg-gray-50 p-3 rounded">
-                                    <span className="text-sm text-gray-600">{file.name}</span>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="sm"
-                                      onClick={() => removeFile('knowledgeBaseFiles', index)}
-                                    >
-                                      <X size={16} />
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Property Photos Upload */}
-                  <FormField
-                    control={form.control}
-                    name="propertyPhotos"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-semibold flex items-center">
-                          <Camera className="mr-2" size={20} />
-                          Property Photos
-                        </FormLabel>
-                        <FormControl>
-                          <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 hover:border-orange-400 transition-colors">
-                            <input
-                              type="file"
-                              accept="image/*"
-                              multiple
-                              onChange={(e) => handleFileUpload('propertyPhotos', e.target.files, 20)}
-                              className="hidden"
-                              id="photos-upload"
-                            />
-                            <label htmlFor="photos-upload" className="cursor-pointer">
-                              <div className="text-center">
-                                <Upload className="mx-auto h-12 w-12 text-gray-400 mb-4" />
-                                <p className="text-gray-600">Upload property photos</p>
-                                <p className="text-sm text-gray-400 mt-1">PNG, JPG up to 10MB each (max 20 photos)</p>
-                              </div>
-                            </label>
-                            {uploadedFiles.propertyPhotos && uploadedFiles.propertyPhotos.length > 0 && (
-                              <div className="mt-4 grid grid-cols-2 md:grid-cols-4 gap-2">
-                                {uploadedFiles.propertyPhotos.map((file, index) => (
-                                  <div key={index} className="relative">
-                                    <div className="bg-gray-50 p-2 rounded text-center">
-                                      <span className="text-xs text-gray-600 block truncate">{file.name}</span>
-                                    </div>
-                                    <Button
-                                      type="button"
-                                      variant="ghost"
-                                      size="sm"
-                                      className="absolute -top-2 -right-2 h-6 w-6 p-0 bg-red-500 text-white rounded-full hover:bg-red-600"
-                                      onClick={() => removeFile('propertyPhotos', index)}
-                                    >
-                                      <X size={12} />
-                                    </Button>
-                                  </div>
-                                ))}
-                              </div>
-                            )}
-                          </div>
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Video & Media Section */}
-                  <FormField
-                    control={form.control}
-                    name="videoLink"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-semibold flex items-center">
-                          <Video className="mr-2" size={20} />
-                          Video & Media Link
-                        </FormLabel>
-                        <FormControl>
-                          <Input 
-                            placeholder="Paste YouTube, Vimeo, or Loom link" 
-                            {...field} 
-                            className="h-12" 
-                          />
-                        </FormControl>
-                        <FormDescription>
-                          Add a property tour video or virtual walkthrough
-                        </FormDescription>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Social Media Links */}
-                  <div>
-                    <h3 className="text-lg font-semibold mb-4">Social Media Links</h3>
-                    <div className="grid md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="facebookUrl"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center">
-                              <Facebook className="mr-2" size={16} />
-                              Facebook
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="https://facebook.com/yourprofile" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="instagramUrl"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center">
-                              <Instagram className="mr-2" size={16} />
-                              Instagram
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="https://instagram.com/yourprofile" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="linkedinUrl"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className="flex items-center">
-                              <Linkedin className="mr-2" size={16} />
-                              LinkedIn
-                            </FormLabel>
-                            <FormControl>
-                              <Input placeholder="https://linkedin.com/in/yourprofile" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                      <FormField
-                        control={form.control}
-                        name="tiktokUrl"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>TikTok</FormLabel>
-                            <FormControl>
-                              <Input placeholder="https://tiktok.com/@yourprofile" {...field} />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
+                  {/* Media & Social Links */}
+                  <MediaLinksSection control={form.control} />
 
                   {/* Property Features */}
-                  <FormField
-                    control={form.control}
-                    name="propertyFeatures"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-base font-semibold">Property Features (Optional)</FormLabel>
-                        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-                          {['Pool', 'Garage', 'Garden', 'Fireplace', 'Balcony', 'Gym'].map((feature) => (
-                            <div key={feature} className="flex items-center space-x-2">
-                              <Checkbox
-                                id={feature.toLowerCase()}
-                                checked={field.value?.includes(feature.toLowerCase())}
-                                onCheckedChange={(checked) => {
-                                  if (checked) {
-                                    field.onChange([...(field.value || []), feature.toLowerCase()])
-                                  } else {
-                                    field.onChange(field.value?.filter((value) => value !== feature.toLowerCase()))
-                                  }
-                                }}
-                              />
-                              <label 
-                                htmlFor={feature.toLowerCase()} 
-                                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                              >
-                                {feature}
-                              </label>
-                            </div>
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  <PropertyFeaturesSection control={form.control} />
 
-                  {/* Free Consultation Scheduler */}
-                  <FormField
+                  {/* Consultation Section */}
+                  <ConsultationSection 
                     control={form.control}
-                    name="scheduleConsultation"
-                    render={({ field }) => (
-                      <FormItem>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            id="consultation"
-                            checked={field.value}
-                            onCheckedChange={(checked) => {
-                              field.onChange(checked);
-                              setShowConsultationForm(!!checked);
-                            }}
-                          />
-                          <FormLabel htmlFor="consultation" className="text-base font-semibold flex items-center">
-                            <Calendar className="mr-2" size={20} />
-                            Would you like to schedule a free consultation?
-                          </FormLabel>
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
+                    showConsultationForm={showConsultationForm}
+                    setShowConsultationForm={setShowConsultationForm}
                   />
-
-                  {showConsultationForm && (
-                    <div className="animate-fade-in bg-orange-50 p-6 rounded-lg border border-orange-200">
-                      <FormField
-                        control={form.control}
-                        name="consultationTime"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Preferred Consultation Time</FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger>
-                                  <SelectValue placeholder="Select a time slot" />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="morning">Morning (9:00 AM - 12:00 PM)</SelectItem>
-                                <SelectItem value="afternoon">Afternoon (12:00 PM - 5:00 PM)</SelectItem>
-                                <SelectItem value="evening">Evening (5:00 PM - 8:00 PM)</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormDescription>
-                              Our team will contact you within 24 hours to schedule your free consultation.
-                            </FormDescription>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  )}
 
                   {/* Additional Notes */}
                   <FormField
