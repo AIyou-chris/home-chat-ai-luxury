@@ -83,7 +83,7 @@ export const FeaturesShowcase = () => {
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button
-                onClick={() => window.location.href = '/'}
+                onClick={() => window.location.href = '/demo'}
                 size="lg"
                 className="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 w-full sm:w-auto"
               >

@@ -19,14 +19,14 @@ const SalesPage = () => {
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
-        <meta property="og:url" content="https://homelistingai.com/sales" />
+        <meta property="og:url" content="https://homelistingai.com/" />
         <meta property="og:title" content="Home Listing AI - 24/7 AI Sales Agent for Real Estate" />
         <meta property="og:description" content="AI-powered chat system that answers buyer questions instantly, schedules appointments, and captures leads while you sleep. 300% more leads guaranteed." />
         <meta property="og:image" content="/lovable-uploads/8fee2013-89fc-47e0-ba14-1795e366cdc3.png" />
 
         {/* Twitter */}
         <meta property="twitter:card" content="summary_large_image" />
-        <meta property="twitter:url" content="https://homelistingai.com/sales" />
+        <meta property="twitter:url" content="https://homelistingai.com/" />
         <meta property="twitter:title" content="Home Listing AI - 24/7 AI Sales Agent for Real Estate" />
         <meta property="twitter:description" content="Transform your listings with AI chat. 300% more leads, voice interactions, auto-scheduling. Start in 5 minutes." />
         <meta property="twitter:image" content="/lovable-uploads/8fee2013-89fc-47e0-ba14-1795e366cdc3.png" />
@@ -78,7 +78,7 @@ const SalesPage = () => {
         <meta name="robots" content="index, follow" />
         <meta name="author" content="Home Listing AI" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link rel="canonical" href="https://homelistingai.com/sales" />
+        <link rel="canonical" href="https://homelistingai.com/" />
       </Helmet>
 
       <div className="min-h-screen bg-white w-screen overflow-x-hidden" style={{ margin: 0, padding: 0 }}>

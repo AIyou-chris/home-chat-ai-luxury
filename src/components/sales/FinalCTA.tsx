@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowRight, Clock, Shield, Zap, Mail, Phone } from 'lucide-react';
+import { ArrowRight, Clock, Shield, Zap, Mail } from 'lucide-react';
 
 export const FinalCTA = () => {
   const [email, setEmail] = useState('');
@@ -68,30 +68,24 @@ export const FinalCTA = () => {
           {/* Contact Section */}
           <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 sm:p-8 max-w-2xl mx-auto mb-8">
             <h3 className="text-xl sm:text-2xl font-bold text-white mb-4">Contact Us</h3>
-            <div className="flex flex-col sm:flex-row gap-4 items-center justify-center mb-4">
-              <div className="flex items-center space-x-2 text-white">
-                <Phone className="text-orange-200" size={20} />
-                <span className="font-medium">206-755-1047</span>
-              </div>
-              <form onSubmit={handleContactSubmit} className="flex gap-2 w-full sm:w-auto">
-                <Input
-                  type="email"
-                  placeholder="Your email address"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="bg-white/20 border-white/30 text-white placeholder-white/70 w-full sm:w-64"
-                  required
-                />
-                <Button
-                  type="submit"
-                  variant="outline"
-                  className="border-white text-white hover:bg-white hover:text-orange-600 whitespace-nowrap"
-                >
-                  <Mail className="mr-1" size={16} />
-                  Contact
-                </Button>
-              </form>
-            </div>
+            <form onSubmit={handleContactSubmit} className="flex flex-col sm:flex-row gap-4 items-center justify-center">
+              <Input
+                type="email"
+                placeholder="Your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="bg-white/20 border-white/30 text-white placeholder-white/70 w-full sm:w-64"
+                required
+              />
+              <Button
+                type="submit"
+                variant="outline"
+                className="border-white text-white hover:bg-white hover:text-orange-600 whitespace-nowrap"
+              >
+                <Mail className="mr-1" size={16} />
+                Contact
+              </Button>
+            </form>
           </div>
         </div>
       </div>

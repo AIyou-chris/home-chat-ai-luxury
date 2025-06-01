@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { MessageCircle, X, Send, Mic, MicOff } from 'lucide-react';
+import { useEnhancedVoice } from '@/hooks/useEnhancedVoice';
 
 interface Message {
   id: string;
@@ -23,7 +24,14 @@ export const SalesChatWidget = () => {
   ]);
   const [inputValue, setInputValue] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  const { speak, isSpeaking } = useEnhancedVoice({
+    onSpeakStart: () => console.log('AI started speaking'),
+    onSpeakEnd: () => console.log('AI finished speaking'),
+    onError: (error) => console.error('Voice error:', error)
+  });
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -33,12 +41,13 @@ export const SalesChatWidget = () => {
     scrollToBottom();
   }, [messages]);
 
-  const sendMessage = async () => {
-    if (!inputValue.trim() || isLoading) return;
+  const sendMessage = async (messageText?: string) => {
+    const textToSend = messageText || inputValue;
+    if (!textToSend.trim() || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now().toString(),
-      text: inputValue,
+      text: textToSend,
       sender: 'user',
       timestamp: new Date()
     };
@@ -57,16 +66,55 @@ export const SalesChatWidget = () => {
         "Our AI handles both voice and text conversations 24/7. It knows everything about your properties and can answer detailed questions. Would you like to try our live demo?"
       ];
 
+      const responseText = responses[Math.floor(Math.random() * responses.length)];
+      
       const aiResponse: Message = {
         id: (Date.now() + 1).toString(),
-        text: responses[Math.floor(Math.random() * responses.length)],
+        text: responseText,
         sender: 'ai',
         timestamp: new Date()
       };
 
       setMessages(prev => [...prev, aiResponse]);
       setIsLoading(false);
+      
+      // Speak the AI response
+      speak(responseText);
     }, 1000);
+  };
+
+  const handleVoiceInput = () => {
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      alert('Voice input is not supported in your browser');
+      return;
+    }
+
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      sendMessage(transcript);
+    };
+
+    recognition.onerror = (event: any) => {
+      console.error('Speech recognition error:', event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -122,6 +170,9 @@ export const SalesChatWidget = () => {
               }`}
             >
               {message.text}
+              {message.sender === 'ai' && isSpeaking && (
+                <div className="mt-2 text-xs opacity-70">🔊 Speaking...</div>
+              )}
             </div>
           </div>
         ))}
@@ -153,7 +204,16 @@ export const SalesChatWidget = () => {
             disabled={isLoading}
           />
           <Button
-            onClick={sendMessage}
+            onClick={handleVoiceInput}
+            disabled={isLoading}
+            size="sm"
+            variant="outline"
+            className={`px-3 ${isListening ? 'bg-red-100 border-red-300' : ''}`}
+          >
+            {isListening ? <MicOff size={16} className="text-red-600" /> : <Mic size={16} />}
+          </Button>
+          <Button
+            onClick={() => sendMessage()}
             disabled={isLoading || !inputValue.trim()}
             size="sm"
             className="bg-orange-500 hover:bg-orange-600 px-3"
@@ -161,6 +221,9 @@ export const SalesChatWidget = () => {
             <Send size={16} />
           </Button>
         </div>
+        <p className="text-xs text-gray-500 mt-2 text-center">
+          Voice enabled • Click mic to speak or type your questions
+        </p>
       </div>
     </div>
   );

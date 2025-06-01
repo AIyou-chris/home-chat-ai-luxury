@@ -21,8 +21,8 @@ function App() {
         <Toaster />
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/sales" element={<SalesPage />} />
+            <Route path="/" element={<SalesPage />} />
+            <Route path="/demo" element={<Index />} />
             <Route path="/realtor-submit" element={<RealtorSubmission />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/confirmation" element={<ConfirmationPage />} />

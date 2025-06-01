@@ -9,7 +9,7 @@ export const TestimonialsSection = () => {
       location: 'Los Angeles, CA',
       content: 'This AI system transformed my business overnight. I went from missing weekend leads to capturing 300% more qualified prospects. The voice chat feature is incredible - buyers love talking to the listings!',
       rating: 5,
-      avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?q=80&w=200&h=200&auto=format&fit=crop&crop=face'
+      avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=200&h=200&auto=format&fit=crop&crop=face'
     },
     {
       name: 'M Sheen',
@@ -43,16 +43,16 @@ export const TestimonialsSection = () => {
       icon: Smartphone
     },
     {
-      year: '2005',
-      title: 'Mortgage Pioneer',
-      description: 'Created one of the first online mortgage agencies',
-      icon: Calendar
+      year: '2021',
+      title: 'AI Research Lab',
+      description: 'Started deep AI research, spending hundreds of hours perfecting automation',
+      icon: Zap
     },
     {
       year: 'Today',
       title: 'AI-Powered Sales',
-      description: '200+ elite sales professionals with 15+ years expertise',
-      icon: Zap
+      description: 'Next-gen blend of human instinct and machine precision',
+      icon: TrendingUp
     }
   ];
 
@@ -110,7 +110,7 @@ export const TestimonialsSection = () => {
               Our Story: Built on Hustle. Proven by Results.
             </h2>
             <p className="text-lg sm:text-xl text-gray-700 max-w-4xl mx-auto leading-relaxed">
-              In 1997, we launched our first online store—long before "e-commerce" became a buzzword. By 2005, we released our first mobile app, meeting customers where they lived: on the go. In 2005, we pioneered one of the industry's first online mortgage agencies, setting new standards for digital deal-making.
+              In 1997, we launched our first online store—long before "e-commerce" became a buzzword. By 2005, we released our first mobile app, meeting customers where they lived: on the go. And we're just getting started.
             </p>
           </div>
 
@@ -135,17 +135,12 @@ export const TestimonialsSection = () => {
           <div className="bg-white rounded-2xl p-6 sm:p-8 shadow-sm">
             <div className="max-w-4xl mx-auto">
               <p className="text-gray-700 leading-relaxed mb-6 text-base sm:text-lg">
-                What started as a bold bet on the web has evolved into a sales powerhouse. Today, our team boasts 
-                <span className="font-semibold text-orange-600"> over 200 elite sales professionals</span>—each 
-                sharpened by 15+ years of deep expertise in mortgage sales and marketing.
+                For the past 3 years, we've been deep in the lab—spending hundreds of hours perfecting 
+                <span className="font-semibold text-orange-600"> AI prompting and automation</span>. The result? 
+                A next-gen blend of human instinct and machine precision that supercharges every message, every lead, every move.
               </p>
               <p className="text-gray-700 leading-relaxed mb-6 text-base sm:text-lg">
-                And we haven't stopped innovating. Over the last 3 years, we've logged hundreds of hours mastering 
-                <span className="font-semibold text-orange-600"> AI prompting and automation</span>—blending human 
-                nuance with machine intelligence to amplify every touchpoint, every lead, every conversion.
-              </p>
-              <p className="text-gray-700 leading-relaxed mb-6 text-base sm:text-lg">
-                From dial-up to downloads, from web forms to full-funnel automation—we've led the charge, helping thousands of families find funding, faster. We don't just close deals—we create lifetime clients.
+                From our dial-up days to today's AI-driven funnels, we've always been ahead of the curve—helping thousands of families get funded, faster. We don't just close loans—we build lifetime loyalty.
               </p>
               <div className="text-center">
                 <p className="text-xl sm:text-2xl font-bold text-gray-900">
@@ -155,7 +150,7 @@ export const TestimonialsSection = () => {
             </div>
           </div>
 
-          {/* Stats - Removed 500+ active agents */}
+          {/* Stats */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8 mt-12">
             <div className="text-center">
               <div className="text-2xl sm:text-3xl font-bold text-orange-600">50K+</div>
