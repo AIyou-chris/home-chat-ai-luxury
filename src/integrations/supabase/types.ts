@@ -163,6 +163,68 @@ export type Database = {
           },
         ]
       }
+      email_campaigns: {
+        Row: {
+          agent_id: string | null
+          clicked_count: number | null
+          created_at: string
+          delivered_count: number | null
+          email_template: string
+          id: string
+          name: string
+          opened_count: number | null
+          scheduled_at: string | null
+          sent_at: string | null
+          status: string
+          subject: string
+          target_audience: Json | null
+          total_recipients: number | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          clicked_count?: number | null
+          created_at?: string
+          delivered_count?: number | null
+          email_template: string
+          id?: string
+          name: string
+          opened_count?: number | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string
+          subject: string
+          target_audience?: Json | null
+          total_recipients?: number | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          clicked_count?: number | null
+          created_at?: string
+          delivered_count?: number | null
+          email_template?: string
+          id?: string
+          name?: string
+          opened_count?: number | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string
+          subject?: string
+          target_audience?: Json | null
+          total_recipients?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "email_campaigns_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       leads: {
         Row: {
           contact_info: Json | null
@@ -203,6 +265,50 @@ export type Database = {
             columns: ["property_id"]
             isOneToOne: false
             referencedRelation: "properties"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      marketing_lists: {
+        Row: {
+          agent_id: string | null
+          contact_count: number | null
+          created_at: string
+          criteria: Json | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          contact_count?: number | null
+          created_at?: string
+          criteria?: Json | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          contact_count?: number | null
+          created_at?: string
+          criteria?: Json | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "marketing_lists_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
             referencedColumns: ["id"]
           },
         ]
@@ -412,6 +518,177 @@ export type Database = {
             columns: ["appointment_id"]
             isOneToOne: false
             referencedRelation: "appointments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sms_campaigns: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          delivered_count: number | null
+          description: string | null
+          failed_count: number | null
+          id: string
+          message_template: string
+          name: string
+          response_count: number | null
+          scheduled_at: string | null
+          sent_at: string | null
+          status: string
+          target_audience: Json | null
+          total_recipients: number | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          delivered_count?: number | null
+          description?: string | null
+          failed_count?: number | null
+          id?: string
+          message_template: string
+          name: string
+          response_count?: number | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string
+          target_audience?: Json | null
+          total_recipients?: number | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          delivered_count?: number | null
+          description?: string | null
+          failed_count?: number | null
+          id?: string
+          message_template?: string
+          name?: string
+          response_count?: number | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string
+          target_audience?: Json | null
+          total_recipients?: number | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_campaigns_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sms_messages: {
+        Row: {
+          campaign_id: string | null
+          created_at: string
+          delivered_at: string | null
+          delivery_status: string | null
+          error_message: string | null
+          id: string
+          message_content: string
+          recipient_name: string | null
+          recipient_phone: string
+          response_content: string | null
+          response_received_at: string | null
+          sent_at: string | null
+          status: string
+          twilio_sid: string | null
+          updated_at: string
+        }
+        Insert: {
+          campaign_id?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          delivery_status?: string | null
+          error_message?: string | null
+          id?: string
+          message_content: string
+          recipient_name?: string | null
+          recipient_phone: string
+          response_content?: string | null
+          response_received_at?: string | null
+          sent_at?: string | null
+          status?: string
+          twilio_sid?: string | null
+          updated_at?: string
+        }
+        Update: {
+          campaign_id?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          delivery_status?: string | null
+          error_message?: string | null
+          id?: string
+          message_content?: string
+          recipient_name?: string | null
+          recipient_phone?: string
+          response_content?: string | null
+          response_received_at?: string | null
+          sent_at?: string | null
+          status?: string
+          twilio_sid?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_messages_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "sms_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sms_templates: {
+        Row: {
+          agent_id: string | null
+          category: string
+          created_at: string
+          id: string
+          is_active: boolean | null
+          name: string
+          template_content: string
+          updated_at: string
+          usage_count: number | null
+          variables: Json | null
+        }
+        Insert: {
+          agent_id?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          name: string
+          template_content: string
+          updated_at?: string
+          usage_count?: number | null
+          variables?: Json | null
+        }
+        Update: {
+          agent_id?: string | null
+          category?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          template_content?: string
+          updated_at?: string
+          usage_count?: number | null
+          variables?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sms_templates_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
             referencedColumns: ["id"]
           },
         ]
