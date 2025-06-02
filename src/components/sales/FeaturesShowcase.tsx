@@ -1,5 +1,5 @@
 
-import { MessageSquare, Calendar, BarChart3, Mic, Brain, Clock } from 'lucide-react';
+import { MessageSquare, Calendar, BarChart3, Mic, Brain, Clock, Smartphone } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const FeaturesShowcase = () => {
@@ -11,6 +11,13 @@ export const FeaturesShowcase = () => {
       gradient: 'from-blue-500 to-blue-600'
     },
     {
+      icon: Smartphone,
+      title: 'Real-Time SMS Alerts',
+      description: 'Instant two-way SMS notifications for leads, QR scans, and appointments with custom rules',
+      gradient: 'from-green-500 to-green-600',
+      isPro: true
+    },
+    {
       icon: Mic,
       title: 'Voice Interactions',
       description: 'Natural voice conversations for a more personal buyer experience',
@@ -20,24 +27,18 @@ export const FeaturesShowcase = () => {
       icon: Calendar,
       title: 'Auto Scheduling',
       description: 'Seamlessly books appointments directly into your calendar system',
-      gradient: 'from-green-500 to-green-600'
+      gradient: 'from-orange-500 to-orange-600'
     },
     {
       icon: BarChart3,
       title: 'Lead Analytics',
       description: 'Track engagement, conversation quality, and conversion metrics',
-      gradient: 'from-orange-500 to-orange-600'
+      gradient: 'from-indigo-500 to-indigo-600'
     },
     {
       icon: Brain,
       title: 'Property Intelligence',
       description: 'AI learns every detail about your listings for accurate responses',
-      gradient: 'from-indigo-500 to-indigo-600'
-    },
-    {
-      icon: Clock,
-      title: '24/7 Availability',
-      description: 'Never miss a lead - AI works around the clock for you',
       gradient: 'from-red-500 to-red-600'
     }
   ];
@@ -60,8 +61,13 @@ export const FeaturesShowcase = () => {
             return (
               <div 
                 key={index}
-                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100"
+                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1 border border-gray-100 relative"
               >
+                {feature.isPro && (
+                  <div className="absolute -top-2 -right-2">
+                    <span className="bg-orange-500 text-white text-xs font-bold px-2 py-1 rounded-full">PRO</span>
+                  </div>
+                )}
                 <div className={`inline-flex items-center justify-center w-12 h-12 bg-gradient-to-r ${feature.gradient} rounded-lg mb-4`}>
                   <Icon className="text-white" size={24} />
                 </div>

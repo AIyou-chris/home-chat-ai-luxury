@@ -7,7 +7,7 @@ export const PricingSection = () => {
   const plans = [
     {
       name: 'Starter',
-      price: '$39',
+      price: '$49',
       period: '/month',
       description: 'Perfect for new agents getting started',
       popular: false,
@@ -23,13 +23,15 @@ export const PricingSection = () => {
     },
     {
       name: 'Professional',
-      price: '$49',
+      price: '$69',
       period: '/month',
       description: 'For established agents serious about growth',
       popular: true,
       features: [
-        'Unlimited AI-powered listings',
+        '1 AI-powered listing with advanced features',
         'Voice chat capabilities',
+        'Real-time two-way SMS notifications',
+        'Custom SMS notification rules',
         'Advanced appointment scheduling',
         'CRM integration',
         'Detailed analytics & reporting',

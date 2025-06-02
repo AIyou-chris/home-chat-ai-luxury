@@ -6,6 +6,7 @@ import { FeaturesShowcase } from '@/components/sales/FeaturesShowcase';
 import { DemoSection } from '@/components/sales/DemoSection';
 import { PricingSection } from '@/components/sales/PricingSection';
 import { TestimonialsSection } from '@/components/sales/TestimonialsSection';
+import { FAQSection } from '@/components/sales/FAQSection';
 import { FinalCTA } from '@/components/sales/FinalCTA';
 import { SalesChatWidget } from '@/components/sales/SalesChatWidget';
 
@@ -14,8 +15,8 @@ const SalesPage = () => {
     <>
       <Helmet>
         <title>Home Listing AI - Turn Every Property Into a 24/7 Sales Agent | Real Estate AI Chat</title>
-        <meta name="description" content="Transform your real estate listings with AI-powered chat that captures leads 24/7. Voice chat, auto-scheduling, and 300% more leads. 15-day money back guarantee. Start at $39/month." />
-        <meta name="keywords" content="real estate AI, property chat bot, real estate lead generation, AI listing agent, real estate automation, property marketing AI, real estate chatbot, lead capture software" />
+        <meta name="description" content="Transform your real estate listings with AI-powered chat that captures leads 24/7. Voice chat, SMS alerts, auto-scheduling, and 300% more leads. 15-day money back guarantee. Start at $49/month." />
+        <meta name="keywords" content="real estate AI, property chat bot, real estate lead generation, AI listing agent, real estate automation, property marketing AI, real estate chatbot, lead capture software, SMS notifications" />
         
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -39,16 +40,16 @@ const SalesPage = () => {
             "name": "Home Listing AI",
             "applicationCategory": "Real Estate Software",
             "operatingSystem": "Web Browser",
-            "description": "AI-powered real estate listing chat system that captures leads 24/7 with voice chat and auto-scheduling",
+            "description": "AI-powered real estate listing chat system that captures leads 24/7 with voice chat, SMS notifications, and auto-scheduling",
             "offers": [
               {
                 "@type": "Offer",
                 "name": "Starter Plan",
-                "price": "39",
+                "price": "49",
                 "priceCurrency": "USD",
                 "priceSpecification": {
                   "@type": "UnitPriceSpecification",
-                  "price": "39",
+                  "price": "49",
                   "priceCurrency": "USD",
                   "unitText": "MONTH"
                 }
@@ -56,11 +57,11 @@ const SalesPage = () => {
               {
                 "@type": "Offer",
                 "name": "Professional Plan",
-                "price": "49",
+                "price": "69",
                 "priceCurrency": "USD",
                 "priceSpecification": {
                   "@type": "UnitPriceSpecification",
-                  "price": "49",
+                  "price": "69",
                   "priceCurrency": "USD",
                   "unitText": "MONTH"
                 }
@@ -88,6 +89,7 @@ const SalesPage = () => {
         <DemoSection />
         <PricingSection />
         <TestimonialsSection />
+        <FAQSection />
         <FinalCTA />
         <SalesChatWidget />
       </div>
