@@ -79,12 +79,13 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
                 <MapPin size={16} />
                 <span className="text-sm">{property.address}</span>
               </div>
-              <LiveUpdatesTag lastUpdated={property.lastUpdated} />
             </div>
             
             <h1 className="text-4xl md:text-6xl font-light leading-tight text-white">
               {property.title}
             </h1>
+            
+            <LiveUpdatesTag lastUpdated={property.lastUpdated} />
             
             <div className="text-3xl md:text-4xl font-light text-orange-400">
               {property.price}
