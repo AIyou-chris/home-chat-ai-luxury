@@ -1,9 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Volume2, VolumeX, Settings } from 'lucide-react';
-import { useState } from 'react';
+import { Settings } from 'lucide-react';
 
 interface VoiceControlsProps {
   isListening: boolean;

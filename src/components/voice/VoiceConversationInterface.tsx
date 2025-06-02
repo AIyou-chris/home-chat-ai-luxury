@@ -46,6 +46,7 @@ export const VoiceConversationInterface = ({
     stopListening,
     voiceMode,
     switchVoiceMode,
+    availableVoices,
   } = useEnhancedVoiceChat({
     onTranscript: handleTranscript,
     onAIResponse: handleAIResponse,
@@ -139,17 +140,15 @@ export const VoiceConversationInterface = ({
             <VoiceAnimation 
               isListening={isListening}
               isSpeaking={isSpeaking}
-              isConnected={isConnected}
             />
             
             <VoiceControls
               isListening={isListening}
               isSpeaking={isSpeaking}
-              isConnected={isConnected}
+              isSupported={isSupported}
               onStartListening={startListening}
               onStopListening={stopListening}
-              onShowVoiceSelection={() => setShowVoiceSelection(true)}
-              error={error}
+              onOpenVoiceSettings={() => setShowVoiceSelection(true)}
             />
 
             {transcript && (
@@ -181,7 +180,17 @@ export const VoiceConversationInterface = ({
         {/* Voice Selection Popup */}
         {showVoiceSelection && (
           <VoiceSelectionPopup 
+            isOpen={showVoiceSelection}
             onClose={() => setShowVoiceSelection(false)}
+            availableVoices={availableVoices || [
+              { id: 'alloy', name: 'Alloy', description: 'Neutral and balanced' },
+              { id: 'echo', name: 'Echo', description: 'Deep and resonant' },
+              { id: 'fable', name: 'Fable', description: 'Expressive and dynamic' },
+              { id: 'onyx', name: 'Onyx', description: 'Deep and authoritative' },
+              { id: 'nova', name: 'Nova', description: 'Warm and engaging' },
+              { id: 'shimmer', name: 'Shimmer', description: 'Bright and cheerful' }
+            ]}
+            currentVoice="alloy"
             onVoiceSelect={(voiceId) => {
               console.log('Voice selected:', voiceId);
               setShowVoiceSelection(false);
