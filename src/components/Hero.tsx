@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -53,12 +54,9 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
               alt="Home Listing AI" 
               className="h-12 md:h-16 w-auto"
             />
-            <div className="flex flex-col space-y-2">
-              <Badge variant="secondary" className="bg-white/80 text-gray-800 border-gray-300 backdrop-blur-md">
-                New Listing
-              </Badge>
-              <LiveUpdatesTag lastUpdated={property.lastUpdated} />
-            </div>
+            <Badge variant="secondary" className="bg-white/80 text-gray-800 border-gray-300 backdrop-blur-md">
+              New Listing
+            </Badge>
           </div>
           <div className="flex space-x-2">
             {property.images.map((_: any, index: number) => (
@@ -76,9 +74,12 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
         {/* Bottom Section */}
         <div className="space-y-6">
           <div className="space-y-4">
-            <div className="flex items-center space-x-2 text-white/90">
-              <MapPin size={16} />
-              <span className="text-sm">{property.address}</span>
+            <div className="flex flex-col space-y-2">
+              <div className="flex items-center space-x-2 text-white/90">
+                <MapPin size={16} />
+                <span className="text-sm">{property.address}</span>
+              </div>
+              <LiveUpdatesTag lastUpdated={property.lastUpdated} />
             </div>
             
             <h1 className="text-4xl md:text-6xl font-light leading-tight text-white">
