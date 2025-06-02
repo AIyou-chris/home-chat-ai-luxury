@@ -44,7 +44,7 @@ const Index = () => {
       'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2940&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2940&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1600607687644-aac4c3eac7f4?q=80&w=2940&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1721322800607-8c38375eef04?q=80&w=2940&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1600566752355-35792bedcfea?q=80&w=2940&auto=format&fit=crop'
     ]
   };
