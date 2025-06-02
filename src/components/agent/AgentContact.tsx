@@ -16,13 +16,13 @@ export const AgentContact = () => {
       </div>
       
       <div className="flex space-x-3">
-        <a href="#" className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full text-gray-600">
+        <a href="https://instagram.com/michaelsterlingrealty" target="_blank" rel="noopener noreferrer" className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full text-gray-600 hover:text-pink-600 transition-colors">
           <Instagram size={18} />
         </a>
-        <a href="#" className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full text-gray-600">
+        <a href="https://facebook.com/michaelsterlingrealestate" target="_blank" rel="noopener noreferrer" className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full text-gray-600 hover:text-blue-600 transition-colors">
           <Facebook size={18} />
         </a>
-        <a href="#" className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full text-gray-600">
+        <a href="https://twitter.com/msterlinghomes" target="_blank" rel="noopener noreferrer" className="bg-gray-100 hover:bg-gray-200 p-2 rounded-full text-gray-600 hover:text-blue-400 transition-colors">
           <Twitter size={18} />
         </a>
       </div>
