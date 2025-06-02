@@ -9,7 +9,7 @@ import { LiveUpdatesTag } from '@/components/LiveUpdatesTag';
 
 interface HeroProps {
   property: any;
-  onChatOpen: () => void;
+  onChatOpen?: () => void;
 }
 
 export const Hero = ({ property, onChatOpen }: HeroProps) => {
@@ -100,14 +100,16 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-3">
-            <Button
-              onClick={onChatOpen}
-              size="lg"
-              className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 md:px-8 py-3 md:py-4 text-base md:text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
-            >
-              <MessageSquare className="mr-2" size={20} />
-              Talk with this Home
-            </Button>
+            {onChatOpen && (
+              <Button
+                onClick={onChatOpen}
+                size="lg"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 md:px-8 py-3 md:py-4 text-base md:text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
+              >
+                <MessageSquare className="mr-2" size={20} />
+                Talk with this Home
+              </Button>
+            )}
             
             <Button
               onClick={() => setIsAppointmentOpen(true)}
