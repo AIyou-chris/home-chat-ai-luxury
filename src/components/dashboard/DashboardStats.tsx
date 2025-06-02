@@ -2,7 +2,7 @@
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Card } from '@/components/ui/card';
-import { Home, Users, FileText, Calendar } from 'lucide-react';
+import { Home, Users, FileText, Calendar, MessageSquare, QrCode } from 'lucide-react';
 
 interface DashboardStatsProps {
   agentId: string;
@@ -68,6 +68,18 @@ export const DashboardStats = ({ agentId }: DashboardStatsProps) => {
       color: 'text-green-600'
     },
     {
+      title: 'SMS Sent',
+      value: 247, // Demo data
+      icon: MessageSquare,
+      color: 'text-purple-600'
+    },
+    {
+      title: 'QR Scans',
+      value: 89, // Demo data
+      icon: QrCode,
+      color: 'text-indigo-600'
+    },
+    {
       title: 'Submissions',
       value: stats?.submissions || 0,
       icon: FileText,
@@ -77,12 +89,12 @@ export const DashboardStats = ({ agentId }: DashboardStatsProps) => {
       title: 'Appointments',
       value: stats?.appointments || 0,
       icon: Calendar,
-      color: 'text-purple-600'
+      color: 'text-red-600'
     }
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {statCards.map((stat) => {
         const Icon = stat.icon;
         return (

@@ -98,10 +98,12 @@ const AgentDashboard = () => {
         <DashboardStats agentId={currentAgent?.id} />
         
         <Tabs defaultValue="properties" className="mt-6">
-          <TabsList>
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="properties">Properties</TabsTrigger>
             <TabsTrigger value="leads">Leads</TabsTrigger>
             <TabsTrigger value="submissions">Submissions</TabsTrigger>
+            <TabsTrigger value="sms-qr">SMS & QR Analytics</TabsTrigger>
+            <TabsTrigger value="privacy">Data & Privacy</TabsTrigger>
           </TabsList>
           
           <TabsContent value="properties">
@@ -114,6 +116,23 @@ const AgentDashboard = () => {
           
           <TabsContent value="submissions">
             <SubmissionsList agentId={currentAgent?.id} />
+          </TabsContent>
+
+          <TabsContent value="sms-qr">
+            <div className="space-y-8">
+              <div>
+                <h2 className="text-xl font-semibold mb-4">SMS Activity</h2>
+                <SMSActivityStats />
+              </div>
+              <div>
+                <h2 className="text-xl font-semibold mb-4">QR Code Analytics</h2>
+                <QRCodeAnalytics />
+              </div>
+            </div>
+          </TabsContent>
+
+          <TabsContent value="privacy">
+            <DataPrivacySection />
           </TabsContent>
         </Tabs>
       </div>
