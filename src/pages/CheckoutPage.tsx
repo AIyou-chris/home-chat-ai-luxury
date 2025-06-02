@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -20,9 +19,47 @@ const CheckoutPage = () => {
   const formData = location.state?.formData;
 
   const plans = {
-    starter: { name: 'Starter', price: 39, features: ['1 AI-powered listing', 'Basic chat functionality', 'Lead capture & email notifications'] },
-    professional: { name: 'Professional', price: 49, features: ['Unlimited AI-powered listings', 'Voice chat capabilities', 'Advanced appointment scheduling', 'CRM integration'] },
-    enterprise: { name: 'Enterprise', price: 'Custom', features: ['Unlimited AI listings', 'Team collaboration tools', 'White-label solutions'] }
+    starter: { 
+      name: 'Starter', 
+      price: 49, 
+      features: [
+        '1 AI-powered listing',
+        'Basic chat functionality', 
+        'Lead capture & email notifications',
+        'Mobile-responsive design',
+        'Basic analytics dashboard',
+        'PayPal recurring billing'
+      ] 
+    },
+    professional: { 
+      name: 'Professional', 
+      price: 69, 
+      features: [
+        '1 AI-powered listing with advanced features',
+        'Voice chat capabilities',
+        'Real-time two-way SMS notifications',
+        'Custom SMS notification rules',
+        'Advanced appointment scheduling', 
+        'CRM integration',
+        'Detailed analytics & reporting',
+        'Priority support',
+        'PayPal recurring billing'
+      ] 
+    },
+    enterprise: { 
+      name: 'Enterprise', 
+      price: 'Custom', 
+      features: [
+        'Unlimited AI listings',
+        'Team collaboration tools', 
+        'White-label solutions',
+        'API access',
+        'Advanced integrations',
+        'Custom AI training',
+        'Dedicated account manager',
+        'Custom PayPal billing'
+      ] 
+    }
   };
 
   const currentPlan = plans[selectedPlan as keyof typeof plans];

@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { VoiceConversationInterface } from './voice/VoiceConversationInterface';
 import { ChatInterface } from './voice/ChatInterface';
+import { ProBadge } from './ProBadge';
 
 interface AIChatProps {
   isOpen: boolean;

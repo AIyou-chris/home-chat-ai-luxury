@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Share, Copy, MessageSquare, Mail, Facebook, Instagram } from 'lucide-react';
+import { Share, Copy, MessageSquare, Mail, Facebook, Twitter, Instagram, Linkedin } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 interface ShareButtonProps {
@@ -56,6 +56,20 @@ export const ShareButton = ({ property }: ShareButtonProps) => {
     setIsOpen(false);
   };
 
+  const shareViaTwitter = () => {
+    const text = encodeURIComponent(shareText);
+    const url = encodeURIComponent(shareUrl);
+    window.open(`https://twitter.com/intent/tweet?text=${text}&url=${url}`, '_blank');
+    setIsOpen(false);
+  };
+
+  const shareViaLinkedIn = () => {
+    const url = encodeURIComponent(shareUrl);
+    const title = encodeURIComponent(property.title);
+    window.open(`https://www.linkedin.com/sharing/share-offsite/?url=${url}&title=${title}`, '_blank');
+    setIsOpen(false);
+  };
+
   const shareViaWhatsApp = () => {
     const text = encodeURIComponent(`${shareText} ${shareUrl}`);
     window.open(`https://wa.me/?text=${text}`, '_blank');
@@ -67,6 +81,8 @@ export const ShareButton = ({ property }: ShareButtonProps) => {
     { name: 'Text/SMS', icon: MessageSquare, action: shareViaSMS },
     { name: 'Email', icon: Mail, action: shareViaEmail },
     { name: 'Facebook', icon: Facebook, action: shareViaFacebook },
+    { name: 'Twitter', icon: Twitter, action: shareViaTwitter },
+    { name: 'LinkedIn', icon: Linkedin, action: shareViaLinkedIn },
     { name: 'WhatsApp', icon: Instagram, action: shareViaWhatsApp },
   ];
 
