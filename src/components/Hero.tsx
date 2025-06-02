@@ -1,9 +1,10 @@
-
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, MapPin, Calendar } from 'lucide-react';
 import { AppointmentModal } from './appointment/AppointmentModal';
+import { ShareButton } from '@/components/ShareButton';
+import { LiveUpdatesTag } from '@/components/LiveUpdatesTag';
 
 interface HeroProps {
   property: any;
@@ -52,9 +53,12 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
               alt="Home Listing AI" 
               className="h-12 md:h-16 w-auto"
             />
-            <Badge variant="secondary" className="bg-white/80 text-gray-800 border-gray-300 backdrop-blur-md">
-              New Listing
-            </Badge>
+            <div className="flex flex-col space-y-2">
+              <Badge variant="secondary" className="bg-white/80 text-gray-800 border-gray-300 backdrop-blur-md">
+                New Listing
+              </Badge>
+              <LiveUpdatesTag lastUpdated={property.lastUpdated} />
+            </div>
           </div>
           <div className="flex space-x-2">
             {property.images.map((_: any, index: number) => (
@@ -112,6 +116,8 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
               <Calendar className="mr-2" size={20} />
               Schedule Showing
             </Button>
+
+            <ShareButton property={property} />
           </div>
         </div>
       </div>

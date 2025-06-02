@@ -9,6 +9,10 @@ import { ContactSection } from '@/components/ContactSection';
 import { BottomNavigation } from '@/components/BottomNavigation';
 import { DemoCTA } from '@/components/DemoCTA';
 import { useSampleProperty } from '@/hooks/useSampleProperty';
+import { PropertyMap } from '@/components/PropertyMap';
+import { ShareButton } from '@/components/ShareButton';
+import { QRCodeGenerator } from '@/components/QRCodeGenerator';
+import { LiveUpdatesTag } from '@/components/LiveUpdatesTag';
 
 const Index = () => {
   const [isChatOpen, setIsChatOpen] = useState(false);
@@ -30,6 +34,7 @@ const Index = () => {
     yearBuilt: 2021,
     lotSize: '0.75 acres',
     type: 'Single Family Home',
+    lastUpdated: new Date(Date.now() - 12 * 60 * 60 * 1000), // 12 hours ago for demo
     description: 'Discover the epitome of modern luxury living in this architectural masterpiece. This stunning estate seamlessly blends contemporary design with timeless elegance, featuring soaring ceilings, floor-to-ceiling windows, and premium finishes throughout.',
     features: [
       'Gourmet chef\'s kitchen with Italian marble countertops',
@@ -64,11 +69,16 @@ const Index = () => {
               onChatOpen={() => setIsChatOpen(true)} 
             />
             <div className="relative z-10 pb-20">
+              <PropertyMap 
+                address={propertyData.address} 
+                title={propertyData.title} 
+              />
               <PropertyGallery 
                 images={propertyData.images} 
                 onImageClick={handleOpenLightbox} 
               />
               <PropertyDetails property={propertyData} />
+              <QRCodeGenerator property={propertyData} />
               <DemoCTA />
             </div>
           </>
