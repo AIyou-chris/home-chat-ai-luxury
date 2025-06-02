@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { CheckCircle, ArrowRight, Clock, Zap, Users, Home, MessageSquare, Calendar } from 'lucide-react';
+import { CheckCircle, ArrowRight, Clock, Zap, Users, Home, MessageSquare, Calendar, QrCode, Download } from 'lucide-react';
 import { CostEstimator } from '@/components/CostEstimator';
 
 const ConfirmationDemo = () => {
@@ -63,6 +62,19 @@ const ConfirmationDemo = () => {
       change: "+8 this week"
     }
   ];
+
+  // QR Code for demo listing
+  const currentUrl = window.location.origin + '/demo';
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&ecc=H&data=${encodeURIComponent(currentUrl)}`;
+
+  const downloadQRCode = () => {
+    const link = document.createElement('a');
+    link.href = qrCodeUrl;
+    link.download = `demo-listing-qr-code-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 py-12">
@@ -147,10 +159,36 @@ const ConfirmationDemo = () => {
           </Card>
         </div>
 
-        {/* Cost Estimator */}
-        <div className="mb-8">
-          <CostEstimator />
-        </div>
+        {/* QR Code Marketing Section */}
+        <Card className="p-6 mb-8 bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <QrCode className="text-orange-600" size={24} />
+              <h3 className="text-xl font-semibold text-gray-800">Demo Marketing QR Code</h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              High-resolution QR code for your demo listing - share with prospects and clients
+            </p>
+            
+            <div className="flex flex-col items-center space-y-4">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <img 
+                  src={qrCodeUrl}
+                  alt="Demo listing QR code"
+                  className="w-48 h-48 mx-auto"
+                />
+              </div>
+              
+              <Button
+                onClick={downloadQRCode}
+                className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3"
+              >
+                <Download className="mr-2" size={18} />
+                Download Demo QR Code
+              </Button>
+            </div>
+          </div>
+        </Card>
 
         {/* Action Buttons */}
         <div className="text-center space-y-4">

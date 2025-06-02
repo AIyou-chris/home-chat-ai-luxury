@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Hero } from '@/components/Hero';
@@ -14,6 +13,7 @@ import { AgentProfile } from '@/components/AgentProfile';
 import { PropertyMap } from '@/components/PropertyMap';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { ShareButton } from '@/components/ShareButton';
+import { LiveUpdatesTag } from '@/components/LiveUpdatesTag';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('details');
@@ -83,6 +83,7 @@ const Index = () => {
         {/* Property Metadata */}
         <div className="container mx-auto px-4 py-4 border-b border-gray-200 bg-white">
           <div className="text-center">
+            <LiveUpdatesTag lastUpdated={sampleProperty.lastUpdated} className="mb-3" />
             <h1 className="text-2xl font-bold text-gray-900 mb-2">{sampleProperty.title}</h1>
             <p className="text-gray-600 mb-1">{sampleProperty.address}</p>
             <p className="text-sm text-gray-500">Last updated: June 1, 2024</p>

@@ -4,9 +4,10 @@ import { AdminStats } from '@/components/admin/AdminStats';
 import { AllAgentsOverview } from '@/components/admin/AllAgentsOverview';
 import { SystemAnalytics } from '@/components/admin/SystemAnalytics';
 import { RevenueTracking } from '@/components/admin/RevenueTracking';
+import { CostEstimator } from '@/components/CostEstimator';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart3, Users, TrendingUp, MessageSquare, DollarSign, Settings } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, MessageSquare, DollarSign, Settings, Calculator } from 'lucide-react';
 
 const AdminDashboard = () => {
   return (
@@ -37,7 +38,7 @@ const AdminDashboard = () => {
       <div className="p-6">
         <div className="max-w-7xl mx-auto">
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-4">
+            <TabsList className="grid w-full grid-cols-5">
               <TabsTrigger value="overview" className="flex items-center space-x-2">
                 <BarChart3 size={16} />
                 <span>Overview</span>
@@ -53,6 +54,10 @@ const AdminDashboard = () => {
               <TabsTrigger value="revenue" className="flex items-center space-x-2">
                 <DollarSign size={16} />
                 <span>Revenue</span>
+              </TabsTrigger>
+              <TabsTrigger value="costs" className="flex items-center space-x-2">
+                <Calculator size={16} />
+                <span>Cost Analysis</span>
               </TabsTrigger>
             </TabsList>
 
@@ -70,6 +75,22 @@ const AdminDashboard = () => {
 
             <TabsContent value="revenue">
               <RevenueTracking />
+            </TabsContent>
+
+            <TabsContent value="costs">
+              <div className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Operational Cost Analysis</CardTitle>
+                    <CardDescription>
+                      Track AI usage costs, infrastructure expenses, and per-listing profitability
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <CostEstimator />
+                  </CardContent>
+                </Card>
+              </div>
             </TabsContent>
           </Tabs>
         </div>

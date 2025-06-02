@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -46,7 +45,8 @@ export const FeaturesShowcase = () => {
       icon: <Smartphone className="text-indigo-500" size={32} />,
       title: "SMS Notifications",
       description: "Instant alerts when prospects engage, with detailed conversation summaries.",
-      highlight: false
+      highlight: false,
+      isPro: true
     },
     {
       icon: <QrCode className="text-cyan-500" size={32} />,
