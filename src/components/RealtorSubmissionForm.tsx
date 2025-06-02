@@ -1,6 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import * as z from "zod"
 import { useNavigate } from 'react-router-dom';
 
 import { Button } from "@/components/ui/button"
@@ -17,7 +16,7 @@ import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { supabase } from "@/integrations/supabase/client";
-import { FormValues } from "@/types/form";
+import { FormValues, formSchema } from "@/types/form";
 
 // Import the new section components
 import BasicInfoSection from "./form-sections/BasicInfoSection";
@@ -25,26 +24,6 @@ import FileUploadSection from "./form-sections/FileUploadSection";
 import MediaLinksSection from "./form-sections/MediaLinksSection";
 import PropertyFeaturesSection from "./form-sections/PropertyFeaturesSection";
 import ConsultationSection from "./form-sections/ConsultationSection";
-
-const formSchema = z.object({
-  listingUrl: z.string().url({ message: "Please enter a valid URL" }),
-  agentEmail: z.string().email({ message: "Please enter a valid email" }),
-  contactPhone: z.string().optional(),
-  propertyType: z.string().min(1, { message: "Please select a property type" }),
-  propertyFeatures: z.array(z.string()).optional(),
-  additionalNotes: z.string().optional(),
-  agentHeadshot: z.string().optional(),
-  logoUpload: z.string().optional(),
-  knowledgeBaseFiles: z.array(z.string()).optional(),
-  propertyPhotos: z.array(z.string()).optional(),
-  videoLink: z.string().optional(),
-  facebookUrl: z.string().optional(),
-  instagramUrl: z.string().optional(),
-  linkedinUrl: z.string().optional(),
-  tiktokUrl: z.string().optional(),
-  scheduleConsultation: z.boolean().default(false),
-  consultationTime: z.string().optional(),
-})
 
 const RealtorSubmissionForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
