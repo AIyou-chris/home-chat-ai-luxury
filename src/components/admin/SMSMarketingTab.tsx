@@ -14,6 +14,7 @@ import { Send, MessageSquare, Users, TrendingUp, Plus, FileText } from 'lucide-r
 export const SMSMarketingTab = () => {
   const [campaigns, setCampaigns] = useState<any[]>([]);
   const [templates, setTemplates] = useState<any[]>([]);
+  const [testPhoneNumber, setTestPhoneNumber] = useState('+12067551047');
   const [newCampaign, setNewCampaign] = useState({
     name: '',
     message: '',
@@ -97,27 +98,61 @@ export const SMSMarketingTab = () => {
     }
   };
 
-  const sendTestSMS = async (message: string) => {
+  const validatePhoneNumber = (phone: string): boolean => {
+    // Basic phone validation - should start with + and contain only digits and formatting
+    const phoneRegex = /^\+\d{1,3}\d{10}$/;
+    return phoneRegex.test(phone.replace(/[\s-()]/g, ''));
+  };
+
+  const sendTestSMS = async (message: string, customPhone?: string) => {
+    const phoneToUse = customPhone || testPhoneNumber;
+    
+    if (!validatePhoneNumber(phoneToUse)) {
+      toast({
+        title: "Invalid Phone Number",
+        description: "Please enter a valid phone number in format +1234567890",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!message.trim()) {
+      toast({
+        title: "Empty Message",
+        description: "Please enter a message to send",
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
     try {
+      console.log('Sending test SMS to:', phoneToUse);
+      
       const { data, error } = await supabase.functions.invoke('send-sms', {
         body: {
-          to: '+15093004366', // Your phone number for testing
+          to: phoneToUse,
           message: `[TEST] ${message}`,
           recipientName: 'Test User'
         }
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('SMS function error:', error);
+        throw error;
+      }
+
+      console.log('SMS response:', data);
 
       toast({
         title: "Test SMS Sent",
-        description: "Check your phone for the test message"
+        description: `Test message sent successfully to ${phoneToUse}`
       });
     } catch (error: any) {
+      console.error('SMS sending error:', error);
       toast({
-        title: "Error",
-        description: error.message,
+        title: "SMS Error",
+        description: error.message || 'Failed to send test SMS',
         variant: "destructive"
       });
     } finally {
@@ -190,6 +225,7 @@ export const SMSMarketingTab = () => {
           <TabsTrigger value="campaigns">Campaigns</TabsTrigger>
           <TabsTrigger value="templates">Templates</TabsTrigger>
           <TabsTrigger value="create">Create Campaign</TabsTrigger>
+          <TabsTrigger value="test">Test SMS</TabsTrigger>
         </TabsList>
 
         <TabsContent value="campaigns">
@@ -321,6 +357,91 @@ export const SMSMarketingTab = () => {
                 >
                   Send Test
                 </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="test">
+          <Card>
+            <CardHeader>
+              <CardTitle>Test SMS Functionality</CardTitle>
+              <CardDescription>Send test messages to verify SMS setup</CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <label className="text-sm font-medium">Test Phone Number</label>
+                <Input
+                  value={testPhoneNumber}
+                  onChange={(e) => setTestPhoneNumber(e.target.value)}
+                  placeholder="+12067551047"
+                  type="tel"
+                />
+                <p className="text-xs text-gray-500 mt-1">
+                  Enter a valid phone number in international format (e.g., +12067551047)
+                </p>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium">Test Message</label>
+                <Textarea
+                  placeholder="Enter test message here..."
+                  rows={3}
+                  id="test-message"
+                />
+              </div>
+
+              <Button 
+                onClick={() => {
+                  const textarea = document.getElementById('test-message') as HTMLTextAreaElement;
+                  if (textarea?.value) {
+                    sendTestSMS(textarea.value, testPhoneNumber);
+                  } else {
+                    toast({
+                      title: "Missing Message",
+                      description: "Please enter a test message",
+                      variant: "destructive"
+                    });
+                  }
+                }}
+                disabled={loading}
+                className="w-full"
+              >
+                <Send className="h-4 w-4 mr-2" />
+                {loading ? 'Sending...' : 'Send Test SMS'}
+              </Button>
+
+              <div className="mt-4 p-4 bg-blue-50 rounded-lg">
+                <h4 className="font-medium text-blue-900 mb-2">Quick Test Templates:</h4>
+                <div className="space-y-2">
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => sendTestSMS("Hello! This is a test message from Home Listing AI.")}
+                    disabled={loading}
+                    className="w-full text-left justify-start"
+                  >
+                    Test: Basic Hello Message
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => sendTestSMS("🏠 New property alert! Check out this amazing listing in your area.")}
+                    disabled={loading}
+                    className="w-full text-left justify-start"
+                  >
+                    Test: Property Alert
+                  </Button>
+                  <Button 
+                    variant="outline" 
+                    size="sm"
+                    onClick={() => sendTestSMS("Thanks for your interest! Would you like to schedule a showing? Reply YES to continue.")}
+                    disabled={loading}
+                    className="w-full text-left justify-start"
+                  >
+                    Test: Follow-up Message
+                  </Button>
+                </div>
               </div>
             </CardContent>
           </Card>
