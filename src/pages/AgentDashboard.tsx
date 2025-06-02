@@ -9,6 +9,9 @@ import { DashboardStats } from '@/components/dashboard/DashboardStats';
 import { PropertyList } from '@/components/dashboard/PropertyList';
 import { LeadsList } from '@/components/dashboard/LeadsList';
 import { SubmissionsList } from '@/components/dashboard/SubmissionsList';
+import { SMSActivityStats } from '@/components/dashboard/SMSActivityStats';
+import { QRCodeAnalytics } from '@/components/dashboard/QRCodeAnalytics';
+import { DataPrivacySection } from '@/components/dashboard/DataPrivacySection';
 import { useToast } from '@/hooks/use-toast';
 
 const AgentDashboard = () => {
