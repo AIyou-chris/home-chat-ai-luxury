@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { Home, Image, MapPin, User, MessageCircle } from 'lucide-react';
+import { Home, Image, MapPin, User, MessageCircle, FileText } from 'lucide-react';
 
 interface BottomNavigationProps {
   activeTab: string;
@@ -11,6 +11,7 @@ export const BottomNavigation = ({ activeTab, setActiveTab }: BottomNavigationPr
   const tabs = [
     { id: 'details', label: 'Details', icon: Home },
     { id: 'gallery', label: 'Gallery', icon: Image },
+    { id: 'knowledge', label: 'Knowledge', icon: FileText },
     { id: 'neighborhood', label: 'Area', icon: MapPin },
     { id: 'agent', label: 'Agent', icon: User },
     { id: 'contact', label: 'Contact', icon: MessageCircle },
@@ -27,14 +28,14 @@ export const BottomNavigation = ({ activeTab, setActiveTab }: BottomNavigationPr
               variant="ghost"
               size="sm"
               onClick={() => setActiveTab(tab.id)}
-              className={`flex flex-col items-center gap-1 h-auto py-2 px-3 ${
+              className={`flex flex-col items-center gap-1 h-auto py-2 px-2 text-xs ${
                 activeTab === tab.id 
                   ? 'text-orange-600 bg-orange-50' 
                   : 'text-gray-600 hover:text-orange-600'
               }`}
             >
-              <Icon size={20} />
-              <span className="text-xs font-medium">{tab.label}</span>
+              <Icon size={18} />
+              <span className="font-medium">{tab.label}</span>
             </Button>
           );
         })}

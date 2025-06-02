@@ -4,6 +4,7 @@ import { Helmet } from 'react-helmet-async';
 import { Hero } from '@/components/Hero';
 import { PropertyDetails } from '@/components/PropertyDetails';
 import { PropertyGallery } from '@/components/PropertyGallery';
+import { PropertyKnowledgeBase } from '@/components/PropertyKnowledgeBase';
 import { NeighborhoodInfo } from '@/components/NeighborhoodInfo';
 import { ContactSection } from '@/components/ContactSection';
 import { PropertyChatBot } from '@/components/PropertyChatBot';
@@ -58,6 +59,8 @@ const Index = () => {
         return <PropertyDetails property={sampleProperty} />;
       case 'gallery':
         return <PropertyGallery images={sampleProperty.images} />;
+      case 'knowledge':
+        return <PropertyKnowledgeBase propertyId={sampleProperty.id} isAgent={false} />;
       case 'neighborhood':
         return <NeighborhoodInfo />;
       case 'agent':
