@@ -1,12 +1,13 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card } from '@/components/ui/card';
-import { MessageSquare, Settings, X } from 'lucide-react';
+import { MessageSquare, X, Mic, MicOff, Volume2, VolumeX } from 'lucide-react';
 import { VoiceAnimation } from './VoiceAnimation';
+import { VoiceControls } from './VoiceControls';
 import { VoiceSelectionPopup } from './VoiceSelectionPopup';
 import { useEnhancedVoiceChat } from '@/hooks/useEnhancedVoiceChat';
-import { supabase } from '@/integrations/supabase/client';
+import { PropertyChatBot } from '../PropertyChatBot';
+import { ProBadge } from '../ProBadge';
 
 interface VoiceConversationInterfaceProps {
   property: any;
@@ -18,193 +19,176 @@ interface VoiceConversationInterfaceProps {
 export const VoiceConversationInterface = ({ 
   property, 
   onSwitchToChat, 
-  onClose,
+  onClose, 
   isOpen 
 }: VoiceConversationInterfaceProps) => {
   const [transcript, setTranscript] = useState('');
-  const [aiResponse, setAiResponse] = useState('');
-  const [showVoicePopup, setShowVoicePopup] = useState(false);
-  const [isProcessing, setIsProcessing] = useState(false);
+  const [aiResponse, setAIResponse] = useState('');
+  const [showVoiceSelection, setShowVoiceSelection] = useState(false);
+  const [pendingVoiceMessage, setPendingVoiceMessage] = useState('');
 
-  const voice = useEnhancedVoiceChat({
-    onTranscript: async (text) => {
-      console.log('Voice transcript received:', text);
-      setTranscript(text);
-      setIsProcessing(true);
+  const handleTranscript = useCallback((text: string) => {
+    setTranscript(text);
+    setPendingVoiceMessage(text);
+  }, []);
 
-      try {
-        // Send the transcript to AI chat
-        const { data, error } = await supabase.functions.invoke('ai-chat', {
-          body: {
-            message: text,
-            propertyId: property.id,
-            sessionId: crypto.randomUUID()
-          }
-        });
+  const handleAIResponse = useCallback((text: string) => {
+    setAIResponse(text);
+  }, []);
 
-        if (error) throw error;
-
-        console.log('AI response received:', data.response);
-        setAiResponse(data.response);
-        
-        // Speak the AI response if using OpenAI mode
-        if (voice.voiceMode === 'openai' && voice.speak) {
-          voice.speak(data.response);
-        }
-      } catch (error) {
-        console.error('Error processing voice message:', error);
-        const errorMessage = "I'm sorry, I'm having trouble processing your request right now.";
-        setAiResponse(errorMessage);
-        if (voice.voiceMode === 'openai' && voice.speak) {
-          voice.speak(errorMessage);
-        }
-      } finally {
-        setIsProcessing(false);
-      }
-    },
-    onAIResponse: (text) => {
-      console.log('AI response for voice:', text);
-      setAiResponse(text);
-    },
+  const {
+    isListening,
+    isSpeaking,
+    isConnected,
+    isSupported,
+    error,
+    startListening,
+    stopListening,
+    voiceMode,
+    switchVoiceMode,
+  } = useEnhancedVoiceChat({
+    onTranscript: handleTranscript,
+    onAIResponse: handleAIResponse,
     property,
     useUltravox: false,
     voiceId: 'alloy'
   });
 
+  const handleVoiceMessageSent = useCallback(() => {
+    setPendingVoiceMessage('');
+    setTranscript('');
+  }, []);
+
   if (!isOpen) return null;
 
-  return (
-    <div className="fixed inset-0 bg-white z-50 flex flex-col h-screen overflow-hidden">
-      {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 flex-shrink-0">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
-            <MessageSquare size={20} className="text-white" />
+  if (!isSupported) {
+    return (
+      <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
+        <div className="absolute right-0 top-0 h-full w-full bg-white">
+          <div className="flex items-center justify-between p-4 border-b border-gray-200">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                <VolumeX size={20} className="text-white" />
+              </div>
+              <div>
+                <h3 className="font-medium text-gray-800">Voice Not Supported</h3>
+                <p className="text-sm text-gray-500">Your browser doesn't support voice features</p>
+              </div>
+            </div>
+            <Button variant="ghost" size="icon" onClick={onClose}>
+              <X size={20} />
+            </Button>
           </div>
-          <div>
-            <h2 className="text-lg font-semibold text-gray-900">
-              Voice Assistant
-            </h2>
-            <p className="text-sm text-gray-600">
-              Ask about {property.title}
+          <div className="p-8 text-center">
+            <p className="text-gray-600 mb-4">
+              Voice chat is not supported in your current browser. Please try using Chrome, Safari, or Edge for the best experience.
             </p>
+            <Button onClick={onSwitchToChat} className="bg-orange-500 hover:bg-orange-600 text-white">
+              Switch to Text Chat
+            </Button>
           </div>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setShowVoicePopup(true)}
-            className="text-gray-600 hover:bg-gray-100"
-          >
-            <Settings size={20} />
-          </Button>
-          <Button
-            onClick={onSwitchToChat}
-            variant="outline"
-            className="text-orange-600 border-orange-200 hover:bg-orange-50"
-          >
-            Switch to Text Chat
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={onClose}
-            className="text-gray-600 hover:bg-gray-100"
-          >
-            <X size={20} />
-          </Button>
         </div>
       </div>
+    );
+  }
 
-      {/* Main Content - Scrollable */}
-      <div className="flex-1 overflow-y-auto p-4">
-        <div className="max-w-2xl mx-auto space-y-6">
-          <div className="text-center">
-            <h3 className="text-xl font-bold text-gray-900 mb-3">
-              Voice Chat with AI Assistant
-            </h3>
-            <p className="text-gray-600">
-              Ask me anything about this property. I can help with details, 
-              scheduling tours, and answering questions.
-            </p>
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
+      <div className="absolute right-0 top-0 h-full w-full bg-white">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
+              <Volume2 size={20} className="text-white" />
+            </div>
+            <div>
+              <div className="flex items-center space-x-2">
+                <h3 className="font-medium text-gray-800">Voice Chat</h3>
+                <ProBadge size="sm" />
+              </div>
+              <p className="text-sm text-gray-500">
+                {isConnected ? 'Talk naturally about the property' : 'Connecting...'}
+              </p>
+            </div>
           </div>
+          
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={onSwitchToChat}
+              className="text-gray-600 hover:bg-gray-100"
+            >
+              <MessageSquare size={20} />
+            </Button>
+            <Button 
+              variant="ghost" 
+              size="icon" 
+              onClick={onClose} 
+              className="text-gray-600 hover:bg-gray-100"
+            >
+              <X size={20} />
+            </Button>
+          </div>
+        </div>
 
-          {/* Voice Animation */}
-          <div className="flex justify-center py-6">
+        {/* Voice Interface Content */}
+        <div className="flex flex-col h-[calc(100vh-80px)]">
+          {/* Voice Animation and Controls */}
+          <div className="flex-1 flex flex-col items-center justify-center p-8 space-y-8">
             <VoiceAnimation 
-              isListening={voice.isListening}
-              isSpeaking={voice.isSpeaking || isProcessing}
+              isListening={isListening}
+              isSpeaking={isSpeaking}
+              isConnected={isConnected}
             />
-          </div>
-
-          {/* Voice Controls */}
-          <div className="space-y-4 text-center">
-            {!voice.isListening && !voice.isSpeaking && !isProcessing && (
-              <Button
-                onClick={voice.startListening}
-                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-full text-lg font-medium shadow-lg transition-all duration-200 hover:scale-105"
-              >
-                Start Voice Chat
-              </Button>
-            )}
             
-            {voice.isListening && (
-              <Button
-                onClick={voice.stopListening}
-                variant="outline"
-                className="border-red-500 text-red-600 hover:bg-red-50 px-8 py-3 rounded-full text-lg font-medium shadow-lg"
-              >
-                Stop Listening
-              </Button>
-            )}
+            <VoiceControls
+              isListening={isListening}
+              isSpeaking={isSpeaking}
+              isConnected={isConnected}
+              onStartListening={startListening}
+              onStopListening={stopListening}
+              onShowVoiceSelection={() => setShowVoiceSelection(true)}
+              error={error}
+            />
 
-            {isProcessing && (
-              <div className="text-center">
-                <div className="text-orange-600 font-medium">Processing your request...</div>
-              </div>
-            )}
-
-            {!voice.isSupported && (
-              <div className="text-center text-sm text-gray-500 p-4 bg-gray-50 rounded-lg">
-                Voice synthesis not supported in this browser
-              </div>
-            )}
-          </div>
-
-          {/* Transcript and Response Display */}
-          <div className="space-y-4 w-full">
             {transcript && (
-              <Card className="p-4 bg-gray-50 border-gray-200">
-                <p className="text-sm text-gray-600 mb-2 font-medium">You said:</p>
-                <p className="text-gray-900">{transcript}</p>
-              </Card>
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 max-w-md text-center">
+                <p className="text-sm text-gray-600 mb-1">You said:</p>
+                <p className="text-blue-800 font-medium">"{transcript}"</p>
+              </div>
             )}
 
             {aiResponse && (
-              <Card className="p-4 bg-orange-50 border-orange-200">
-                <p className="text-sm text-orange-600 mb-2 font-medium">AI Assistant:</p>
-                <p className="text-gray-900">{aiResponse}</p>
-              </Card>
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md text-center">
+                <p className="text-sm text-gray-600 mb-1">AI Response:</p>
+                <p className="text-green-800 font-medium">"{aiResponse}"</p>
+              </div>
             )}
           </div>
-        </div>
-      </div>
 
-      {/* Voice Selection Popup */}
-      {showVoicePopup && voice.voiceMode === 'openai' && (
-        <VoiceSelectionPopup
-          isOpen={showVoicePopup}
-          onClose={() => setShowVoicePopup(false)}
-          availableVoices={voice.availableVoices || []}
-          currentVoice={voice.voiceSettings?.selectedVoice}
-          onVoiceSelect={(voiceId) => {
-            voice.updateVoiceSettings?.({ voice: { id: voiceId } });
-            setShowVoicePopup(false);
-          }}
-        />
-      )}
+          {/* Chat Component for message history */}
+          <div className="h-64 border-t border-gray-200">
+            <PropertyChatBot 
+              property={property}
+              pendingVoiceMessage={pendingVoiceMessage}
+              onVoiceMessageSent={handleVoiceMessageSent}
+              onAIResponse={handleAIResponse}
+            />
+          </div>
+        </div>
+
+        {/* Voice Selection Popup */}
+        {showVoiceSelection && (
+          <VoiceSelectionPopup 
+            onClose={() => setShowVoiceSelection(false)}
+            onVoiceSelect={(voiceId) => {
+              console.log('Voice selected:', voiceId);
+              setShowVoiceSelection(false);
+            }}
+          />
+        )}
+      </div>
     </div>
   );
 };

@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button';
 import { MessageSquare, Mic, X } from 'lucide-react';
 import { PropertyChatBot } from '../PropertyChatBot';
+import { ProBadge } from '../ProBadge';
 
 interface ChatInterfaceProps {
   property: any;
@@ -22,13 +23,16 @@ export const ChatInterface = ({
     <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm">
       <div className="absolute right-0 top-0 h-full w-full bg-white">
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b border-gray-200 safe-area-top">
+        <div className="flex items-center justify-between p-4 border-b border-gray-200">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-orange-500 rounded-full flex items-center justify-center">
               <MessageSquare size={20} className="text-white" />
             </div>
             <div>
-              <h3 className="font-medium text-gray-800">Text Chat</h3>
+              <div className="flex items-center space-x-2">
+                <h3 className="font-medium text-gray-800">Text Chat</h3>
+                <ProBadge size="sm" />
+              </div>
               <p className="text-sm text-gray-500">Ask questions about the property</p>
             </div>
           </div>
@@ -39,6 +43,7 @@ export const ChatInterface = ({
               size="icon"
               onClick={onSwitchToVoice}
               className="text-gray-600 hover:bg-gray-100"
+              title="Switch to Voice Chat (Pro Feature)"
             >
               <Mic size={20} />
             </Button>
@@ -54,7 +59,7 @@ export const ChatInterface = ({
         </div>
 
         {/* Chat Component */}
-        <div className="h-[calc(100vh-80px)] safe-area-bottom">
+        <div className="h-[calc(100vh-80px)]">
           <PropertyChatBot 
             property={property} 
             pendingVoiceMessage=""

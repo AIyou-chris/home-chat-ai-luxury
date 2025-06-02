@@ -2,8 +2,9 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { QrCode, Download } from 'lucide-react';
+import { QrCode, Download, Share } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { ProBadge } from './ProBadge';
 
 interface QRCodeGeneratorProps {
   property: {
@@ -34,12 +35,44 @@ export const QRCodeGenerator = ({ property }: QRCodeGeneratorProps) => {
     });
   };
 
+  const shareQRCode = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: `QR Code for ${property.title}`,
+          text: `Scan this QR code to view ${property.title}`,
+          url: currentUrl
+        });
+      } catch (error) {
+        console.log('Error sharing:', error);
+      }
+    } else {
+      // Fallback - copy to clipboard
+      try {
+        await navigator.clipboard.writeText(currentUrl);
+        toast({
+          title: "Link copied!",
+          description: "Property link copied to clipboard for sharing",
+        });
+      } catch (error) {
+        toast({
+          title: "Copy failed",
+          description: "Unable to copy link to clipboard",
+          variant: "destructive"
+        });
+      }
+    }
+  };
+
   return (
     <section className="py-8 px-6 md:px-8 max-w-7xl mx-auto">
       <Card className="p-6 bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
         <div className="flex flex-col md:flex-row items-center justify-between space-y-4 md:space-y-0">
           <div className="text-center md:text-left">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2">Share with QR Code</h3>
+            <div className="flex items-center justify-center md:justify-start space-x-2 mb-2">
+              <h3 className="text-xl font-semibold text-gray-800">Share with QR Code</h3>
+              <ProBadge size="sm" />
+            </div>
             <p className="text-gray-600">Generate a QR code for easy sharing and tracking</p>
           </div>
           
@@ -53,14 +86,25 @@ export const QRCodeGenerator = ({ property }: QRCodeGeneratorProps) => {
             </Button>
             
             {showQR && (
-              <Button
-                onClick={downloadQRCode}
-                variant="outline"
-                className="border-orange-300 text-orange-700 hover:bg-orange-50"
-              >
-                <Download className="mr-2" size={18} />
-                Download
-              </Button>
+              <>
+                <Button
+                  onClick={downloadQRCode}
+                  variant="outline"
+                  className="border-orange-300 text-orange-700 hover:bg-orange-50"
+                >
+                  <Download className="mr-2" size={18} />
+                  Download
+                </Button>
+                
+                <Button
+                  onClick={shareQRCode}
+                  variant="outline"
+                  className="border-orange-300 text-orange-700 hover:bg-orange-50"
+                >
+                  <Share className="mr-2" size={18} />
+                  Share
+                </Button>
+              </>
             )}
           </div>
         </div>
