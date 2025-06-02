@@ -7,16 +7,18 @@ import { PropertyGallery } from '@/components/PropertyGallery';
 import { PropertyKnowledgeBase } from '@/components/PropertyKnowledgeBase';
 import { NeighborhoodInfo } from '@/components/NeighborhoodInfo';
 import { ContactSection } from '@/components/ContactSection';
-import { PropertyChatBot } from '@/components/PropertyChatBot';
+import { FloatingChatWidget } from '@/components/FloatingChatWidget';
 import { BottomNavigation } from '@/components/BottomNavigation';
 import { DemoCTA } from '@/components/DemoCTA';
 import { AgentProfile } from '@/components/AgentProfile';
+import { PropertyMap } from '@/components/PropertyMap';
+import { QRCodeGenerator } from '@/components/QRCodeGenerator';
+import { ShareButton } from '@/components/ShareButton';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState('details');
-  const [isChatOpen, setIsChatOpen] = useState(false);
 
-  // Sample property data
+  // Sample property data with fixed images
   const sampleProperty = {
     id: '1',
     title: 'Luxury Modern Estate',
@@ -28,7 +30,7 @@ const Index = () => {
     yearBuilt: '2021',
     lotSize: '0.5 acres',
     type: 'Single Family Home',
-    lastUpdated: '2024-01-15',
+    lastUpdated: '2024-06-01',
     description: 'This stunning modern estate represents the pinnacle of luxury living in Beverly Hills. Featuring floor-to-ceiling windows, an open-concept design, and premium finishes throughout, this home offers breathtaking city and canyon views. The gourmet kitchen boasts top-of-the-line appliances and a spacious island perfect for entertaining.',
     features: [
       'Gourmet chef\'s kitchen with premium appliances',
@@ -45,12 +47,8 @@ const Index = () => {
       'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?q=80&w=2070&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2053&auto=format&fit=crop',
       'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2070&auto=format&fit=crop',
-      'https://images.unsplash.com/photo-1600607688960-e095ff8d5e8a?q=80&w=2070&auto=format&fit=crop'
+      'https://images.unsplash.com/photo-1582268611958-ebfd161ef9cf?q=80&w=2070&auto=format&fit=crop'
     ]
-  };
-
-  const handleChatOpen = () => {
-    setIsChatOpen(true);
   };
 
   const renderTabContent = () => {
@@ -79,15 +77,34 @@ const Index = () => {
         <meta name="description" content="Stunning 6BR/7BA modern estate in prime Beverly Hills. Features include chef's kitchen, infinity pool, smart home technology, and panoramic city views." />
       </Helmet>
       
-      <div className="min-h-screen bg-gray-50">
-        <Hero property={sampleProperty} onChatOpen={handleChatOpen} />
+      <div className="min-h-screen bg-gray-50 pb-32">
+        <Hero property={sampleProperty} />
+        
+        {/* Property Metadata */}
+        <div className="container mx-auto px-4 py-4 border-b border-gray-200 bg-white">
+          <div className="text-center">
+            <h1 className="text-2xl font-bold text-gray-900 mb-2">{sampleProperty.title}</h1>
+            <p className="text-gray-600 mb-1">{sampleProperty.address}</p>
+            <p className="text-sm text-gray-500">Last updated: June 1, 2024</p>
+          </div>
+        </div>
         
         <div className="container mx-auto px-4 py-8">
           {renderTabContent()}
         </div>
         
+        <PropertyMap address={sampleProperty.address} title={sampleProperty.title} />
+        <QRCodeGenerator property={sampleProperty} />
+        
+        {/* Share Button - moved to bottom */}
+        <div className="container mx-auto px-4 py-6">
+          <div className="flex justify-center">
+            <ShareButton property={sampleProperty} />
+          </div>
+        </div>
+        
         <DemoCTA />
-        <PropertyChatBot property={sampleProperty} />
+        <FloatingChatWidget property={sampleProperty} />
         <BottomNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
       </div>
     </>

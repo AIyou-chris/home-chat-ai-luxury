@@ -23,11 +23,11 @@ const App = () => (
       <TooltipProvider delayDuration={200}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<Index />} />
+            <Route path="/" element={<SalesPage />} />
+            <Route path="/demo" element={<Index />} />
             <Route path="/submit" element={<RealtorSubmission />} />
             <Route path="/dashboard" element={<AgentDashboard />} />
             <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/sales" element={<SalesPage />} />
             <Route path="/checkout" element={<CheckoutPage />} />
             <Route path="/confirmation" element={<ConfirmationPage />} />
             <Route path="/confirmation-demo" element={<ConfirmationDemo />} />

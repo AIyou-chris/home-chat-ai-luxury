@@ -3,11 +3,13 @@ import React, { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { CheckCircle, ArrowRight, Clock, Zap, Users } from 'lucide-react';
+import { CheckCircle, ArrowRight, Clock, Zap, Users, QrCode, Download } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 const ConfirmationPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const { toast } = useToast();
   
   const { formData, plan, paymentId } = location.state || {};
 
@@ -37,6 +39,24 @@ const ConfirmationPage = () => {
       time: "Ready soon!"
     }
   ];
+
+  // Generate high-resolution QR code for the listing
+  const listingUrl = formData?.listingUrl || 'https://demo-listing.homelistingai.com';
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=400x400&format=png&ecc=H&data=${encodeURIComponent(listingUrl)}`;
+
+  const downloadQRCode = () => {
+    const link = document.createElement('a');
+    link.href = qrCodeUrl;
+    link.download = `listing-qr-code-${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    toast({
+      title: "QR Code Downloaded",
+      description: "High-resolution QR code saved for print marketing",
+    });
+  };
 
   if (!formData) {
     return null;
@@ -106,6 +126,42 @@ const ConfirmationPage = () => {
           </div>
         </Card>
 
+        {/* QR Code Marketing Section */}
+        <Card className="p-6 mb-8 bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200">
+          <div className="text-center">
+            <div className="flex items-center justify-center space-x-2 mb-4">
+              <QrCode className="text-orange-600" size={24} />
+              <h3 className="text-xl font-semibold text-gray-800">Marketing QR Code</h3>
+            </div>
+            <p className="text-gray-600 mb-6">
+              High-resolution QR code for your print marketing materials - yard signs, flyers, business cards
+            </p>
+            
+            <div className="flex flex-col items-center space-y-4">
+              <div className="bg-white p-6 rounded-xl shadow-lg">
+                <img 
+                  src={qrCodeUrl}
+                  alt="Property listing QR code"
+                  className="w-48 h-48 mx-auto"
+                />
+              </div>
+              
+              <div className="flex flex-col sm:flex-row gap-3">
+                <Button
+                  onClick={downloadQRCode}
+                  className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3"
+                >
+                  <Download className="mr-2" size={18} />
+                  Download High-Res QR Code
+                </Button>
+                <div className="text-sm text-gray-600 flex items-center">
+                  <span>400x400px • Print Quality • Error Correction</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </Card>
+
         {/* Next Steps */}
         <Card className="p-6 mb-8">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 text-center">
@@ -137,7 +193,7 @@ const ConfirmationPage = () => {
         <div className="text-center space-y-4">
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button
-              onClick={() => navigate('/agent-dashboard')}
+              onClick={() => navigate('/dashboard')}
               className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 text-lg"
               size="lg"
             >
@@ -145,7 +201,7 @@ const ConfirmationPage = () => {
               <ArrowRight className="ml-2" size={18} />
             </Button>
             <Button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/demo')}
               variant="outline"
               className="px-8 py-3 text-lg"
               size="lg"

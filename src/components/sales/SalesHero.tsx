@@ -14,11 +14,11 @@ export const SalesHero = () => {
   }, []);
 
   const handleDemoClick = () => {
-    window.location.href = '/';
+    window.location.href = '/demo';
   };
 
   const handleGetStartedClick = () => {
-    window.location.href = '/realtor-submit';
+    window.location.href = '/submit';
   };
 
   return (
