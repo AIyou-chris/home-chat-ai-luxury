@@ -3,14 +3,7 @@ import { FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessa
 import { Input } from "@/components/ui/input";
 import { Video, Facebook, Instagram, Linkedin } from "lucide-react";
 import { Control } from "react-hook-form";
-
-interface FormValues {
-  videoLink?: string;
-  facebookUrl?: string;
-  instagramUrl?: string;
-  linkedinUrl?: string;
-  tiktokUrl?: string;
-}
+import { FormValues } from "@/types/form";
 
 interface MediaLinksSectionProps {
   control: Control<FormValues>;

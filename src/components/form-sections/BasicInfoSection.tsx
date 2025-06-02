@@ -3,13 +3,7 @@ import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Control } from "react-hook-form";
-
-interface FormValues {
-  listingUrl: string;
-  agentEmail: string;
-  contactPhone?: string;
-  propertyType: string;
-}
+import { FormValues } from "@/types/form";
 
 interface BasicInfoSectionProps {
   control: Control<FormValues>;

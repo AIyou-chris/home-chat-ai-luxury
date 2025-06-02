@@ -2,10 +2,7 @@
 import { FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Control } from "react-hook-form";
-
-interface FormValues {
-  propertyFeatures?: string[];
-}
+import { FormValues } from "@/types/form";
 
 interface PropertyFeaturesSectionProps {
   control: Control<FormValues>;

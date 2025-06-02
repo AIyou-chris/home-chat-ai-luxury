@@ -4,11 +4,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Calendar } from "lucide-react";
 import { Control } from "react-hook-form";
-
-interface FormValues {
-  scheduleConsultation: boolean;
-  consultationTime?: string;
-}
+import { FormValues } from "@/types/form";
 
 interface ConsultationSectionProps {
   control: Control<FormValues>;

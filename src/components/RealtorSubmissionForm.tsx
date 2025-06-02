@@ -1,4 +1,3 @@
-
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import * as z from "zod"
@@ -18,6 +17,7 @@ import { useEffect, useState } from "react";
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { supabase } from "@/integrations/supabase/client";
+import { FormValues } from "@/types/form";
 
 // Import the new section components
 import BasicInfoSection from "./form-sections/BasicInfoSection";
@@ -45,8 +45,6 @@ const formSchema = z.object({
   scheduleConsultation: z.boolean().default(false),
   consultationTime: z.string().optional(),
 })
-
-interface FormValues extends z.infer<typeof formSchema> {}
 
 const RealtorSubmissionForm = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
