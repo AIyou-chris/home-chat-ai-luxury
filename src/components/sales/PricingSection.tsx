@@ -1,4 +1,3 @@
-
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Check, Star, Shield, CreditCard, Zap } from 'lucide-react';
@@ -39,13 +38,6 @@ export const PricingSection = () => {
         <div className="max-w-4xl mx-auto">
           {/* Main Plan */}
           <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative overflow-hidden">
-            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-              <Badge className="bg-orange-500 text-white px-6 py-2 font-semibold text-lg">
-                <Star className="mr-1" size={16} />
-                Everything Included
-              </Badge>
-            </div>
-            
             <div className="p-8 sm:p-12">
               <div className="text-center mb-8">
                 <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Complete AI Solution</h3>
@@ -146,10 +138,11 @@ export const PricingSection = () => {
 
               <Button
                 onClick={() => window.location.href = '/submit'}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 text-xl rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-lg md:text-xl px-4 sm:px-6"
                 size="lg"
               >
-                Start Your AI Listing - $59/month
+                <span className="block sm:hidden">Start AI Listing</span>
+                <span className="hidden sm:block">Start Your AI Listing - $59/month</span>
               </Button>
 
               <p className="text-center text-gray-500 text-sm mt-4">
