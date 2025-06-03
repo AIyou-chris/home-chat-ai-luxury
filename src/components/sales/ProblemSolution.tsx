@@ -1,6 +1,4 @@
-
-import { AlertCircle, CheckCircle, Clock, Users, TrendingDown, TrendingUp, DollarSign, Star, Shield } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { AlertCircle, CheckCircle, Clock, Users, TrendingDown, TrendingUp, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 export const ProblemSolution = () => {
@@ -91,17 +89,10 @@ export const ProblemSolution = () => {
         </div>
 
         {/* Pricing Section */}
-        <div className="text-center mt-20 mb-16">
-          <div className="pt-8 pb-4 px-3 sm:px-4">
-            <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative overflow-visible max-w-xs sm:max-w-lg mx-auto">
-              <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 z-20">
-                <Badge className="bg-orange-500 text-white px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 font-semibold text-xs sm:text-sm md:text-lg whitespace-nowrap shadow-lg">
-                  <Star className="mr-1 sm:mr-1.5" size={12} />
-                  <span className="hidden xs:inline">Everything </span>Included
-                </Badge>
-              </div>
-              
-              <div className="pt-8 sm:pt-10 md:pt-12 px-4 sm:px-6 md:px-8 pb-6 sm:pb-8">
+        <div className="text-center mt-16 sm:mt-20 mb-16">
+          <div className="pt-6 sm:pt-8 pb-4 px-3 sm:px-4">
+            <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative max-w-xs sm:max-w-lg mx-auto">
+              <div className="pt-6 sm:pt-8 md:pt-10 px-4 sm:px-6 md:px-8 pb-6 sm:pb-8">
                 <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2">Complete AI Solution</h3>
                 <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Turn your listing into a lead machine</p>
                 
@@ -140,10 +131,11 @@ export const ProblemSolution = () => {
 
                 <Button
                   onClick={() => window.location.href = '/submit'}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 sm:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 sm:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-xs sm:text-sm md:text-base px-2 sm:px-4"
                   size="lg"
                 >
-                  Start Your AI Listing
+                  <span className="block sm:hidden">Start AI Listing</span>
+                  <span className="hidden sm:block">Start Your AI Listing</span>
                 </Button>
               </div>
             </div>
