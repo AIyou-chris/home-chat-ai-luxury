@@ -65,7 +65,7 @@ const DemoWithScraping = () => {
   } : null;
 
   // Use the hook to potentially insert the transformed property data
-  useSampleProperty();
+  useSampleProperty(transformedProperty);
 
   const handleDataScraped = (data: ScrapedData) => {
     console.log('Data scraped:', data);
