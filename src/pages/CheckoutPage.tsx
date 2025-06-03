@@ -1,10 +1,11 @@
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { CheckCircle, CreditCard, Shield, ArrowLeft } from 'lucide-react';
+import { CheckCircle, CreditCard, Shield, ArrowLeft, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const CheckoutPage = () => {
@@ -12,62 +13,34 @@ const CheckoutPage = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [isProcessing, setIsProcessing] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState('professional');
   const [paymentMethod, setPaymentMethod] = useState('card');
   
   // Get form data from location state
   const formData = location.state?.formData;
 
-  const plans = {
-    starter: { 
-      name: 'Starter', 
-      price: 49, 
-      features: [
-        '1 AI-powered listing',
-        'Basic chat functionality', 
-        'Lead capture & email notifications',
-        'Mobile-responsive design',
-        'Basic analytics dashboard',
-        'PayPal recurring billing'
-      ] 
-    },
-    professional: { 
-      name: 'Professional', 
-      price: 69, 
-      features: [
-        '1 AI-powered listing with advanced features',
-        'Voice chat capabilities',
-        'Real-time two-way SMS notifications',
-        'Custom SMS notification rules',
-        'Advanced appointment scheduling', 
-        'CRM integration',
-        'Detailed analytics & reporting',
-        'Priority support',
-        'PayPal recurring billing'
-      ] 
-    },
-    enterprise: { 
-      name: 'Enterprise', 
-      price: 'Custom', 
-      features: [
-        'Unlimited AI listings',
-        'Team collaboration tools', 
-        'White-label solutions',
-        'API access',
-        'Advanced integrations',
-        'Custom AI training',
-        'Dedicated account manager',
-        'Custom PayPal billing'
-      ] 
-    }
+  const plan = {
+    name: 'Complete AI Solution',
+    price: 59,
+    features: [
+      'Unlimited AI-powered listings',
+      'Voice chat capabilities',
+      'Real-time SMS notifications',
+      'Smart appointment scheduling',
+      'Lead capture & management',
+      'QR code generation & analytics',
+      'Mobile-optimized interface',
+      'Detailed analytics dashboard',
+      'Priority email support',
+      'CRM integration ready',
+      'Custom branding options',
+      'Regular feature updates'
+    ]
   };
-
-  const currentPlan = plans[selectedPlan as keyof typeof plans];
 
   useEffect(() => {
     // Redirect if no form data
     if (!formData) {
-      navigate('/realtor-submit');
+      navigate('/submit');
     }
   }, [formData, navigate]);
 
@@ -87,7 +60,7 @@ const CheckoutPage = () => {
       navigate('/confirmation', { 
         state: { 
           formData, 
-          plan: currentPlan,
+          plan,
           paymentId: `pay_${Date.now()}`,
           paymentMethod
         } 
@@ -124,7 +97,7 @@ const CheckoutPage = () => {
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-8">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Complete Your Order</h1>
-            <p className="text-xl text-gray-600">Choose your plan and secure your AI-powered listing</p>
+            <p className="text-xl text-gray-600">Get everything you need to turn your listing into a lead machine</p>
           </div>
 
           <Card className="shadow-xl border-0 overflow-hidden">
@@ -132,7 +105,7 @@ const CheckoutPage = () => {
               <div className="mb-4">
                 <Button 
                   variant="ghost" 
-                  onClick={() => navigate('/realtor-submit')}
+                  onClick={() => navigate('/submit')}
                   className="mb-4 p-0 h-auto text-orange-100 hover:text-white"
                 >
                   <ArrowLeft className="mr-2" size={16} />
@@ -144,41 +117,37 @@ const CheckoutPage = () => {
             </CardHeader>
             
             <CardContent className="p-8 space-y-8">
-              {/* Plan Selection */}
+              {/* Single Plan Display */}
               <div>
-                <Label className="text-xl font-bold mb-6 block text-gray-900">Select Your Plan</Label>
-                <div className="space-y-4">
-                  {Object.entries(plans).map(([key, plan]) => (
-                    <div
-                      key={key}
-                      onClick={() => setSelectedPlan(key)}
-                      className={`p-6 border-2 rounded-xl cursor-pointer transition-all hover:shadow-md ${
-                        selectedPlan === key ? 'border-orange-500 bg-orange-50 shadow-lg ring-2 ring-orange-200' : 'border-gray-200 hover:border-gray-300'
-                      }`}
-                    >
-                      <div className="flex justify-between items-start">
-                        <div className="flex-1">
-                          <h3 className="text-xl font-bold text-gray-900 mb-3">{plan.name}</h3>
-                          <ul className="text-gray-600 space-y-2">
-                            {plan.features.map((feature, index) => (
-                              <li key={index} className="flex items-center">
-                                <CheckCircle className="mr-3 text-green-500 flex-shrink-0" size={18} />
-                                <span>{feature}</span>
-                              </li>
-                            ))}
-                          </ul>
-                        </div>
-                        <div className="text-right ml-6">
-                          <span className="text-4xl font-bold text-gray-900">
-                            {typeof plan.price === 'number' ? `$${plan.price}` : plan.price}
-                          </span>
-                          {typeof plan.price === 'number' && (
-                            <span className="text-gray-500 text-lg block">/month</span>
-                          )}
-                        </div>
-                      </div>
+                <div className="bg-gradient-to-r from-orange-50 to-orange-100 border-2 border-orange-200 rounded-2xl p-8 relative">
+                  <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+                    <div className="bg-orange-500 text-white px-6 py-2 rounded-full font-semibold flex items-center">
+                      <Zap className="mr-2" size={16} />
+                      Everything Included
                     </div>
-                  ))}
+                  </div>
+                  
+                  <div className="text-center mb-6 pt-4">
+                    <h3 className="text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
+                    <div className="text-5xl font-bold text-orange-500 mb-2">${plan.price}</div>
+                    <div className="text-gray-600 text-lg">/month</div>
+                  </div>
+
+                  <div className="grid md:grid-cols-2 gap-4">
+                    {plan.features.map((feature, index) => (
+                      <div key={index} className="flex items-center space-x-3">
+                        <CheckCircle className="text-green-500 flex-shrink-0" size={18} />
+                        <span className="text-gray-700">{feature}</span>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 text-center">
+                    <div className="inline-flex items-center bg-green-100 text-green-800 px-4 py-2 rounded-full text-sm font-medium">
+                      <CheckCircle className="mr-2" size={16} />
+                      No setup fees • No hidden costs • Cancel anytime
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -284,11 +253,11 @@ const CheckoutPage = () => {
                     </div>
                     <div className="text-right">
                       <div className="text-3xl font-bold text-gray-900 mb-2">
-                        {typeof currentPlan.price === 'number' ? `$${currentPlan.price}/month` : 'Contact Sales'}
+                        ${plan.price}/month
                       </div>
                       <div className="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
                         <CheckCircle className="mr-1" size={14} />
-                        15-day free trial
+                        15-day money back guarantee
                       </div>
                     </div>
                   </div>
@@ -314,24 +283,16 @@ const CheckoutPage = () => {
               {/* Payment Button */}
               <Button
                 onClick={handlePayment}
-                disabled={isProcessing || currentPlan.price === 'Custom'}
+                disabled={isProcessing}
                 className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white h-16 text-xl font-bold shadow-lg hover:shadow-xl transition-all duration-300"
                 size="lg"
               >
                 {isProcessing ? (
                   'Processing Payment...'
-                ) : currentPlan.price === 'Custom' ? (
-                  'Contact Sales Team'
                 ) : (
-                  `Start Your AI Listing - $${currentPlan.price}/month`
+                  `Start Your AI Listing - $${plan.price}/month`
                 )}
               </Button>
-
-              {currentPlan.price === 'Custom' && (
-                <p className="text-center text-gray-600">
-                  Our enterprise team will contact you within 24 hours to discuss your custom solution.
-                </p>
-              )}
 
               {/* Trust indicators */}
               <div className="text-center">

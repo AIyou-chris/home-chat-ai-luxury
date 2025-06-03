@@ -1,74 +1,22 @@
 
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Star, Shield, CreditCard } from 'lucide-react';
+import { Check, Star, Shield, CreditCard, Zap } from 'lucide-react';
 
 export const PricingSection = () => {
-  const plans = [
-    {
-      name: 'Starter',
-      price: '$49',
-      period: '/month',
-      description: 'Perfect for new agents getting started',
-      popular: false,
-      features: [
-        '1 AI-powered listing',
-        'Basic chat functionality',
-        'Lead capture & email notifications',
-        'Mobile-responsive design',
-        'Basic analytics dashboard',
-        'PayPal recurring billing'
-      ],
-      cta: 'Start Your Listing'
-    },
-    {
-      name: 'Professional',
-      price: '$69',
-      period: '/month',
-      description: 'For established agents serious about growth',
-      popular: true,
-      features: [
-        '1 AI-powered listing with advanced features',
-        'Voice chat capabilities',
-        'Real-time two-way SMS notifications',
-        'Custom SMS notification rules',
-        'Advanced appointment scheduling',
-        'CRM integration',
-        'Detailed analytics & reporting',
-        'Priority support',
-        'PayPal recurring billing'
-      ],
-      cta: 'Most Popular'
-    },
-    {
-      name: 'Enterprise',
-      price: 'Custom',
-      period: '',
-      description: 'For teams and agencies scaling up',
-      popular: false,
-      features: [
-        'Unlimited AI listings',
-        'Team collaboration tools',
-        'White-label solutions',
-        'API access',
-        'Advanced integrations',
-        'Custom AI training',
-        'Dedicated account manager',
-        'Custom PayPal billing'
-      ],
-      cta: 'Contact Sales'
-    }
-  ];
-
   return (
     <div className="py-12 sm:py-16 lg:py-20 bg-gray-50 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12 sm:mb-16">
+          <Badge className="bg-orange-100 text-orange-800 border-orange-200 mb-4 inline-block">
+            <Zap className="mr-1" size={14} />
+            Simplified Pricing - Everything Included
+          </Badge>
           <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-gray-900 mb-4">
-            Simple, Transparent Pricing
+            One Price. Everything Included.
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto">
-            Choose the plan that fits your business. All plans include a 15-day money back guarantee with secure PayPal billing.
+            No more choosing between features. Get everything you need to turn your listing into a lead machine for one simple price.
           </p>
           
           {/* Payment methods */}
@@ -88,64 +36,147 @@ export const PricingSection = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-          {plans.map((plan, index) => (
-            <div 
-              key={index}
-              className={`bg-white rounded-2xl shadow-lg border-2 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 ${
-                plan.popular 
-                  ? 'border-orange-500 relative' 
-                  : 'border-gray-100'
-              }`}
-            >
-              {plan.popular && (
-                <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <Badge className="bg-orange-500 text-white px-4 py-1 font-semibold">
-                    <Star className="mr-1" size={14} />
-                    Most Popular
-                  </Badge>
-                </div>
-              )}
-              
-              <div className="p-6 sm:p-8">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">{plan.name}</h3>
-                <p className="text-gray-600 mb-6">{plan.description}</p>
-                
-                <div className="mb-6">
-                  <span className="text-3xl sm:text-4xl font-bold text-gray-900">{plan.price}</span>
-                  <span className="text-gray-500 text-base sm:text-lg">{plan.period}</span>
-                </div>
-
-                <ul className="space-y-3 mb-8">
-                  {plan.features.map((feature, featureIndex) => (
-                    <li key={featureIndex} className="flex items-start space-x-3">
-                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={16} />
-                      <span className="text-gray-700 text-sm sm:text-base">{feature}</span>
-                    </li>
-                  ))}
-                </ul>
-
-                <Button
-                  onClick={() => window.location.href = '/realtor-submit'}
-                  className={`w-full py-3 font-semibold rounded-xl transition-all duration-300 ${
-                    plan.popular
-                      ? 'bg-orange-500 hover:bg-orange-600 text-white shadow-lg hover:shadow-xl'
-                      : 'bg-gray-900 hover:bg-gray-800 text-white'
-                  }`}
-                  size="lg"
-                >
-                  {plan.cta}
-                </Button>
-              </div>
+        <div className="max-w-4xl mx-auto">
+          {/* Main Plan */}
+          <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative overflow-hidden">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <Badge className="bg-orange-500 text-white px-6 py-2 font-semibold text-lg">
+                <Star className="mr-1" size={16} />
+                Everything Included
+              </Badge>
             </div>
-          ))}
+            
+            <div className="p-8 sm:p-12">
+              <div className="text-center mb-8">
+                <h3 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-2">Complete AI Solution</h3>
+                <p className="text-gray-600 text-lg mb-6">Turn your listing into a lead machine</p>
+                
+                <div className="mb-8">
+                  <span className="text-5xl sm:text-6xl font-bold text-gray-900">$59</span>
+                  <span className="text-gray-500 text-xl ml-2">/month</span>
+                </div>
+
+                <div className="inline-flex items-center bg-green-50 border border-green-200 rounded-full px-6 py-3 mb-8">
+                  <div className="w-3 h-3 bg-green-500 rounded-full mr-3"></div>
+                  <span className="text-green-800 font-medium">No setup fees • No upsells • Cancel anytime</span>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-8 mb-8">
+                <div className="space-y-4">
+                  <h4 className="font-bold text-lg text-gray-900 mb-4">🤖 AI Features</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Unlimited AI-powered listings</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Voice chat capabilities</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">24/7 automated responses</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Smart appointment scheduling</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="font-bold text-lg text-gray-900 mb-4">📱 Mobile & Notifications</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Real-time SMS notifications</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Mobile-optimized interface</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">QR code generation & analytics</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Lead capture & management</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="font-bold text-lg text-gray-900 mb-4">📊 Analytics & Support</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Detailed analytics dashboard</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Priority email support</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Regular feature updates</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <h4 className="font-bold text-lg text-gray-900 mb-4">🚀 Premium Benefits</h4>
+                  <div className="space-y-3">
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">CRM integration ready</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Custom branding options</span>
+                    </div>
+                    <div className="flex items-start space-x-3">
+                      <Check className="text-green-500 mt-0.5 flex-shrink-0" size={18} />
+                      <span className="text-gray-700">Unlimited usage</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <Button
+                onClick={() => window.location.href = '/submit'}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 text-xl rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                size="lg"
+              >
+                Start Your AI Listing - $59/month
+              </Button>
+
+              <p className="text-center text-gray-500 text-sm mt-4">
+                Everything included • No hidden fees • 15-day money back guarantee
+              </p>
+            </div>
+          </div>
+
+          {/* Enterprise Option */}
+          <div className="mt-8 bg-gray-900 rounded-xl p-6 text-center">
+            <h3 className="text-white font-bold text-xl mb-2">Need White-Label or Custom Solutions?</h3>
+            <p className="text-gray-300 mb-4">Perfect for agencies, brokerages, and enterprise teams</p>
+            <Button
+              onClick={() => window.location.href = '/submit'}
+              variant="outline"
+              className="bg-transparent border-white text-white hover:bg-white hover:text-gray-900"
+            >
+              Contact Enterprise Sales
+            </Button>
+          </div>
         </div>
 
         {/* Money Back Guarantee */}
         <div className="text-center mt-8 sm:mt-12">
-          <div className="inline-flex items-center space-x-2 bg-green-50 border border-green-200 rounded-full px-6 py-3">
-            <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-            <span className="text-green-800 font-medium">15-day satisfaction guarantee • Secure PayPal billing • Cancel anytime</span>
+          <div className="inline-flex items-center space-x-3 bg-green-50 border-2 border-green-200 rounded-full px-8 py-4">
+            <Shield className="text-green-600" size={24} />
+            <span className="text-green-800 font-bold text-lg">15-day satisfaction guarantee • Secure PayPal billing • Cancel anytime</span>
           </div>
         </div>
       </div>
