@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { DemoUrlInput } from '@/components/DemoUrlInput';
+import { ScrapedResultsPreview } from '@/components/ScrapedResultsPreview';
 import { useSampleProperty } from '@/hooks/useSampleProperty';
 
 interface ScrapedData {
@@ -20,6 +21,7 @@ interface ScrapedData {
 
 const DemoWithScraping = () => {
   const [scrapedData, setScrapedData] = useState<ScrapedData | null>(null);
+  const [showPreview, setShowPreview] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
 
   // Transform scraped data to match the demo format
@@ -70,29 +72,54 @@ const DemoWithScraping = () => {
   const handleDataScraped = (data: ScrapedData) => {
     console.log('Data scraped:', data);
     setScrapedData(data);
-    setShowDemo(true);
+    setShowPreview(true);
   };
 
   const handleSkip = () => {
     setShowDemo(true);
   };
 
-  if (!showDemo) {
+  const handleContinueToDemo = () => {
+    setShowDemo(true);
+  };
+
+  const handleTryAgain = () => {
+    setScrapedData(null);
+    setShowPreview(false);
+    setShowDemo(false);
+  };
+
+  // Show URL input form
+  if (!showPreview && !showDemo) {
     return <DemoUrlInput onDataScraped={handleDataScraped} onSkip={handleSkip} />;
   }
 
+  // Show scraped results preview
+  if (showPreview && !showDemo && scrapedData) {
+    return (
+      <ScrapedResultsPreview
+        scrapedData={scrapedData}
+        onContinue={handleContinueToDemo}
+        onTryAgain={handleTryAgain}
+      />
+    );
+  }
+
   // Redirect to main demo page with the property data
-  // This will be handled by the routing system
-  window.location.href = '/demo';
-  
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
-      <div className="text-center">
-        <h2 className="text-2xl font-bold text-gray-900 mb-4">Preparing Your Demo...</h2>
-        <p className="text-gray-600">Loading your personalized AI assistant</p>
+  if (showDemo) {
+    window.location.href = '/demo';
+    
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-4">Preparing Your Demo...</h2>
+          <p className="text-gray-600">Loading your personalized AI assistant</p>
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  return null;
 };
 
 export default DemoWithScraping;
