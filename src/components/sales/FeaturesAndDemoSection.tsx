@@ -10,11 +10,9 @@ import {
   TrendingUp, 
   Smartphone, 
   QrCode,
-  BarChart3,
   Clock,
   Play
 } from 'lucide-react';
-import { ProBadge } from '@/components/ProBadge';
 
 export const FeaturesAndDemoSection = () => {
   const [selectedImage, setSelectedImage] = useState(0);
@@ -30,8 +28,7 @@ export const FeaturesAndDemoSection = () => {
       icon: <Mic className="text-purple-500" size={32} />,
       title: "Voice Interaction",
       description: "Natural voice conversations with lifelike AI that can answer complex questions about your property.",
-      highlight: true,
-      isPro: true
+      highlight: true
     },
     {
       icon: <Calendar className="text-green-500" size={32} />,
@@ -43,15 +40,13 @@ export const FeaturesAndDemoSection = () => {
       icon: <TrendingUp className="text-orange-500" size={32} />,
       title: "Lead Analysis",
       description: "Advanced scoring and qualification of prospects with detailed behavioral insights.",
-      highlight: true,
-      isPro: true
+      highlight: true
     },
     {
       icon: <Smartphone className="text-indigo-500" size={32} />,
       title: "SMS Notifications",
       description: "Instant alerts when prospects engage, with detailed conversation summaries.",
-      highlight: false,
-      isPro: true
+      highlight: false
     },
     {
       icon: <QrCode className="text-cyan-500" size={32} />,
@@ -100,10 +95,7 @@ export const FeaturesAndDemoSection = () => {
                 <div className="mb-4">
                   {feature.icon}
                 </div>
-                <div className="flex items-center space-x-2 mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">{feature.title}</h3>
-                  {feature.isPro && <ProBadge size="sm" />}
-                </div>
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">{feature.title}</h3>
                 <p className="text-gray-600 flex-1">{feature.description}</p>
                 {feature.highlight && (
                   <Badge className="bg-orange-500 text-white mt-4 self-start">
