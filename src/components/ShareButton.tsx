@@ -101,10 +101,10 @@ export const ShareButton = ({ property }: ShareButtonProps) => {
       {isOpen && (
         <>
           <div 
-            className="fixed inset-0 z-[45]" 
+            className="fixed inset-0 z-40" 
             onClick={() => setIsOpen(false)}
           />
-          <Card className="absolute top-full mt-2 right-0 z-[50] p-4 min-w-[200px] shadow-xl border-gray-200 bg-white">
+          <Card className="absolute top-full mt-2 right-0 z-50 p-4 min-w-[200px] shadow-xl border-gray-200 bg-white !important" style={{ zIndex: 50 }}>
             <div className="space-y-2">
               <h3 className="font-medium text-gray-800 mb-3">Share this property</h3>
               {shareOptions.map((option) => {
