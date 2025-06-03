@@ -313,6 +313,91 @@ export type Database = {
           },
         ]
       }
+      notification_events: {
+        Row: {
+          agent_id: string | null
+          created_at: string
+          event_data: Json | null
+          event_type: string
+          id: string
+          notification_method: string | null
+          notification_sent: boolean | null
+          sent_at: string | null
+        }
+        Insert: {
+          agent_id?: string | null
+          created_at?: string
+          event_data?: Json | null
+          event_type: string
+          id?: string
+          notification_method?: string | null
+          notification_sent?: boolean | null
+          sent_at?: string | null
+        }
+        Update: {
+          agent_id?: string | null
+          created_at?: string
+          event_data?: Json | null
+          event_type?: string
+          id?: string
+          notification_method?: string | null
+          notification_sent?: boolean | null
+          sent_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_events_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_preferences: {
+        Row: {
+          agent_id: string | null
+          appointment_notifications: boolean | null
+          created_at: string
+          email_notifications: boolean | null
+          id: string
+          lead_notifications: boolean | null
+          notification_email: string | null
+          qr_scan_notifications: boolean | null
+          updated_at: string
+        }
+        Insert: {
+          agent_id?: string | null
+          appointment_notifications?: boolean | null
+          created_at?: string
+          email_notifications?: boolean | null
+          id?: string
+          lead_notifications?: boolean | null
+          notification_email?: string | null
+          qr_scan_notifications?: boolean | null
+          updated_at?: string
+        }
+        Update: {
+          agent_id?: string | null
+          appointment_notifications?: boolean | null
+          created_at?: string
+          email_notifications?: boolean | null
+          id?: string
+          lead_notifications?: boolean | null
+          notification_email?: string | null
+          qr_scan_notifications?: boolean | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_preferences_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       properties: {
         Row: {
           address: string

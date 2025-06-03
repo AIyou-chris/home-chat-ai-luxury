@@ -8,6 +8,7 @@ import { Clock, Calendar as CalendarIcon, User, Phone, Mail } from 'lucide-react
 import { format } from 'date-fns';
 import { useToast } from '@/hooks/use-toast';
 import { appointmentService } from '@/services/appointmentService';
+import { notificationService } from '@/services/notificationService';
 
 interface AppointmentBookingProps {
   property: any;
@@ -72,6 +73,24 @@ export const AppointmentBooking = ({
         showingType: showingType,
         notes: `Scheduled via ${prefilledContact ? 'AI Chat' : 'Direct Booking'}`
       });
+
+      // Send notification about new appointment
+      if (property.agent_id) {
+        await notificationService.sendNotification({
+          type: 'appointment',
+          data: {
+            contact_name: contactInfo.name,
+            contact_email: contactInfo.email,
+            contact_phone: contactInfo.phone,
+            appointment_date: selectedDate.toISOString().split('T')[0],
+            appointment_time: selectedTime,
+            showing_type: showingType,
+            property_address: property.address,
+            property_title: property.title
+          },
+          agentId: property.agent_id
+        });
+      }
 
       toast({
         title: 'Appointment Scheduled!',

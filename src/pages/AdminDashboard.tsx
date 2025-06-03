@@ -4,11 +4,11 @@ import { AdminStats } from '@/components/admin/AdminStats';
 import { AllAgentsOverview } from '@/components/admin/AllAgentsOverview';
 import { SystemAnalytics } from '@/components/admin/SystemAnalytics';
 import { RevenueTracking } from '@/components/admin/RevenueTracking';
-import { SMSMarketingTab } from '@/components/admin/SMSMarketingTab';
+import { NotificationPreferencesTab } from '@/components/admin/NotificationPreferencesTab';
 import { CostEstimator } from '@/components/CostEstimator';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { BarChart3, Users, TrendingUp, MessageSquare, DollarSign, Settings, Calculator } from 'lucide-react';
+import { BarChart3, Users, TrendingUp, Bell, DollarSign, Settings, Calculator } from 'lucide-react';
 
 const AdminDashboard = () => {
   return (
@@ -56,9 +56,9 @@ const AdminDashboard = () => {
                 <DollarSign size={16} />
                 <span>Revenue</span>
               </TabsTrigger>
-              <TabsTrigger value="sms" className="flex items-center space-x-2">
-                <MessageSquare size={16} />
-                <span>SMS Marketing</span>
+              <TabsTrigger value="notifications" className="flex items-center space-x-2">
+                <Bell size={16} />
+                <span>Notifications</span>
               </TabsTrigger>
               <TabsTrigger value="costs" className="flex items-center space-x-2">
                 <Calculator size={16} />
@@ -82,8 +82,8 @@ const AdminDashboard = () => {
               <RevenueTracking />
             </TabsContent>
 
-            <TabsContent value="sms">
-              <SMSMarketingTab />
+            <TabsContent value="notifications">
+              <NotificationPreferencesTab />
             </TabsContent>
 
             <TabsContent value="costs">

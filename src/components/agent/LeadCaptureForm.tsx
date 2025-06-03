@@ -5,12 +5,14 @@ import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { useToast } from '@/hooks/use-toast';
+import { notificationService } from '@/services/notificationService';
 
 interface LeadCaptureFormProps {
   children: React.ReactNode;
+  propertyData?: any;
 }
 
-export const LeadCaptureForm = ({ children }: LeadCaptureFormProps) => {
+export const LeadCaptureForm = ({ children, propertyData }: LeadCaptureFormProps) => {
   const [isLeadFormOpen, setIsLeadFormOpen] = useState(false);
   const { toast } = useToast();
   const [leadData, setLeadData] = useState({
@@ -30,8 +32,26 @@ export const LeadCaptureForm = ({ children }: LeadCaptureFormProps) => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    // Send notification about new lead
+    if (propertyData?.agent_id) {
+      await notificationService.sendNotification({
+        type: 'lead',
+        data: {
+          contact_name: `${leadData.firstName} ${leadData.lastName}`,
+          contact_email: leadData.email,
+          contact_phone: leadData.phone,
+          property_address: propertyData.address,
+          property_title: propertyData.title,
+          message: leadData.message,
+          timeframe: leadData.timeframe,
+          budget: leadData.budget
+        },
+        agentId: propertyData.agent_id
+      });
+    }
     
     toast({
       title: "Lead Captured!",
