@@ -8,40 +8,6 @@ export const ValuePropositionSection = () => {
     <div className="py-16 lg:py-20 bg-gradient-to-br from-orange-50 to-red-50 w-full">
       <div className="w-full px-4 sm:px-6 lg:px-8">
         <div className="max-w-7xl mx-auto">
-          {/* Pricing Section - Moved to Top */}
-          <div className="text-center mb-16">
-            <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative overflow-hidden max-w-md mx-auto mb-12">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                <Badge className="bg-orange-500 text-white px-6 py-2 font-semibold text-lg">
-                  Everything Included
-                </Badge>
-              </div>
-              
-              <div className="p-8">
-                <h3 className="text-2xl font-bold text-gray-900 mb-2">Complete AI Solution</h3>
-                <p className="text-gray-600 mb-4">Turn your listing into a lead machine</p>
-                
-                <div className="mb-6">
-                  <span className="text-4xl font-bold text-gray-900">$59</span>
-                  <span className="text-gray-500 text-lg ml-2">/month</span>
-                </div>
-
-                <div className="inline-flex items-center bg-green-50 border border-green-200 rounded-full px-4 py-2 mb-6">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
-                  <span className="text-green-800 font-medium text-sm">No setup fees • No upsells • Cancel anytime</span>
-                </div>
-
-                <Button
-                  onClick={() => window.location.href = '/submit'}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
-                  size="lg"
-                >
-                  Start Your AI Listing
-                </Button>
-              </div>
-            </div>
-          </div>
-
           {/* Header */}
           <div className="text-center mb-16">
             <Badge className="bg-orange-100 text-orange-800 border-orange-200 mb-4 inline-block text-lg px-4 py-2">

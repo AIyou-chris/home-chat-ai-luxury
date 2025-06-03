@@ -1,5 +1,7 @@
 
-import { AlertCircle, CheckCircle, Clock, Users, TrendingDown, TrendingUp } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock, Users, TrendingDown, TrendingUp, DollarSign } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 export const ProblemSolution = () => {
   return (
@@ -14,7 +16,7 @@ export const ProblemSolution = () => {
           </p>
         </div>
 
-        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center">
+        <div className="grid lg:grid-cols-2 gap-8 sm:gap-12 lg:gap-16 items-center mb-16">
           {/* Problem Side */}
           <div className="space-y-6 sm:space-y-8">
             <div className="text-center lg:text-left">
@@ -88,8 +90,65 @@ export const ProblemSolution = () => {
           </div>
         </div>
 
+        {/* Pricing Section */}
+        <div className="text-center mb-12">
+          <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative overflow-hidden max-w-md mx-auto">
+            <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
+              <Badge className="bg-orange-500 text-white px-6 py-2 font-semibold text-lg">
+                Everything Included
+              </Badge>
+            </div>
+            
+            <div className="p-8">
+              <h3 className="text-2xl font-bold text-gray-900 mb-2">Complete AI Solution</h3>
+              <p className="text-gray-600 mb-4">Turn your listing into a lead machine</p>
+              
+              <div className="mb-6">
+                <span className="text-4xl font-bold text-gray-900">$59</span>
+                <span className="text-gray-500 text-lg ml-2">/month</span>
+              </div>
+
+              <div className="space-y-3 mb-6 text-left">
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
+                  <span className="text-gray-700 text-sm">Real-time notifications</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
+                  <span className="text-gray-700 text-sm">CRM integration ready</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
+                  <span className="text-gray-700 text-sm">Lead to close system</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
+                  <span className="text-gray-700 text-sm">24/7 AI chat support</span>
+                </div>
+                <div className="flex items-center space-x-3">
+                  <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
+                  <span className="text-gray-700 text-sm">Voice interaction</span>
+                </div>
+              </div>
+
+              <div className="inline-flex items-center bg-green-50 border border-green-200 rounded-full px-4 py-2 mb-6">
+                <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                <span className="text-green-800 font-medium text-sm">No setup fees • No upsells • Cancel anytime</span>
+              </div>
+
+              <Button
+                onClick={() => window.location.href = '/submit'}
+                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                size="lg"
+              >
+                Start Your AI Listing
+              </Button>
+            </div>
+          </div>
+        </div>
+
         {/* Results Banner */}
-        <div className="mt-12 sm:mt-16 bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-6 sm:p-8 text-white text-center">
+        <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-6 sm:p-8 text-white text-center">
           <h3 className="text-xl sm:text-2xl font-bold mb-4">Real Results from Real Agents</h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
             <div>
