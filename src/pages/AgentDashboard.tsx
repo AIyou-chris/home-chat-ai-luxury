@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
@@ -9,7 +8,6 @@ import { DashboardStats } from '@/components/dashboard/DashboardStats';
 import { PropertyList } from '@/components/dashboard/PropertyList';
 import { LeadsList } from '@/components/dashboard/LeadsList';
 import { SubmissionsList } from '@/components/dashboard/SubmissionsList';
-import { SMSActivityStats } from '@/components/dashboard/SMSActivityStats';
 import { QRCodeAnalytics } from '@/components/dashboard/QRCodeAnalytics';
 import { DataPrivacySection } from '@/components/dashboard/DataPrivacySection';
 import { useToast } from '@/hooks/use-toast';
@@ -105,7 +103,7 @@ const AgentDashboard = () => {
             <TabsTrigger value="properties">Properties</TabsTrigger>
             <TabsTrigger value="leads">Leads</TabsTrigger>
             <TabsTrigger value="submissions">Submissions</TabsTrigger>
-            <TabsTrigger value="sms-qr">SMS & QR Analytics</TabsTrigger>
+            <TabsTrigger value="qr-analytics">QR Analytics</TabsTrigger>
             <TabsTrigger value="privacy">Data & Privacy</TabsTrigger>
           </TabsList>
           
@@ -121,12 +119,8 @@ const AgentDashboard = () => {
             <SubmissionsList agentId={currentAgent?.id} />
           </TabsContent>
 
-          <TabsContent value="sms-qr">
+          <TabsContent value="qr-analytics">
             <div className="space-y-8">
-              <div>
-                <h2 className="text-xl font-semibold mb-4">SMS Activity</h2>
-                <SMSActivityStats />
-              </div>
               <div>
                 <h2 className="text-xl font-semibold mb-4">QR Code Analytics</h2>
                 <QRCodeAnalytics />
