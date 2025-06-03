@@ -79,8 +79,7 @@ export const FinalCTA = () => {
               />
               <Button
                 type="submit"
-                variant="outline"
-                className="border-white text-white hover:bg-white hover:text-orange-600 whitespace-nowrap"
+                className="bg-blue-600 hover:bg-blue-700 text-white font-semibold border-none whitespace-nowrap px-6 py-2"
               >
                 <Mail className="mr-1" size={16} />
                 Contact
