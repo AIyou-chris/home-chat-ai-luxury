@@ -2,20 +2,20 @@
 import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-export const useSampleProperty = () => {
+export const useSampleProperty = (customProperty?: any) => {
   useEffect(() => {
     const insertSampleProperty = async () => {
       // Check if sample property already exists
       const { data: existing } = await supabase
         .from('properties')
         .select('id')
-        .eq('title', 'Luxury Modern Estate')
+        .eq('title', customProperty?.title || 'Luxury Modern Estate')
         .single();
 
       if (existing) return; // Already exists
 
-      // Insert sample property data with comprehensive restraint information
-      const sampleProperty = {
+      // Use custom property data if provided, otherwise use default sample
+      const propertyData = customProperty || {
         title: 'Luxury Modern Estate',
         listing_url: 'https://example.com/listing/123',
         address: '1247 Beverly Hills Drive, Beverly Hills, CA 90210',
@@ -123,9 +123,11 @@ export const useSampleProperty = () => {
         ]
       };
 
-      await supabase.from('properties').insert(sampleProperty);
+      await supabase.from('properties').insert(propertyData);
     };
 
     insertSampleProperty();
-  }, []);
+  }, [customProperty]);
+
+  return { property: null }; // Return consistent object structure
 };
