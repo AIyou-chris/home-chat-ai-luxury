@@ -3,10 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { CheckCircle, CreditCard, Shield, ArrowLeft, Zap } from 'lucide-react';
+import { CheckCircle, Zap } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { CheckoutHeader } from '@/components/checkout/CheckoutHeader';
+import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelector';
+import { PaymentForm } from '@/components/checkout/PaymentForm';
+import { OrderSummary } from '@/components/checkout/OrderSummary';
+import { SecurityBadges } from '@/components/checkout/SecurityBadges';
 
 const CheckoutPage = () => {
   const location = useLocation();
@@ -82,16 +85,7 @@ const CheckoutPage = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="w-full bg-white border-b border-gray-100 shadow-sm">
-        <div className="container mx-auto px-6 py-4">
-          <img 
-            src="/lovable-uploads/fb2afea8-edfe-40f9-b8ce-9728d6cd7f40.png" 
-            alt="Home Listing AI" 
-            className="h-12 w-auto"
-          />
-        </div>
-      </div>
+      <CheckoutHeader />
 
       <div className="container mx-auto py-8 px-6">
         <div className="max-w-4xl mx-auto">
@@ -102,16 +96,6 @@ const CheckoutPage = () => {
 
           <Card className="shadow-xl border-0 overflow-hidden">
             <CardHeader className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
-              <div className="mb-4">
-                <Button 
-                  variant="ghost" 
-                  onClick={() => navigate('/submit')}
-                  className="mb-4 p-0 h-auto text-orange-100 hover:text-white"
-                >
-                  <ArrowLeft className="mr-2" size={16} />
-                  Back to Form
-                </Button>
-              </div>
               <CardTitle className="text-3xl">Secure Checkout</CardTitle>
               <CardDescription className="text-orange-100 text-lg">Start your AI revolution today</CardDescription>
             </CardHeader>
@@ -151,134 +135,16 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
-              {/* Payment Method Selection */}
-              <div className="border-t pt-8">
-                <Label className="text-xl font-bold mb-6 block text-gray-900">Payment Method</Label>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div
-                    onClick={() => setPaymentMethod('card')}
-                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all flex items-center justify-center space-x-3 ${
-                      paymentMethod === 'card' ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <CreditCard className="text-gray-600" size={24} />
-                    <span className="font-medium">Credit/Debit Card</span>
-                  </div>
-                  <div
-                    onClick={() => setPaymentMethod('paypal')}
-                    className={`p-4 border-2 rounded-xl cursor-pointer transition-all flex items-center justify-center space-x-3 ${
-                      paymentMethod === 'paypal' ? 'border-orange-500 bg-orange-50' : 'border-gray-200 hover:border-gray-300'
-                    }`}
-                  >
-                    <div className="w-6 h-6 bg-blue-600 rounded flex items-center justify-center">
-                      <span className="text-white text-xs font-bold">P</span>
-                    </div>
-                    <span className="font-medium">PayPal</span>
-                  </div>
-                </div>
-              </div>
+              <PaymentMethodSelector 
+                paymentMethod={paymentMethod} 
+                setPaymentMethod={setPaymentMethod} 
+              />
 
-              {/* Payment Information */}
-              {paymentMethod === 'card' && (
-                <div className="border-t pt-8">
-                  <h3 className="text-lg font-semibold mb-6 flex items-center">
-                    <CreditCard className="mr-3" size={24} />
-                    Card Information
-                  </h3>
+              <PaymentForm paymentMethod={paymentMethod} />
 
-                  <div className="space-y-6">
-                    <div>
-                      <Label htmlFor="cardNumber" className="text-base font-medium">Card Number</Label>
-                      <Input
-                        id="cardNumber"
-                        placeholder="1234 5678 9012 3456"
-                        className="mt-2 h-12"
-                      />
-                    </div>
+              <OrderSummary formData={formData} plan={plan} />
 
-                    <div className="grid grid-cols-2 gap-6">
-                      <div>
-                        <Label htmlFor="expiry" className="text-base font-medium">Expiry Date</Label>
-                        <Input
-                          id="expiry"
-                          placeholder="MM/YY"
-                          className="mt-2 h-12"
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="cvv" className="text-base font-medium">CVV</Label>
-                        <Input
-                          id="cvv"
-                          placeholder="123"
-                          className="mt-2 h-12"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <Label htmlFor="billingName" className="text-base font-medium">Billing Name</Label>
-                      <Input
-                        id="billingName"
-                        placeholder="John Doe"
-                        className="mt-2 h-12"
-                      />
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {paymentMethod === 'paypal' && (
-                <div className="border-t pt-8">
-                  <div className="bg-blue-50 border border-blue-200 rounded-xl p-6 text-center">
-                    <div className="w-16 h-16 bg-blue-600 rounded-full flex items-center justify-center mx-auto mb-4">
-                      <span className="text-white text-2xl font-bold">P</span>
-                    </div>
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">PayPal Checkout</h3>
-                    <p className="text-gray-600">You'll be redirected to PayPal to complete your payment securely.</p>
-                  </div>
-                </div>
-              )}
-
-              {/* Order Summary */}
-              <div className="border-t pt-8">
-                <h3 className="text-xl font-bold mb-6 text-gray-900">Order Summary</h3>
-                <div className="bg-gray-50 p-6 rounded-xl border-2 border-gray-100">
-                  <div className="grid md:grid-cols-2 gap-6 items-center">
-                    <div>
-                      <p className="font-bold text-lg text-gray-900">{formData.listingUrl || 'New AI Listing'}</p>
-                      <p className="text-gray-600 mt-1">Agent: {formData.agentEmail}</p>
-                      {formData.contactPhone && (
-                        <p className="text-gray-600">Phone: {formData.contactPhone}</p>
-                      )}
-                    </div>
-                    <div className="text-right">
-                      <div className="text-3xl font-bold text-gray-900 mb-2">
-                        ${plan.price}/month
-                      </div>
-                      <div className="inline-flex items-center bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
-                        <CheckCircle className="mr-1" size={14} />
-                        15-day money back guarantee
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Security badges */}
-              <div className="flex flex-wrap items-center justify-center gap-8 text-sm text-gray-600 border-t pt-8">
-                <div className="flex items-center">
-                  <Shield className="mr-2 text-green-500" size={20} />
-                  <span className="font-medium">SSL Secured</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckCircle className="mr-2 text-green-500" size={20} />
-                  <span className="font-medium">PayPal Protected</span>
-                </div>
-                <div className="flex items-center">
-                  <CheckCircle className="mr-2 text-green-500" size={20} />
-                  <span className="font-medium">Money Back Guarantee</span>
-                </div>
-              </div>
+              <SecurityBadges />
 
               {/* Payment Button */}
               <Button
