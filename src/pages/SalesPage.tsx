@@ -2,14 +2,12 @@
 import { Helmet } from 'react-helmet-async';
 import { SalesHero } from '@/components/sales/SalesHero';
 import { ProblemSolution } from '@/components/sales/ProblemSolution';
-import { LeadMachineSection } from '@/components/sales/LeadMachineSection';
-import { MobileSalesSection } from '@/components/sales/MobileSalesSection';
+import { ValuePropositionSection } from '@/components/sales/ValuePropositionSection';
 import { MultiListingShowcase } from '@/components/sales/MultiListingShowcase';
-import { FeaturesShowcase } from '@/components/sales/FeaturesShowcase';
-import { DemoSection } from '@/components/sales/DemoSection';
+import { FeaturesAndDemoSection } from '@/components/sales/FeaturesAndDemoSection';
 import { PricingSection } from '@/components/sales/PricingSection';
 import { TestimonialsSection } from '@/components/sales/TestimonialsSection';
-import { FAQSection } from '@/components/sales/FAQSection';
+import { StreamlinedFAQSection } from '@/components/sales/StreamlinedFAQSection';
 import { FinalCTA } from '@/components/sales/FinalCTA';
 import { SalesChatWidget } from '@/components/sales/SalesChatWidget';
 
@@ -72,16 +70,23 @@ const SalesPage = () => {
       </Helmet>
 
       <div className="min-h-screen bg-white w-screen overflow-x-hidden" style={{ margin: 0, padding: 0 }}>
+        {/* Part A: Introduction & Problem */}
         <SalesHero />
         <ProblemSolution />
-        <LeadMachineSection />
-        <MobileSalesSection />
+        
+        {/* Part B: Core Value Proposition */}
+        <ValuePropositionSection />
         <MultiListingShowcase />
-        <FeaturesShowcase />
-        <DemoSection />
+        
+        {/* Part C: Features & Demonstration */}
+        <FeaturesAndDemoSection />
+        
+        {/* Part D: Conversion & Social Proof */}
         <PricingSection />
         <TestimonialsSection />
-        <FAQSection />
+        
+        {/* Part E: Final Push & Support */}
+        <StreamlinedFAQSection />
         <FinalCTA />
         <SalesChatWidget />
       </div>
