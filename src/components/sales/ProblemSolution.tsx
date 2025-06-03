@@ -1,3 +1,4 @@
+
 import { AlertCircle, CheckCircle, Clock, Users, TrendingDown, TrendingUp, DollarSign, Star, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -91,55 +92,55 @@ export const ProblemSolution = () => {
 
         {/* Pricing Section */}
         <div className="text-center mt-20 mb-16">
-          <div className="pt-6 pb-4 px-4">
-            <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative overflow-visible max-w-lg mx-auto">
-              <div className="absolute -top-4 left-1/2 transform -translate-x-1/2 z-20">
-                <Badge className="bg-orange-500 text-white px-4 sm:px-6 py-2 sm:py-2.5 font-semibold text-sm sm:text-lg whitespace-nowrap shadow-lg">
-                  <Star className="mr-1.5" size={16} />
-                  Everything Included
+          <div className="pt-8 pb-4 px-3 sm:px-4">
+            <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative overflow-visible max-w-xs sm:max-w-lg mx-auto">
+              <div className="absolute -top-3 sm:-top-4 left-1/2 transform -translate-x-1/2 z-20">
+                <Badge className="bg-orange-500 text-white px-3 sm:px-4 md:px-6 py-1.5 sm:py-2 md:py-2.5 font-semibold text-xs sm:text-sm md:text-lg whitespace-nowrap shadow-lg">
+                  <Star className="mr-1 sm:mr-1.5" size={12} />
+                  <span className="hidden xs:inline">Everything </span>Included
                 </Badge>
               </div>
               
-              <div className="pt-10 sm:pt-12 px-6 sm:px-8 pb-6 sm:pb-8">
-                <h3 className="text-xl sm:text-2xl font-bold text-gray-900 mb-2">Complete AI Solution</h3>
-                <p className="text-gray-600 mb-6">Turn your listing into a lead machine</p>
+              <div className="pt-8 sm:pt-10 md:pt-12 px-4 sm:px-6 md:px-8 pb-6 sm:pb-8">
+                <h3 className="text-lg sm:text-xl md:text-2xl font-bold text-gray-900 mb-2">Complete AI Solution</h3>
+                <p className="text-sm sm:text-base text-gray-600 mb-4 sm:mb-6">Turn your listing into a lead machine</p>
                 
-                <div className="mb-8">
-                  <span className="text-3xl sm:text-4xl font-bold text-gray-900">$59</span>
-                  <span className="text-gray-500 text-lg ml-2">/month</span>
+                <div className="mb-6 sm:mb-8">
+                  <span className="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-900">$59</span>
+                  <span className="text-gray-500 text-base sm:text-lg ml-2">/month</span>
                 </div>
 
-                <div className="space-y-3 mb-8 text-left">
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
-                    <span className="text-gray-700 text-sm">Real-time notifications</span>
+                <div className="space-y-2 sm:space-y-3 mb-6 sm:mb-8 text-left">
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0" size={14} />
+                    <span className="text-gray-700 text-xs sm:text-sm">Real-time notifications</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
-                    <span className="text-gray-700 text-sm">CRM integration ready</span>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0" size={14} />
+                    <span className="text-gray-700 text-xs sm:text-sm">CRM integration ready</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
-                    <span className="text-gray-700 text-sm">Lead to close system</span>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0" size={14} />
+                    <span className="text-gray-700 text-xs sm:text-sm">Lead to close system</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
-                    <span className="text-gray-700 text-sm">24/7 AI chat support</span>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0" size={14} />
+                    <span className="text-gray-700 text-xs sm:text-sm">24/7 AI chat support</span>
                   </div>
-                  <div className="flex items-center space-x-3">
-                    <CheckCircle className="text-green-500 flex-shrink-0" size={16} />
-                    <span className="text-gray-700 text-sm">Voice interaction</span>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <CheckCircle className="text-green-500 flex-shrink-0" size={14} />
+                    <span className="text-gray-700 text-xs sm:text-sm">Voice interaction</span>
                   </div>
                 </div>
 
-                <div className="inline-flex items-center bg-green-50 border border-green-200 rounded-full px-3 sm:px-4 py-2 mb-8">
-                  <div className="w-3 h-3 bg-green-500 rounded-full mr-2"></div>
+                <div className="inline-flex items-center bg-green-50 border border-green-200 rounded-full px-2 sm:px-3 md:px-4 py-1.5 sm:py-2 mb-6 sm:mb-8">
+                  <div className="w-2 sm:w-3 h-2 sm:h-3 bg-green-500 rounded-full mr-1.5 sm:mr-2"></div>
                   <span className="text-green-800 font-medium text-xs sm:text-sm">No setup fees • No upsells • Cancel anytime</span>
                 </div>
 
                 <Button
                   onClick={() => window.location.href = '/submit'}
-                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                  className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2.5 sm:py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-base"
                   size="lg"
                 >
                   Start Your AI Listing
