@@ -3,7 +3,6 @@ import { Helmet } from 'react-helmet-async';
 import { SalesHero } from '@/components/sales/SalesHero';
 import { ProblemSolution } from '@/components/sales/ProblemSolution';
 import { ValuePropositionSection } from '@/components/sales/ValuePropositionSection';
-import { MultiListingShowcase } from '@/components/sales/MultiListingShowcase';
 import { FeaturesAndDemoSection } from '@/components/sales/FeaturesAndDemoSection';
 import { PricingSection } from '@/components/sales/PricingSection';
 import { TestimonialsSection } from '@/components/sales/TestimonialsSection';
@@ -76,7 +75,6 @@ const SalesPage = () => {
         
         {/* Part B: Core Value Proposition */}
         <ValuePropositionSection />
-        <MultiListingShowcase />
         
         {/* Part C: Features & Demonstration */}
         <FeaturesAndDemoSection />

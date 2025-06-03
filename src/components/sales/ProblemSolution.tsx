@@ -1,5 +1,5 @@
 
-import { AlertCircle, CheckCircle, Clock, Users, TrendingDown, TrendingUp, DollarSign } from 'lucide-react';
+import { AlertCircle, CheckCircle, Clock, Users, TrendingDown, TrendingUp, DollarSign, Star, Shield } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 
@@ -95,6 +95,7 @@ export const ProblemSolution = () => {
           <div className="bg-white rounded-2xl shadow-xl border-2 border-orange-500 relative overflow-hidden max-w-md mx-auto">
             <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
               <Badge className="bg-orange-500 text-white px-6 py-2 font-semibold text-lg">
+                <Star className="mr-1" size={16} />
                 Everything Included
               </Badge>
             </div>
