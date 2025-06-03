@@ -1,10 +1,14 @@
 
 import { Button } from '@/components/ui/button';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Globe } from 'lucide-react';
 
 export const DemoCTA = () => {
   const handleStartListing = () => {
     window.location.href = '/realtor-submit';
+  };
+
+  const handleTryWithListing = () => {
+    window.location.href = '/demo-scraping';
   };
 
   return (
@@ -16,13 +20,25 @@ export const DemoCTA = () => {
         </div>
         <h3 className="text-white font-bold text-xl mb-2">Love what you see?</h3>
         <p className="text-orange-100 text-base mb-4">Get your own AI-powered listing with voice chat!</p>
-        <Button 
-          onClick={handleStartListing}
-          className="w-full bg-white text-orange-600 hover:bg-gray-100 font-semibold py-3"
-        >
-          Start Your Listing
-          <ArrowRight className="ml-2" size={16} />
-        </Button>
+        
+        <div className="flex flex-col sm:flex-row gap-3">
+          <Button 
+            onClick={handleStartListing}
+            className="flex-1 bg-white text-orange-600 hover:bg-gray-100 font-semibold py-3"
+          >
+            Start Your Listing
+            <ArrowRight className="ml-2" size={16} />
+          </Button>
+          
+          <Button 
+            onClick={handleTryWithListing}
+            variant="outline"
+            className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-orange-600 font-semibold py-3 px-6"
+          >
+            <Globe className="mr-2" size={16} />
+            Try Your Listing
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -1,6 +1,6 @@
 
 import { Button } from '@/components/ui/button';
-import { Play } from 'lucide-react';
+import { Play, Globe } from 'lucide-react';
 import { useState } from 'react';
 
 export const DemoSection = () => {
@@ -22,7 +22,7 @@ export const DemoSection = () => {
             See It In Action
           </h2>
           <p className="text-lg sm:text-xl text-gray-600 max-w-4xl mx-auto">
-            Experience our AI-powered property chat yourself. This is a real listing with full AI capabilities.
+            Experience our AI-powered property chat yourself. Try it with your actual listing or use our sample property.
           </p>
         </div>
 
@@ -105,8 +105,8 @@ export const DemoSection = () => {
                 Try Our Full-Featured Demo
               </h3>
               <p className="text-gray-600 text-base sm:text-lg leading-relaxed">
-                This isn't a fake demo - it's our actual AI system running on a real luxury property listing. 
-                Chat with the AI, ask questions about the property, schedule appointments, and see how it captures your information.
+                Experience our AI system with your actual listing or use our sample property. 
+                Chat with the AI, ask questions about the property, schedule appointments, and see how it captures leads.
               </p>
             </div>
 
@@ -129,14 +129,26 @@ export const DemoSection = () => {
               </div>
             </div>
 
-            <Button
-              onClick={() => window.location.href = '/demo'}
-              size="lg"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 w-full sm:w-auto"
-            >
-              <Play className="mr-2" size={20} />
-              Try Live Demo
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-4">
+              <Button
+                onClick={() => window.location.href = '/demo-scraping'}
+                size="lg"
+                className="bg-orange-500 hover:bg-orange-600 text-white px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex-1"
+              >
+                <Globe className="mr-2" size={20} />
+                Try with Your Listing
+              </Button>
+              
+              <Button
+                onClick={() => window.location.href = '/demo'}
+                variant="outline"
+                size="lg"
+                className="px-6 sm:px-8 py-3 sm:py-4 text-base sm:text-lg font-semibold rounded-xl flex-1"
+              >
+                <Play className="mr-2" size={20} />
+                Use Sample Demo
+              </Button>
+            </div>
           </div>
         </div>
       </div>

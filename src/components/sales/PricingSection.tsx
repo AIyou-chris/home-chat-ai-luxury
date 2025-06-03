@@ -1,6 +1,6 @@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Check, Star, Shield, CreditCard, Zap } from 'lucide-react';
+import { Check, Star, Shield, CreditCard, Zap, Globe } from 'lucide-react';
 
 export const PricingSection = () => {
   return (
@@ -136,14 +136,27 @@ export const PricingSection = () => {
                 </div>
               </div>
 
-              <Button
-                onClick={() => window.location.href = '/submit'}
-                className="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-lg md:text-xl px-4 sm:px-6"
-                size="lg"
-              >
-                <span className="block sm:hidden">Start AI Listing</span>
-                <span className="hidden sm:block">Start Your AI Listing - $59/month</span>
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 mb-6">
+                <Button
+                  onClick={() => window.location.href = '/submit'}
+                  className="flex-1 bg-orange-500 hover:bg-orange-600 text-white font-semibold py-4 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 text-sm sm:text-lg md:text-xl px-4 sm:px-6"
+                  size="lg"
+                >
+                  <span className="block sm:hidden">Start AI Listing</span>
+                  <span className="hidden sm:block">Start Your AI Listing - $59/month</span>
+                </Button>
+
+                <Button
+                  onClick={() => window.location.href = '/demo-scraping'}
+                  variant="outline"
+                  className="px-6 py-4 text-lg border-orange-500 text-orange-600 hover:bg-orange-50"
+                  size="lg"
+                >
+                  <Globe className="mr-2" size={18} />
+                  <span className="hidden sm:inline">Try with Your Listing</span>
+                  <span className="sm:hidden">Try Demo</span>
+                </Button>
+              </div>
 
               <p className="text-center text-gray-500 text-sm mt-4">
                 Everything included • No hidden fees • 15-day money back guarantee

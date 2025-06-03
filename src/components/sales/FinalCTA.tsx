@@ -1,14 +1,17 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ArrowRight, Clock, Shield, Zap, Mail } from 'lucide-react';
+import { ArrowRight, Clock, Shield, Zap, Mail, Sparkles } from 'lucide-react';
 
 export const FinalCTA = () => {
   const [email, setEmail] = useState('');
 
   const handleStartListing = () => {
     window.location.href = '/realtor-submit';
+  };
+
+  const handleTryDemo = () => {
+    window.location.href = '/demo-scraping';
   };
 
   const handleContactSubmit = (e: React.FormEvent) => {
@@ -46,6 +49,16 @@ export const FinalCTA = () => {
             >
               Start Your Listing in 5 Minutes
               <ArrowRight className="ml-2" size={20} />
+            </Button>
+            
+            <Button
+              onClick={handleTryDemo}
+              variant="outline"
+              size="lg"
+              className="bg-transparent border-2 border-white text-white hover:bg-white hover:text-orange-600 px-8 sm:px-12 py-3 sm:py-4 text-lg sm:text-xl font-bold rounded-2xl shadow-xl hover:shadow-2xl transition-all duration-300 hover:scale-105 w-full sm:w-auto"
+            >
+              Try with Your Listing
+              <Sparkles className="ml-2" size={20} />
             </Button>
           </div>
 
