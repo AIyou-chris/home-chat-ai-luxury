@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MessageSquare, MapPin, Calendar } from 'lucide-react';
+import { MessageSquare, MapPin, Calendar, Mic } from 'lucide-react';
 import { AppointmentModal } from './appointment/AppointmentModal';
 import { LiveUpdatesTag } from '@/components/LiveUpdatesTag';
 
@@ -73,24 +73,27 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
         {/* Bottom Section */}
         <div className="space-y-4 md:space-y-6 pb-safe">
           <div className="space-y-3 md:space-y-4">
-            <h1 className="text-3xl md:text-4xl lg:text-6xl font-light leading-tight text-white">
+            <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-6xl font-light leading-tight text-white">
               {property.title}
             </h1>
             
-            <LiveUpdatesTag lastUpdated={property.lastUpdated} />
+            <LiveUpdatesTag 
+              lastUpdated={property.lastUpdated} 
+              showAutoScan={true}
+            />
             
             <div className="flex flex-col space-y-2">
               <div className="flex items-center space-x-2 text-white/90">
-                <MapPin size={16} />
-                <span className="text-sm md:text-base">{property.address}</span>
+                <MapPin size={16} className="flex-shrink-0" />
+                <span className="text-sm md:text-base break-words">{property.address}</span>
               </div>
             </div>
             
-            <div className="text-2xl md:text-3xl lg:text-4xl font-light text-orange-400">
+            <div className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-light text-orange-400">
               {property.price}
             </div>
 
-            <div className="flex space-x-4 md:space-x-6 text-sm md:text-base text-white">
+            <div className="flex flex-wrap gap-4 text-sm md:text-base text-white">
               <span>{property.beds} beds</span>
               <span>{property.baths} baths</span>
               <span>{property.sqft} sq ft</span>
@@ -103,10 +106,10 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
               <Button
                 onClick={onChatOpen}
                 size="lg"
-                className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-6 md:px-8 py-3 md:py-4 text-base md:text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
+                className="bg-orange-500 hover:bg-orange-600 text-white font-medium px-4 sm:px-6 md:px-8 py-3 md:py-4 text-sm sm:text-base md:text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
               >
-                <MessageSquare className="mr-2" size={20} />
-                Talk with this Home
+                <Mic className="mr-2 flex-shrink-0" size={20} />
+                <span className="truncate">Talk with this Home</span>
               </Button>
             )}
             
@@ -114,10 +117,10 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
               onClick={() => setIsAppointmentOpen(true)}
               size="lg"
               variant="outline"
-              className="bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/20 font-medium px-6 md:px-8 py-3 md:py-4 text-base md:text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
+              className="bg-white/10 backdrop-blur-md border-white/30 text-white hover:bg-white/20 font-medium px-4 sm:px-6 md:px-8 py-3 md:py-4 text-sm sm:text-base md:text-lg rounded-xl transition-all duration-300 hover:scale-105 active:scale-95"
             >
-              <Calendar className="mr-2" size={20} />
-              Schedule Showing
+              <Calendar className="mr-2 flex-shrink-0" size={20} />
+              <span className="truncate">Schedule Showing</span>
             </Button>
           </div>
         </div>
