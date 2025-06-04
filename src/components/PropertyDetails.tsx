@@ -21,6 +21,22 @@ export const PropertyDetails = ({ property, onOpenVoiceChat }: PropertyDetailsPr
 
   return (
     <section className="py-16 px-6 md:px-8 max-w-7xl mx-auto">
+      {/* Header with Talk to Button */}
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-4xl md:text-5xl font-light text-gray-800 mb-2">{property.title}</h1>
+          <p className="text-xl text-gray-600">{property.address}</p>
+          <p className="text-3xl font-bold text-blue-600 mt-2">{property.price}</p>
+        </div>
+        <Button
+          onClick={onOpenVoiceChat}
+          className="bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2 px-6 py-3 text-lg"
+        >
+          <Mic size={20} />
+          Talk to This Home
+        </Button>
+      </div>
+
       <div className="grid md:grid-cols-2 gap-12">
         {/* Description */}
         <div className="space-y-6">
