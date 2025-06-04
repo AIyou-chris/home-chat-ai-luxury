@@ -56,7 +56,7 @@ export const FloatingChatWidget = ({ property }: FloatingChatWidgetProps) => {
   }
 
   return (
-    <div className="fixed bottom-6 right-6 z-40">
+    <div className="fixed bottom-32 right-6 z-40">
       <Button
         onClick={() => setIsOpen(true)}
         className="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
