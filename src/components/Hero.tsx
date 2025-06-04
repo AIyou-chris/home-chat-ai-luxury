@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MessageSquare, MapPin, Calendar } from 'lucide-react';
 import { AppointmentModal } from './appointment/AppointmentModal';
-import { ShareButton } from '@/components/ShareButton';
 import { LiveUpdatesTag } from '@/components/LiveUpdatesTag';
 
 interface HeroProps {
@@ -120,8 +119,6 @@ export const Hero = ({ property, onChatOpen }: HeroProps) => {
               <Calendar className="mr-2" size={20} />
               Schedule Showing
             </Button>
-
-            <ShareButton property={property} />
           </div>
         </div>
       </div>

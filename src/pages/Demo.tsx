@@ -10,6 +10,7 @@ import { BottomNavigation } from '@/components/BottomNavigation';
 import { FloatingChatWidget } from '@/components/FloatingChatWidget';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { DemoCTA } from '@/components/DemoCTA';
+import { Hero } from '@/components/Hero';
 
 const Demo = () => {
   const [activeTab, setActiveTab] = useState('details');
@@ -51,10 +52,12 @@ const Demo = () => {
       name: 'Michael Sterling',
       email: 'michael.sterling@luxuryrealty.com',
       phone: '(310) 555-0123'
-    }
+    },
+    lastUpdated: new Date().toISOString()
   };
 
   const handleOpenVoiceChat = () => {
+    console.log('Opening voice chat...');
     setIsVoiceChatOpen(true);
   };
 
@@ -63,6 +66,10 @@ const Demo = () => {
       case 'details':
         return (
           <div className="space-y-6 pb-20">
+            <Hero 
+              property={property} 
+              onChatOpen={handleOpenVoiceChat}
+            />
             <PropertyDetails 
               property={property} 
               onOpenVoiceChat={handleOpenVoiceChat}
@@ -108,6 +115,10 @@ const Demo = () => {
       default:
         return (
           <div className="pb-20">
+            <Hero 
+              property={property} 
+              onChatOpen={handleOpenVoiceChat}
+            />
             <PropertyDetails 
               property={property} 
               onOpenVoiceChat={handleOpenVoiceChat}
