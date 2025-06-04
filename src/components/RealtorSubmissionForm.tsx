@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Upload, FileText, MessageSquare, CheckCircle } from 'lucide-react';
-import { BasicInfoSection } from './form-sections/BasicInfoSection';
-import { PropertyFeaturesSection } from './form-sections/PropertyFeaturesSection';
-import { MediaLinksSection } from './form-sections/MediaLinksSection';
-import { FileUploadSection } from './form-sections/FileUploadSection';
-import { ConsultationSection } from './form-sections/ConsultationSection';
+import BasicInfoSection from './form-sections/BasicInfoSection';
+import PropertyFeaturesSection from './form-sections/PropertyFeaturesSection';
+import MediaLinksSection from './form-sections/MediaLinksSection';
+import FileUploadSection from './form-sections/FileUploadSection';
+import ConsultationSection from './form-sections/ConsultationSection';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from "@/components/ui/use-toast";
 
-export const RealtorSubmissionForm = () => {
+const RealtorSubmissionForm = () => {
   const [formData, setFormData] = useState({
     title: '',
     address: '',
@@ -191,3 +191,5 @@ export const RealtorSubmissionForm = () => {
     </div>
   );
 };
+
+export default RealtorSubmissionForm;
