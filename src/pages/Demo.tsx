@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { PropertyDetails } from '@/components/PropertyDetails';
 import { PropertyGallery } from '@/components/PropertyGallery';
@@ -68,28 +67,6 @@ const Demo = () => {
               property={property} 
               onOpenVoiceChat={handleOpenVoiceChat}
             />
-            
-            {/* Share Button Section - clearly separated above QR Code */}
-            <div className="py-8 px-6 md:px-8 max-w-7xl mx-auto">
-              <div className="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-6 border border-blue-200">
-                <div className="text-center mb-4">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">Share This Property</h3>
-                  <p className="text-gray-600 text-sm">Instantly share this listing with clients and colleagues</p>
-                </div>
-                <div className="flex justify-center">
-                  <ShareButton property={{
-                    title: property.title,
-                    address: property.address,
-                    price: property.price
-                  }} />
-                </div>
-              </div>
-            </div>
-
-            {/* Visual separator */}
-            <div className="px-6 md:px-8 max-w-7xl mx-auto">
-              <div className="border-t border-gray-200"></div>
-            </div>
             
             <QRCodeGenerator property={{
               title: property.title,
