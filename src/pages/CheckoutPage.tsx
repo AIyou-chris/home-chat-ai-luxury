@@ -27,7 +27,7 @@ const CheckoutPage = () => {
     features: [
       'Unlimited AI-powered listings',
       'Voice chat capabilities',
-      'Real-time SMS notifications',
+      'Instant lead notifications',
       'Smart appointment scheduling',
       'Lead capture & management',
       'QR code generation & analytics',
