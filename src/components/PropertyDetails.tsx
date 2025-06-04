@@ -2,13 +2,14 @@
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Phone, Mail, MessageSquare } from 'lucide-react';
+import { Phone, Mail, MessageSquare, Mic } from 'lucide-react';
 
 interface PropertyDetailsProps {
   property: any;
+  onOpenVoiceChat?: () => void;
 }
 
-export const PropertyDetails = ({ property }: PropertyDetailsProps) => {
+export const PropertyDetails = ({ property, onOpenVoiceChat }: PropertyDetailsProps) => {
   const specs = [
     { label: 'Bedrooms', value: property.beds },
     { label: 'Bathrooms', value: property.baths },
@@ -28,6 +29,23 @@ export const PropertyDetails = ({ property }: PropertyDetailsProps) => {
             <p className="text-gray-600 leading-relaxed text-lg text-left">
               {property.description}
             </p>
+          </div>
+
+          {/* Voice Chat CTA */}
+          <div className="bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200 rounded-lg p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h4 className="font-semibold text-orange-800 mb-1">Talk to This Home</h4>
+                <p className="text-sm text-orange-600">Ask questions about features, neighborhood, and more</p>
+              </div>
+              <Button
+                onClick={onOpenVoiceChat}
+                className="bg-orange-500 hover:bg-orange-600 text-white flex items-center gap-2 px-4 py-2"
+              >
+                <Mic size={16} />
+                Start Voice Chat
+              </Button>
+            </div>
           </div>
 
           {/* Features */}

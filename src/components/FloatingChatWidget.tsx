@@ -7,10 +7,21 @@ import { ProBadge } from './ProBadge';
 
 interface FloatingChatWidgetProps {
   property: any;
+  isOpen?: boolean;
+  onClose?: () => void;
 }
 
-export const FloatingChatWidget = ({ property }: FloatingChatWidgetProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+export const FloatingChatWidget = ({ property, isOpen: externalIsOpen, onClose: externalOnClose }: FloatingChatWidgetProps) => {
+  const [internalIsOpen, setInternalIsOpen] = useState(false);
+  
+  // Use external control if provided, otherwise use internal state
+  const isOpen = externalIsOpen !== undefined ? externalIsOpen : internalIsOpen;
+  const setIsOpen = externalOnClose ? externalOnClose : () => setInternalIsOpen(false);
+  const handleOpen = () => {
+    if (externalIsOpen === undefined) {
+      setInternalIsOpen(true);
+    }
+  };
 
   if (isOpen) {
     return (
@@ -34,7 +45,7 @@ export const FloatingChatWidget = ({ property }: FloatingChatWidgetProps) => {
             <Button 
               variant="ghost" 
               size="icon" 
-              onClick={() => setIsOpen(false)} 
+              onClick={setIsOpen} 
               className="text-gray-600 hover:bg-gray-100"
             >
               <X size={20} />
@@ -58,7 +69,7 @@ export const FloatingChatWidget = ({ property }: FloatingChatWidgetProps) => {
   return (
     <div className="fixed bottom-32 right-6 z-40">
       <Button
-        onClick={() => setIsOpen(true)}
+        onClick={handleOpen}
         className="bg-blue-500 hover:bg-blue-600 text-white rounded-full w-16 h-16 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
         size="lg"
       >

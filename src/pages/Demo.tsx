@@ -14,6 +14,7 @@ import { DemoCTA } from '@/components/DemoCTA';
 
 const Demo = () => {
   const [activeTab, setActiveTab] = useState('details');
+  const [isVoiceChatOpen, setIsVoiceChatOpen] = useState(false);
   
   // Sample property data since useSampleProperty is not working properly
   const property = {
@@ -54,12 +55,19 @@ const Demo = () => {
     }
   };
 
+  const handleOpenVoiceChat = () => {
+    setIsVoiceChatOpen(true);
+  };
+
   const renderContent = () => {
     switch (activeTab) {
       case 'details':
         return (
           <div className="space-y-6 pb-20">
-            <PropertyDetails property={property} />
+            <PropertyDetails 
+              property={property} 
+              onOpenVoiceChat={handleOpenVoiceChat}
+            />
             
             {/* Share Button Section - clearly separated above QR Code */}
             <div className="py-8 px-6 md:px-8 max-w-7xl mx-auto">
@@ -123,7 +131,10 @@ const Demo = () => {
       default:
         return (
           <div className="pb-20">
-            <PropertyDetails property={property} />
+            <PropertyDetails 
+              property={property} 
+              onOpenVoiceChat={handleOpenVoiceChat}
+            />
           </div>
         );
     }
@@ -136,7 +147,11 @@ const Demo = () => {
       </div>
       
       <BottomNavigation activeTab={activeTab} setActiveTab={setActiveTab} />
-      <FloatingChatWidget property={property} />
+      <FloatingChatWidget 
+        property={property} 
+        isOpen={isVoiceChatOpen}
+        onClose={() => setIsVoiceChatOpen(false)}
+      />
     </div>
   );
 };
