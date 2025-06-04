@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { PropertyDetails } from '@/components/PropertyDetails';
 import { PropertyGallery } from '@/components/PropertyGallery';
@@ -7,7 +8,6 @@ import { AgentProfile } from '@/components/AgentProfile';
 import { ContactSection } from '@/components/ContactSection';
 import { BottomNavigation } from '@/components/BottomNavigation';
 import { FloatingChatWidget } from '@/components/FloatingChatWidget';
-import { ShareButton } from '@/components/ShareButton';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { DemoCTA } from '@/components/DemoCTA';
 
