@@ -11,22 +11,48 @@ import { FloatingChatWidget } from '@/components/FloatingChatWidget';
 import { ShareButton } from '@/components/ShareButton';
 import { QRCodeGenerator } from '@/components/QRCodeGenerator';
 import { DemoCTA } from '@/components/DemoCTA';
-import { useSampleProperty } from '@/hooks/useSampleProperty';
 
 const Demo = () => {
   const [activeTab, setActiveTab] = useState('details');
-  const property = useSampleProperty();
-
-  if (!property) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Loading Demo...</h2>
-          <p className="text-gray-600">Preparing your AI-powered property listing</p>
-        </div>
-      </div>
-    );
-  }
+  
+  // Sample property data since useSampleProperty is not working properly
+  const property = {
+    id: '1',
+    title: 'Luxury Modern Estate',
+    address: '1247 Beverly Hills Drive, Beverly Hills, CA 90210',
+    price: '$4,750,000',
+    beds: 5,
+    baths: 6,
+    sqft: '6,200',
+    yearBuilt: '2018',
+    lotSize: '0.8 acres',
+    type: 'Single Family',
+    description: 'Discover the epitome of modern luxury living in this architectural masterpiece. This stunning estate seamlessly blends contemporary design with timeless elegance, featuring soaring ceilings, floor-to-ceiling windows, and premium finishes throughout.',
+    features: [
+      'Gourmet chef\'s kitchen with Italian marble countertops',
+      'Master suite with private terrace and spa-like bathroom',
+      'Resort-style backyard with infinity pool and spa',
+      'Home theater and wine cellar',
+      'Smart home automation system',
+      '3-car garage with Tesla charging station'
+    ],
+    images: [
+      'https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?q=80&w=2940&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?q=80&w=2940&auto=format&fit=crop',
+      'https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2940&auto=format&fit=crop'
+    ],
+    neighborhood_data: {
+      schools: ['Beverly Hills High School (9/10)', 'Hawthorne Elementary (10/10)'],
+      nearby: ['Rodeo Drive (2 miles)', 'Beverly Hills Hotel (1.5 miles)', 'Century City Mall (3 miles)'],
+      walkScore: 85,
+      demographics: 'Affluent residential area with median income $150k+'
+    },
+    agent: {
+      name: 'Michael Sterling',
+      email: 'michael.sterling@luxuryrealty.com',
+      phone: '(310) 555-0123'
+    }
+  };
 
   const renderContent = () => {
     switch (activeTab) {
@@ -38,11 +64,18 @@ const Demo = () => {
             {/* Share Button - moved above QR Code */}
             <div className="px-6 md:px-8 max-w-7xl mx-auto">
               <div className="flex justify-center">
-                <ShareButton property={property} />
+                <ShareButton property={{
+                  title: property.title,
+                  address: property.address,
+                  price: property.price
+                }} />
               </div>
             </div>
             
-            <QRCodeGenerator property={property} />
+            <QRCodeGenerator property={{
+              title: property.title,
+              address: property.address
+            }} />
             <DemoCTA />
           </div>
         );
@@ -55,19 +88,19 @@ const Demo = () => {
       case 'knowledge':
         return (
           <div className="pb-20">
-            <PropertyKnowledgeBase property={property} />
+            <PropertyKnowledgeBase propertyId={property.id} />
           </div>
         );
       case 'neighborhood':
         return (
           <div className="pb-20">
-            <NeighborhoodInfo neighborhood={property.neighborhood_data} />
+            <NeighborhoodInfo />
           </div>
         );
       case 'agent':
         return (
           <div className="pb-20">
-            <AgentProfile agent={property.agent} />
+            <AgentProfile />
           </div>
         );
       case 'contact':
