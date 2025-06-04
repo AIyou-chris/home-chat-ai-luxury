@@ -1,7 +1,9 @@
+
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Upload, FileText, MessageSquare, CheckCircle } from 'lucide-react';
+import { Loader2, Upload, MessageSquare } from 'lucide-react';
 import BasicInfoSection from './form-sections/BasicInfoSection';
 import PropertyFeaturesSection from './form-sections/PropertyFeaturesSection';
 import MediaLinksSection from './form-sections/MediaLinksSection';
@@ -11,6 +13,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useToast } from "@/components/ui/use-toast";
 
 const RealtorSubmissionForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     title: '',
     address: '',
@@ -34,7 +37,6 @@ const RealtorSubmissionForm = () => {
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
   const { toast } = useToast();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -73,34 +75,11 @@ const RealtorSubmissionForm = () => {
       // Log the submission data (replace with actual submission logic)
       console.log('Form Data Submitted:', submissionData);
 
-      // Show success toast
-      toast({
-        title: "Submission Received!",
-        description: "We'll process your listing and contact you within 24 hours.",
+      // Navigate directly to checkout with form data
+      navigate('/checkout', { 
+        state: { formData: submissionData } 
       });
 
-      setSubmitted(true);
-      setFormData({
-        title: '',
-        address: '',
-        price: '',
-        beds: '',
-        baths: '',
-        sqft: '',
-        description: '',
-        propertyType: '',
-        yearBuilt: '',
-        lotSize: '',
-        agentName: '',
-        agentPhone: '',
-        agentEmail: '',
-        websiteLink: '',
-        virtualTourLink: '',
-        videoLink: '',
-        additionalFeatures: '',
-        uploadedFiles: [],
-        consultationTime: '',
-      });
     } catch (error: any) {
       console.error('Form submission error:', error.message);
       toast({
@@ -171,20 +150,6 @@ const RealtorSubmissionForm = () => {
                 </Button>
               </div>
             </form>
-
-            {submitted && (
-              <Card className="mt-8 bg-green-50 border-green-200">
-                <CardContent className="p-6 text-center">
-                  <CheckCircle className="mx-auto text-green-600 mb-4" size={48} />
-                  <h3 className="text-xl font-semibold text-green-800 mb-2">
-                    Submission Received!
-                  </h3>
-                  <p className="text-green-700">
-                    We'll process your listing and contact you within 24 hours with your AI-enhanced property assistant.
-                  </p>
-                </CardContent>
-              </Card>
-            )}
           </CardContent>
         </Card>
       </div>
