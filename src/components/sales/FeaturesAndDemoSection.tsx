@@ -16,8 +16,6 @@ import {
 export const FeaturesAndDemoSection = () => {
   const [selectedImage, setSelectedImage] = useState(0);
 
-  console.log('FeaturesAndDemoSection rendering, selectedImage:', selectedImage);
-
   const features = [
     {
       icon: <MessageSquare className="text-blue-500" size={32} />,
@@ -65,36 +63,20 @@ export const FeaturesAndDemoSection = () => {
   ];
 
   const handleDemoClick = () => {
-    console.log('Demo button clicked');
-    try {
-      window.location.href = '/demo';
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+    window.location.href = '/demo';
   };
 
   const handleImageSelect = (index: number) => {
-    console.log('Image selected:', index);
-    try {
-      setSelectedImage(index);
-    } catch (error) {
-      console.error('Image selection error:', error);
-    }
+    setSelectedImage(index);
   };
 
   const handleStartTrial = () => {
-    console.log('Start trial clicked');
-    try {
-      window.location.href = '/submit';
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+    window.location.href = '/submit';
   };
 
   return (
     <section className="py-20 bg-gray-50">
       <div className="container mx-auto px-6 sm:px-8 lg:px-12">
-        {/* Features Section */}
         <div className="text-center mb-16">
           <Badge className="bg-blue-100 text-blue-800 border-blue-200 mb-4">
             🚀 Powerful Features
@@ -115,7 +97,7 @@ export const FeaturesAndDemoSection = () => {
               key={index} 
               className={`p-6 h-full ${
                 feature.highlight 
-                  ? 'border-orange-200 bg-gradient-to-br from-orange-50 to-white' 
+                  ? 'border-orange-200 bg-orange-50' 
                   : ''
               }`}
             >
@@ -135,7 +117,6 @@ export const FeaturesAndDemoSection = () => {
           ))}
         </div>
 
-        {/* Demo Section */}
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
             See It In Action
@@ -146,9 +127,8 @@ export const FeaturesAndDemoSection = () => {
         </div>
 
         <div className="grid lg:grid-cols-2 gap-12 items-center mb-16">
-          {/* Demo Preview */}
           <div className="relative">
-            <div className="bg-gradient-to-br from-gray-900 to-gray-800 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="bg-gray-900 rounded-2xl overflow-hidden shadow-2xl">
               <div className="bg-orange-500 p-4 flex items-center justify-between">
                 <h3 className="text-white font-semibold text-sm sm:text-base">Live Demo: $4.75M Beverly Hills Estate</h3>
                 <div className="flex space-x-2">
@@ -159,17 +139,12 @@ export const FeaturesAndDemoSection = () => {
               </div>
               
               <div className="p-6">
-                {demoImages[selectedImage] && (
-                  <img 
-                    src={demoImages[selectedImage]}
-                    alt="Luxury Property Demo"
-                    className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer"
-                    onClick={handleDemoClick}
-                    onError={(e) => {
-                      console.error('Demo image failed to load:', e);
-                    }}
-                  />
-                )}
+                <img 
+                  src={demoImages[selectedImage]}
+                  alt="Luxury Property Demo"
+                  className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer"
+                  onClick={handleDemoClick}
+                />
                 
                 <div className="grid grid-cols-4 gap-2 mb-4">
                   {demoImages.map((image, index) => (
@@ -186,9 +161,6 @@ export const FeaturesAndDemoSection = () => {
                         src={image}
                         alt={`Thumbnail ${index + 1}`}
                         className="w-full h-full object-cover"
-                        onError={(e) => {
-                          console.error('Thumbnail failed to load:', e);
-                        }}
                       />
                     </button>
                   ))}
@@ -215,13 +187,12 @@ export const FeaturesAndDemoSection = () => {
             </div>
           </div>
 
-          {/* Demo Details */}
           <div className="space-y-6">
             <div>
               <h3 className="text-2xl font-bold text-gray-900 mb-4">
                 Try Our Full-Featured Demo
               </h3>
-              <p className="text-lg text-gray-600 leading-relaxed mb-6">
+              <p className="text-lg text-gray-600 mb-6">
                 This isn't a fake demo - it's our actual AI system running on a real luxury property listing. 
                 Chat with the AI, ask questions, and see how it captures leads.
               </p>
@@ -249,7 +220,7 @@ export const FeaturesAndDemoSection = () => {
             <Button
               onClick={handleDemoClick}
               size="lg"
-              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg font-semibold shadow-lg"
             >
               <Play className="mr-2" size={20} />
               Try Live Demo
@@ -257,7 +228,6 @@ export const FeaturesAndDemoSection = () => {
           </div>
         </div>
 
-        {/* Final CTA for Features */}
         <div className="bg-white rounded-2xl p-8 shadow-lg border border-gray-100 text-center">
           <h3 className="text-2xl font-bold text-gray-900 mb-4">
             Ready to Transform Your Listings?
@@ -268,14 +238,14 @@ export const FeaturesAndDemoSection = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Button 
               onClick={handleDemoClick}
-              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold"
+              className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 font-semibold"
             >
               See Live Demo
             </Button>
             <Button 
               onClick={handleStartTrial}
               variant="outline"
-              className="border border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-xl font-semibold"
+              className="border border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 font-semibold"
             >
               Start Free Trial
             </Button>

@@ -4,57 +4,37 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Zap, TrendingUp, Users } from 'lucide-react';
 
 export const SalesHero = () => {
-  console.log('SalesHero rendering - start');
-  
   const handleTryDemo = () => {
     console.log('Try Free Demo clicked');
-    try {
-      window.location.href = '/demo-scraping';
-    } catch (error) {
-      console.error('Navigation error:', error);
-    }
+    window.location.href = '/demo-scraping';
   };
 
   const handleSeePricing = () => {
     console.log('See Pricing clicked');
-    try {
-      const pricingElement = document.getElementById('pricing');
-      if (pricingElement) {
-        pricingElement.scrollIntoView({ behavior: 'smooth' });
-      }
-    } catch (error) {
-      console.error('Scroll error:', error);
+    const pricingElement = document.getElementById('pricing');
+    if (pricingElement) {
+      pricingElement.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
-  console.log('SalesHero rendering - returning JSX');
-  
   return (
-    <section className="relative min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center overflow-hidden">
-      {/* Background elements */}
-      <div className="absolute inset-0">
-        <div className="absolute top-20 left-10 w-72 h-72 bg-orange-200 rounded-full opacity-30 blur-xl"></div>
-        <div className="absolute top-40 right-20 w-72 h-72 bg-blue-200 rounded-full opacity-30 blur-xl"></div>
-        <div className="absolute bottom-8 left-20 w-72 h-72 bg-purple-200 rounded-full opacity-30 blur-xl"></div>
-      </div>
-      
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+    <section className="min-h-screen bg-white flex items-center">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
-          {/* Left Column - Content */}
           <div className="space-y-8 text-center lg:text-left">
-            <Badge className="inline-flex items-center space-x-2 bg-orange-100 text-orange-700 hover:bg-orange-200">
+            <Badge className="inline-flex items-center space-x-2 bg-orange-100 text-orange-700">
               <Zap className="w-4 h-4" />
               <span>AI-Powered Real Estate</span>
             </Badge>
             
-            <h1 className="text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-bold text-gray-900 leading-tight">
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900">
               Turn Every Property Into a{' '}
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-orange-500 to-orange-600">
+              <span className="text-orange-500">
                 24/7 Sales Agent
               </span>
             </h1>
             
-            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl leading-relaxed">
+            <p className="text-lg sm:text-xl text-gray-600 max-w-2xl">
               AI chat that answers buyer questions instantly, schedules appointments, 
               and captures leads while you sleep. 
               <span className="font-semibold text-orange-600">300% more leads guaranteed.</span>
@@ -63,7 +43,7 @@ export const SalesHero = () => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
               <Button
                 size="lg"
-                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg font-semibold rounded-xl"
+                className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg font-semibold"
                 onClick={handleTryDemo}
               >
                 Try Free Demo
@@ -72,14 +52,13 @@ export const SalesHero = () => {
               <Button
                 size="lg"
                 variant="outline"
-                className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 text-lg font-semibold rounded-xl"
+                className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 text-lg font-semibold"
                 onClick={handleSeePricing}
               >
                 See Pricing
               </Button>
             </div>
 
-            {/* Social Proof */}
             <div className="pt-8 border-t border-gray-200">
               <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start space-y-4 sm:space-y-0 sm:space-x-8">
                 <div className="flex items-center space-x-2 text-gray-600">
@@ -98,22 +77,14 @@ export const SalesHero = () => {
             </div>
           </div>
 
-          {/* Right Column - Demo Preview */}
           <div className="relative lg:ml-8">
             <div className="relative">
               <img
                 src="/lovable-uploads/8fee2013-89fc-47e0-ba14-1795e366cdc3.png"
                 alt="AI Chat Demo"
-                className="w-full max-w-lg mx-auto rounded-2xl shadow-2xl border border-gray-200"
-                onError={(e) => {
-                  console.error('Image failed to load:', e);
-                  if (e.currentTarget) {
-                    e.currentTarget.style.display = 'none';
-                  }
-                }}
+                className="w-full max-w-lg mx-auto rounded-2xl shadow-lg border border-gray-200"
               />
               
-              {/* Floating elements */}
               <div className="absolute -top-6 -right-6 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">
                 Live Demo →
               </div>
