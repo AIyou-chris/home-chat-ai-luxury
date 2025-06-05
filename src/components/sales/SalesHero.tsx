@@ -4,6 +4,8 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Zap, TrendingUp, Users } from 'lucide-react';
 
 export const SalesHero = () => {
+  console.log('SalesHero rendering');
+  
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center overflow-hidden">
       {/* Animated background elements */}
@@ -39,7 +41,10 @@ export const SalesHero = () => {
               <Button
                 size="lg"
                 className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg group"
-                onClick={() => window.location.href = '/demo-scraping'}
+                onClick={() => {
+                  console.log('Try Free Demo clicked');
+                  window.location.href = '/demo-scraping';
+                }}
               >
                 Try Free Demo
                 <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -48,7 +53,10 @@ export const SalesHero = () => {
                 size="lg"
                 variant="outline"
                 className="border-2 border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-4 text-lg font-semibold rounded-xl transition-all duration-300 hover:scale-105 hover:shadow-lg"
-                onClick={() => document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' })}
+                onClick={() => {
+                  console.log('See Pricing clicked');
+                  document.getElementById('pricing')?.scrollIntoView({ behavior: 'smooth' });
+                }}
               >
                 See Pricing
               </Button>
@@ -80,6 +88,9 @@ export const SalesHero = () => {
                 src="/lovable-uploads/8fee2013-89fc-47e0-ba14-1795e366cdc3.png"
                 alt="AI Chat Demo"
                 className="w-full max-w-lg mx-auto rounded-2xl shadow-2xl border border-gray-200 transition-all duration-300 hover:scale-105 hover:shadow-3xl"
+                onError={(e) => {
+                  console.error('Image failed to load:', e);
+                }}
               />
               
               {/* Floating elements */}

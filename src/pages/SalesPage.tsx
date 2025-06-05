@@ -9,8 +9,11 @@ import { TestimonialsSection } from '@/components/sales/TestimonialsSection';
 import { StreamlinedFAQSection } from '@/components/sales/StreamlinedFAQSection';
 import { FinalCTA } from '@/components/sales/FinalCTA';
 import { SalesChatWidget } from '@/components/sales/SalesChatWidget';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 
 const SalesPage = () => {
+  console.log('SalesPage rendering');
+  
   return (
     <>
       <Helmet>
@@ -68,26 +71,46 @@ const SalesPage = () => {
         <link rel="canonical" href="https://homelistingai.com/" />
       </Helmet>
 
-      <div className="min-h-screen bg-white w-screen overflow-x-hidden" style={{ margin: 0, padding: 0 }}>
-        {/* Part A: Introduction & Problem */}
-        <SalesHero />
-        <ProblemSolution />
-        
-        {/* Part B: Core Value Proposition */}
-        <ValuePropositionSection />
-        
-        {/* Part C: Features & Demonstration */}
-        <FeaturesAndDemoSection />
-        
-        {/* Part D: Conversion & Social Proof */}
-        <PricingSection />
-        <TestimonialsSection />
-        
-        {/* Part E: Final Push & Support */}
-        <StreamlinedFAQSection />
-        <FinalCTA />
-        <SalesChatWidget />
-      </div>
+      <ErrorBoundary>
+        <div className="min-h-screen bg-white w-screen overflow-x-hidden" style={{ margin: 0, padding: 0 }}>
+          {/* Part A: Introduction & Problem */}
+          <ErrorBoundary>
+            <SalesHero />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <ProblemSolution />
+          </ErrorBoundary>
+          
+          {/* Part B: Core Value Proposition */}
+          <ErrorBoundary>
+            <ValuePropositionSection />
+          </ErrorBoundary>
+          
+          {/* Part C: Features & Demonstration */}
+          <ErrorBoundary>
+            <FeaturesAndDemoSection />
+          </ErrorBoundary>
+          
+          {/* Part D: Conversion & Social Proof */}
+          <ErrorBoundary>
+            <PricingSection />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <TestimonialsSection />
+          </ErrorBoundary>
+          
+          {/* Part E: Final Push & Support */}
+          <ErrorBoundary>
+            <StreamlinedFAQSection />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <FinalCTA />
+          </ErrorBoundary>
+          <ErrorBoundary>
+            <SalesChatWidget />
+          </ErrorBoundary>
+        </div>
+      </ErrorBoundary>
     </>
   );
 };
