@@ -11,6 +11,8 @@ export class ErrorBoundary extends React.Component<
   React.PropsWithChildren<{}>,
   ErrorBoundaryState
 > {
+  private globalErrorHandler?: (event: ErrorEvent) => void;
+
   constructor(props: React.PropsWithChildren<{}>) {
     super(props);
     this.state = { hasError: false };
@@ -50,7 +52,7 @@ export class ErrorBoundary extends React.Component<
 
   componentDidMount() {
     // Add a global error listener to catch any remaining errors
-    const globalErrorHandler = (event) => {
+    this.globalErrorHandler = (event: ErrorEvent) => {
       if (event.error && event.error.message && event.error.message.includes('classList')) {
         console.error('GLOBAL CLASSLIST ERROR DETECTED:', {
           message: event.error.message,
@@ -64,10 +66,7 @@ export class ErrorBoundary extends React.Component<
       }
     };
 
-    window.addEventListener('error', globalErrorHandler);
-    
-    // Clean up on unmount
-    this.globalErrorHandler = globalErrorHandler;
+    window.addEventListener('error', this.globalErrorHandler);
   }
 
   componentWillUnmount() {

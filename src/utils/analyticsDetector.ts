@@ -7,7 +7,8 @@ export const detectAnalyticsScripts = () => {
   const analyticsScripts = [];
   
   scripts.forEach((script, index) => {
-    const src = script.src || script.innerHTML;
+    const scriptElement = script as HTMLScriptElement;
+    const src = scriptElement.src || scriptElement.innerHTML;
     if (src && (
       src.includes('hotjar') || 
       src.includes('analytics') || 
@@ -18,10 +19,10 @@ export const detectAnalyticsScripts = () => {
     )) {
       analyticsScripts.push({
         index,
-        src: script.src,
-        innerHTML: script.innerHTML.substring(0, 100),
-        id: script.id,
-        className: script.className
+        src: scriptElement.src,
+        innerHTML: scriptElement.innerHTML.substring(0, 100),
+        id: scriptElement.id,
+        className: scriptElement.className
       });
     }
   });
@@ -35,12 +36,12 @@ export const detectAnalyticsScripts = () => {
   const foundGlobals = [];
   
   analyticsGlobals.forEach(global => {
-    if (window[global]) {
+    if ((window as any)[global]) {
       foundGlobals.push({
         name: global,
-        type: typeof window[global],
-        hasInit: typeof window[global]?.init === 'function',
-        hasRender: typeof window[global]?.render === 'function'
+        type: typeof (window as any)[global],
+        hasInit: typeof (window as any)[global]?.init === 'function',
+        hasRender: typeof (window as any)[global]?.render === 'function'
       });
     }
   });
@@ -78,16 +79,17 @@ export const cleanupAnalyticsScripts = () => {
     // Remove known analytics scripts
     const scriptsToRemove = document.querySelectorAll('script[src*="hotjar"], script[src*="analytics"], script[src*="gtag"]');
     scriptsToRemove.forEach((script, index) => {
-      console.log(`Removing script ${index}:`, script.src);
+      const scriptElement = script as HTMLScriptElement;
+      console.log(`Removing script ${index}:`, scriptElement.src);
       script.remove();
     });
 
     // Clear global variables
     const globalsToDelete = ['hj', 'gtag', 'ga', '_gaq'];
     globalsToDelete.forEach(global => {
-      if (window[global]) {
+      if ((window as any)[global]) {
         console.log(`Clearing global: ${global}`);
-        delete window[global];
+        delete (window as any)[global];
       }
     });
 
