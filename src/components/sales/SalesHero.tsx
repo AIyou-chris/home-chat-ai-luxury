@@ -1,64 +1,72 @@
+
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Zap, TrendingUp, Users } from 'lucide-react';
 import { useEffect } from 'react';
+import { safeQuerySelector, safeScrollIntoView, waitForElement } from '@/utils/domSafetyUtils';
 
 export const SalesHero = () => {
   console.log('SalesHero component rendering');
 
   useEffect(() => {
-    // Check for any dynamically loaded scripts
-    const checkForAnalyticsScripts = () => {
-      console.log('Checking for analytics scripts...');
+    console.log('SalesHero useEffect - setting up component with safety measures');
+    
+    // Enhanced safety checks and analytics detection
+    const checkForInterference = () => {
+      console.log('Checking for potential script interference...');
       
-      // Check all script tags
-      const scripts = document.querySelectorAll('script');
-      scripts.forEach((script, index) => {
-        if (script.src && (script.src.includes('hotjar') || script.src.includes('analytics') || script.src.includes('gtag'))) {
-          console.warn(`Found analytics script ${index}:`, script.src);
+      // Check for Hotjar interference
+      if ((window as any).hj) {
+        console.warn('Hotjar detected - potential interference risk');
+        try {
+          // Disable Hotjar to prevent classList errors
+          delete (window as any).hj;
+          console.log('Hotjar disabled for safety');
+        } catch (e) {
+          console.error('Error disabling Hotjar:', e);
         }
-      });
-
-      // Check for global variables that might indicate analytics
-      const analyticsGlobals = ['hj', 'gtag', 'ga', '_gaq', 'dataLayer'];
-      analyticsGlobals.forEach(global => {
-        if (window[global]) {
-          console.warn(`Found analytics global variable: ${global}`, window[global]);
-        }
-      });
-
-      // Check for any DOM elements with analytics-related attributes
-      const elementsWithTracking = document.querySelectorAll('[data-hotjar], [data-gtag], [data-analytics]');
-      if (elementsWithTracking.length > 0) {
-        console.warn('Found elements with tracking attributes:', elementsWithTracking);
+      }
+      
+      // Check for problematic scripts
+      const problematicScripts = document.querySelectorAll('script[src*="hotjar"], script[src*="static.hotjar.com"]');
+      if (problematicScripts.length > 0) {
+        console.warn(`Found ${problematicScripts.length} potentially problematic scripts`);
+        problematicScripts.forEach((script, index) => {
+          console.warn(`Script ${index}:`, (script as HTMLScriptElement).src);
+        });
+      }
+      
+      // Check for elements that might be targeted by analytics
+      const hotjarElements = document.querySelectorAll('[id*="hotjar"], [class*="hotjar"], [data-hj]');
+      if (hotjarElements.length > 0) {
+        console.warn(`Found ${hotjarElements.length} Hotjar-related elements that might cause issues`);
       }
     };
 
-    // Run checks after component mounts
-    checkForAnalyticsScripts();
+    checkForInterference();
 
-    // Set up error listener specifically for classList errors
-    const errorHandler = (event) => {
-      if (event.error && event.error.message && event.error.message.includes('classList')) {
-        console.error('ClassList error detected:', {
+    // Enhanced error listener specifically for this component
+    const componentErrorHandler = (event: ErrorEvent) => {
+      if (event.error && event.error.message && 
+          (event.error.message.includes('classList') || event.error.message.includes('hj'))) {
+        console.error('SalesHero component detected interference error:', {
           message: event.error.message,
           stack: event.error.stack,
-          filename: event.filename,
-          lineno: event.lineno,
-          colno: event.colno
+          component: 'SalesHero',
+          timestamp: new Date().toISOString()
         });
       }
     };
 
-    window.addEventListener('error', errorHandler);
+    window.addEventListener('error', componentErrorHandler);
 
     return () => {
-      window.removeEventListener('error', errorHandler);
+      window.removeEventListener('error', componentErrorHandler);
     };
   }, []);
 
   const handleTryDemo = () => {
-    console.log('Try Free Demo clicked - starting navigation');
+    console.log('Try Free Demo clicked - using safe navigation');
     try {
       console.log('About to navigate to /demo-scraping');
       window.location.href = '/demo-scraping';
@@ -68,28 +76,38 @@ export const SalesHero = () => {
     }
   };
 
-  const handleSeePricing = () => {
-    console.log('See Pricing clicked - starting scroll');
+  const handleSeePricing = async () => {
+    console.log('See Pricing clicked - using safe scroll with DOM protection');
     try {
       console.log('Looking for pricing element with ID: pricing');
       
-      // Enhanced safety checks
-      if (!document || typeof document.getElementById !== 'function') {
-        console.error('Document or getElementById not available');
-        return;
-      }
-
-      const pricingElement = document.getElementById('pricing');
+      // Use safe DOM manipulation
+      const pricingElement = safeQuerySelector('#pricing');
       console.log('Pricing element found:', pricingElement);
       
-      if (pricingElement && typeof pricingElement.scrollIntoView === 'function') {
-        console.log('About to scroll to pricing element');
-        pricingElement.scrollIntoView({ behavior: 'smooth' });
-        console.log('Scroll initiated successfully');
+      if (pricingElement) {
+        console.log('About to scroll to pricing element safely');
+        const scrollSuccess = safeScrollIntoView(pricingElement);
+        if (scrollSuccess) {
+          console.log('Safe scroll completed successfully');
+        } else {
+          console.log('Safe scroll failed, trying fallback');
+          // Fallback: wait for element and try again
+          const waitedElement = await waitForElement('#pricing', 2000);
+          if (waitedElement) {
+            safeScrollIntoView(waitedElement);
+          } else {
+            // Ultimate fallback: scroll to bottom
+            try {
+              window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+              console.log('Fallback scroll to bottom executed');
+            } catch (scrollError) {
+              console.error('All scroll methods failed:', scrollError);
+            }
+          }
+        }
       } else {
-        console.warn('Pricing element not found in DOM or scrollIntoView not available');
-        
-        // Fallback: try to scroll to bottom if pricing element not found
+        console.warn('Pricing element not found, using fallback scroll');
         try {
           window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
           console.log('Fallback scroll to bottom executed');
@@ -102,7 +120,7 @@ export const SalesHero = () => {
     }
   };
 
-  console.log('SalesHero about to render JSX');
+  console.log('SalesHero about to render JSX with enhanced safety');
 
   return (
     <section className="min-h-screen bg-white flex items-center">
