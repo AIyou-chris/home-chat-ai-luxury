@@ -36,7 +36,7 @@ export const PropertyList = ({ agentId }: PropertyListProps) => {
         <h3 className="text-lg font-semibold mb-2">No Properties Yet</h3>
         <p className="text-gray-600 mb-4">Submit a listing to see your properties here</p>
         <Button asChild>
-          <a href="/realtor-submit">Submit Listing</a>
+          <a href="/submit">Submit Listing</a>
         </Button>
       </Card>
     );
