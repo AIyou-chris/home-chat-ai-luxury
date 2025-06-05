@@ -1,10 +1,61 @@
-
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Zap, TrendingUp, Users } from 'lucide-react';
+import { useEffect } from 'react';
 
 export const SalesHero = () => {
   console.log('SalesHero component rendering');
+
+  useEffect(() => {
+    // Check for any dynamically loaded scripts
+    const checkForAnalyticsScripts = () => {
+      console.log('Checking for analytics scripts...');
+      
+      // Check all script tags
+      const scripts = document.querySelectorAll('script');
+      scripts.forEach((script, index) => {
+        if (script.src && (script.src.includes('hotjar') || script.src.includes('analytics') || script.src.includes('gtag'))) {
+          console.warn(`Found analytics script ${index}:`, script.src);
+        }
+      });
+
+      // Check for global variables that might indicate analytics
+      const analyticsGlobals = ['hj', 'gtag', 'ga', '_gaq', 'dataLayer'];
+      analyticsGlobals.forEach(global => {
+        if (window[global]) {
+          console.warn(`Found analytics global variable: ${global}`, window[global]);
+        }
+      });
+
+      // Check for any DOM elements with analytics-related attributes
+      const elementsWithTracking = document.querySelectorAll('[data-hotjar], [data-gtag], [data-analytics]');
+      if (elementsWithTracking.length > 0) {
+        console.warn('Found elements with tracking attributes:', elementsWithTracking);
+      }
+    };
+
+    // Run checks after component mounts
+    checkForAnalyticsScripts();
+
+    // Set up error listener specifically for classList errors
+    const errorHandler = (event) => {
+      if (event.error && event.error.message && event.error.message.includes('classList')) {
+        console.error('ClassList error detected:', {
+          message: event.error.message,
+          stack: event.error.stack,
+          filename: event.filename,
+          lineno: event.lineno,
+          colno: event.colno
+        });
+      }
+    };
+
+    window.addEventListener('error', errorHandler);
+
+    return () => {
+      window.removeEventListener('error', errorHandler);
+    };
+  }, []);
 
   const handleTryDemo = () => {
     console.log('Try Free Demo clicked - starting navigation');
@@ -21,6 +72,13 @@ export const SalesHero = () => {
     console.log('See Pricing clicked - starting scroll');
     try {
       console.log('Looking for pricing element with ID: pricing');
+      
+      // Enhanced safety checks
+      if (!document || typeof document.getElementById !== 'function') {
+        console.error('Document or getElementById not available');
+        return;
+      }
+
       const pricingElement = document.getElementById('pricing');
       console.log('Pricing element found:', pricingElement);
       
@@ -30,6 +88,14 @@ export const SalesHero = () => {
         console.log('Scroll initiated successfully');
       } else {
         console.warn('Pricing element not found in DOM or scrollIntoView not available');
+        
+        // Fallback: try to scroll to bottom if pricing element not found
+        try {
+          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+          console.log('Fallback scroll to bottom executed');
+        } catch (scrollError) {
+          console.error('Fallback scroll also failed:', scrollError);
+        }
       }
     } catch (error) {
       console.error('Error in handleSeePricing:', error);
