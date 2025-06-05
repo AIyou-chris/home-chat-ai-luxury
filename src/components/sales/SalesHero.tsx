@@ -8,14 +8,22 @@ export const SalesHero = () => {
   
   const handleTryDemo = () => {
     console.log('Try Free Demo clicked');
-    window.location.href = '/demo-scraping';
+    try {
+      window.location.href = '/demo-scraping';
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
   };
 
   const handleSeePricing = () => {
     console.log('See Pricing clicked');
-    const pricingElement = document.getElementById('pricing');
-    if (pricingElement) {
-      pricingElement.scrollIntoView({ behavior: 'smooth' });
+    try {
+      const pricingElement = document.getElementById('pricing');
+      if (pricingElement) {
+        pricingElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    } catch (error) {
+      console.error('Scroll error:', error);
     }
   };
 
@@ -23,7 +31,7 @@ export const SalesHero = () => {
   
   return (
     <section className="relative min-h-screen bg-gradient-to-br from-orange-50 via-white to-orange-50 flex items-center overflow-hidden">
-      {/* Simplified background elements */}
+      {/* Background elements */}
       <div className="absolute inset-0">
         <div className="absolute top-20 left-10 w-72 h-72 bg-orange-200 rounded-full opacity-30 blur-xl"></div>
         <div className="absolute top-40 right-20 w-72 h-72 bg-blue-200 rounded-full opacity-30 blur-xl"></div>
@@ -99,7 +107,9 @@ export const SalesHero = () => {
                 className="w-full max-w-lg mx-auto rounded-2xl shadow-2xl border border-gray-200"
                 onError={(e) => {
                   console.error('Image failed to load:', e);
-                  e.currentTarget.style.display = 'none';
+                  if (e.currentTarget) {
+                    e.currentTarget.style.display = 'none';
+                  }
                 }}
               />
               

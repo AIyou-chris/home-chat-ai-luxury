@@ -66,17 +66,29 @@ export const FeaturesAndDemoSection = () => {
 
   const handleDemoClick = () => {
     console.log('Demo button clicked');
-    window.location.href = '/demo';
+    try {
+      window.location.href = '/demo';
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
   };
 
-  const handleImageSelect = (index) => {
+  const handleImageSelect = (index: number) => {
     console.log('Image selected:', index);
-    setSelectedImage(index);
+    try {
+      setSelectedImage(index);
+    } catch (error) {
+      console.error('Image selection error:', error);
+    }
   };
 
   const handleStartTrial = () => {
     console.log('Start trial clicked');
-    window.location.href = '/submit';
+    try {
+      window.location.href = '/submit';
+    } catch (error) {
+      console.error('Navigation error:', error);
+    }
   };
 
   return (
@@ -147,12 +159,17 @@ export const FeaturesAndDemoSection = () => {
               </div>
               
               <div className="p-6">
-                <img 
-                  src={demoImages[selectedImage]}
-                  alt="Luxury Property Demo"
-                  className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer"
-                  onClick={handleDemoClick}
-                />
+                {demoImages[selectedImage] && (
+                  <img 
+                    src={demoImages[selectedImage]}
+                    alt="Luxury Property Demo"
+                    className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer"
+                    onClick={handleDemoClick}
+                    onError={(e) => {
+                      console.error('Demo image failed to load:', e);
+                    }}
+                  />
+                )}
                 
                 <div className="grid grid-cols-4 gap-2 mb-4">
                   {demoImages.map((image, index) => (
@@ -169,6 +186,9 @@ export const FeaturesAndDemoSection = () => {
                         src={image}
                         alt={`Thumbnail ${index + 1}`}
                         className="w-full h-full object-cover"
+                        onError={(e) => {
+                          console.error('Thumbnail failed to load:', e);
+                        }}
                       />
                     </button>
                   ))}
