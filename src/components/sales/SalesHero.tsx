@@ -4,18 +4,43 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, Zap, TrendingUp, Users } from 'lucide-react';
 
 export const SalesHero = () => {
+  console.log('SalesHero component rendering');
+
   const handleTryDemo = () => {
-    console.log('Try Free Demo clicked');
-    window.location.href = '/demo-scraping';
+    console.log('Try Free Demo clicked - starting navigation');
+    try {
+      const currentLocation = window.location;
+      console.log('Current location:', currentLocation);
+      console.log('About to navigate to /demo-scraping');
+      window.location.href = '/demo-scraping';
+      console.log('Navigation initiated successfully');
+    } catch (error) {
+      console.error('Error in handleTryDemo:', error);
+    }
   };
 
   const handleSeePricing = () => {
-    console.log('See Pricing clicked');
-    const pricingElement = document.getElementById('pricing');
-    if (pricingElement) {
-      pricingElement.scrollIntoView({ behavior: 'smooth' });
+    console.log('See Pricing clicked - starting scroll');
+    try {
+      console.log('Looking for pricing element with ID: pricing');
+      const pricingElement = document.getElementById('pricing');
+      console.log('Pricing element found:', pricingElement);
+      console.log('Element type:', typeof pricingElement);
+      console.log('Element classList:', pricingElement?.classList);
+      
+      if (pricingElement) {
+        console.log('About to scroll to pricing element');
+        pricingElement.scrollIntoView({ behavior: 'smooth' });
+        console.log('Scroll initiated successfully');
+      } else {
+        console.warn('Pricing element not found in DOM');
+      }
+    } catch (error) {
+      console.error('Error in handleSeePricing:', error);
     }
   };
+
+  console.log('SalesHero about to render JSX');
 
   return (
     <section className="min-h-screen bg-white flex items-center">
@@ -83,6 +108,8 @@ export const SalesHero = () => {
                 src="/lovable-uploads/8fee2013-89fc-47e0-ba14-1795e366cdc3.png"
                 alt="AI Chat Demo"
                 className="w-full max-w-lg mx-auto rounded-2xl shadow-lg border border-gray-200"
+                onLoad={() => console.log('Hero image loaded successfully')}
+                onError={(e) => console.error('Hero image failed to load:', e)}
               />
               
               <div className="absolute -top-6 -right-6 bg-green-500 text-white px-4 py-2 rounded-full text-sm font-semibold shadow-lg">

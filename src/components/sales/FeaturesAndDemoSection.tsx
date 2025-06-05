@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,7 +14,14 @@ import {
 } from 'lucide-react';
 
 export const FeaturesAndDemoSection = () => {
+  console.log('FeaturesAndDemoSection component rendering');
+  
   const [selectedImage, setSelectedImage] = useState(0);
+
+  useEffect(() => {
+    console.log('FeaturesAndDemoSection useEffect triggered');
+    console.log('Current selectedImage:', selectedImage);
+  }, [selectedImage]);
 
   const features = [
     {
@@ -63,16 +70,39 @@ export const FeaturesAndDemoSection = () => {
   ];
 
   const handleDemoClick = () => {
-    window.location.href = '/demo';
+    console.log('Demo click handler triggered');
+    try {
+      console.log('About to navigate to /demo');
+      window.location.href = '/demo';
+      console.log('Demo navigation initiated successfully');
+    } catch (error) {
+      console.error('Error in handleDemoClick:', error);
+    }
   };
 
   const handleImageSelect = (index: number) => {
-    setSelectedImage(index);
+    console.log('Image select handler triggered with index:', index);
+    try {
+      console.log('Previous selectedImage:', selectedImage);
+      setSelectedImage(index);
+      console.log('New selectedImage set to:', index);
+    } catch (error) {
+      console.error('Error in handleImageSelect:', error);
+    }
   };
 
   const handleStartTrial = () => {
-    window.location.href = '/submit';
+    console.log('Start trial handler triggered');
+    try {
+      console.log('About to navigate to /submit');
+      window.location.href = '/submit';
+      console.log('Trial navigation initiated successfully');
+    } catch (error) {
+      console.error('Error in handleStartTrial:', error);
+    }
   };
+
+  console.log('FeaturesAndDemoSection about to render JSX');
 
   return (
     <section className="py-20 bg-gray-50">
@@ -92,29 +122,32 @@ export const FeaturesAndDemoSection = () => {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
-          {features.map((feature, index) => (
-            <Card 
-              key={index} 
-              className={`p-6 h-full ${
-                feature.highlight 
-                  ? 'border-orange-200 bg-orange-50' 
-                  : ''
-              }`}
-            >
-              <div className="flex flex-col h-full">
-                <div className="mb-4">
-                  {feature.icon}
+          {features.map((feature, index) => {
+            console.log(`Rendering feature ${index}:`, feature.title);
+            return (
+              <Card 
+                key={index} 
+                className={`p-6 h-full ${
+                  feature.highlight 
+                    ? 'border-orange-200 bg-orange-50' 
+                    : ''
+                }`}
+              >
+                <div className="flex flex-col h-full">
+                  <div className="mb-4">
+                    {feature.icon}
+                  </div>
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">{feature.title}</h3>
+                  <p className="text-gray-600 flex-1">{feature.description}</p>
+                  {feature.highlight && (
+                    <Badge className="bg-orange-500 text-white mt-4 self-start">
+                      Most Popular
+                    </Badge>
+                  )}
                 </div>
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">{feature.title}</h3>
-                <p className="text-gray-600 flex-1">{feature.description}</p>
-                {feature.highlight && (
-                  <Badge className="bg-orange-500 text-white mt-4 self-start">
-                    Most Popular
-                  </Badge>
-                )}
-              </div>
-            </Card>
-          ))}
+              </Card>
+            );
+          })}
         </div>
 
         <div className="text-center mb-12">
@@ -144,26 +177,33 @@ export const FeaturesAndDemoSection = () => {
                   alt="Luxury Property Demo"
                   className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer"
                   onClick={handleDemoClick}
+                  onLoad={() => console.log(`Demo image ${selectedImage} loaded successfully`)}
+                  onError={(e) => console.error(`Demo image ${selectedImage} failed to load:`, e)}
                 />
                 
                 <div className="grid grid-cols-4 gap-2 mb-4">
-                  {demoImages.map((image, index) => (
-                    <button
-                      key={index}
-                      onClick={() => handleImageSelect(index)}
-                      className={`aspect-square rounded overflow-hidden ${
-                        selectedImage === index
-                          ? 'ring-2 ring-orange-400'
-                          : 'opacity-70 hover:opacity-100'
-                      }`}
-                    >
-                      <img
-                        src={image}
-                        alt={`Thumbnail ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
+                  {demoImages.map((image, index) => {
+                    console.log(`Rendering thumbnail ${index}`);
+                    return (
+                      <button
+                        key={index}
+                        onClick={() => handleImageSelect(index)}
+                        className={`aspect-square rounded overflow-hidden ${
+                          selectedImage === index
+                            ? 'ring-2 ring-orange-400'
+                            : 'opacity-70 hover:opacity-100'
+                        }`}
+                      >
+                        <img
+                          src={image}
+                          alt={`Thumbnail ${index + 1}`}
+                          className="w-full h-full object-cover"
+                          onLoad={() => console.log(`Thumbnail ${index} loaded successfully`)}
+                          onError={(e) => console.error(`Thumbnail ${index} failed to load:`, e)}
+                        />
+                      </button>
+                    );
+                  })}
                 </div>
                 
                 <div className="space-y-3">
