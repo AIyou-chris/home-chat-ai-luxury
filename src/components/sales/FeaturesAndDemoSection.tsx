@@ -17,6 +17,8 @@ import {
 export const FeaturesAndDemoSection = () => {
   const [selectedImage, setSelectedImage] = useState(0);
 
+  console.log('FeaturesAndDemoSection rendering, selectedImage:', selectedImage);
+
   const features = [
     {
       icon: <MessageSquare className="text-blue-500" size={32} />,
@@ -62,6 +64,21 @@ export const FeaturesAndDemoSection = () => {
     "https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?q=80&w=2940&auto=format&fit=crop",
     "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2940&auto=format&fit=crop"
   ];
+
+  const handleDemoClick = () => {
+    console.log('Demo button clicked');
+    window.location.href = '/demo';
+  };
+
+  const handleImageSelect = (index) => {
+    console.log('Image selected:', index);
+    setSelectedImage(index);
+  };
+
+  const handleStartTrial = () => {
+    console.log('Start trial clicked');
+    window.location.href = '/submit';
+  };
 
   return (
     <section className="py-20 bg-gray-50">
@@ -132,17 +149,17 @@ export const FeaturesAndDemoSection = () => {
               
               <div className="p-6">
                 <img 
-                  src={demoImages[selectedImage]}
+                  src={demoImages[selectedImage] || demoImages[0]}
                   alt="Luxury Property Demo"
                   className="w-full h-48 object-cover rounded-lg mb-4 cursor-pointer"
-                  onClick={() => window.location.href = '/demo'}
+                  onClick={handleDemoClick}
                 />
                 
                 <div className="grid grid-cols-4 gap-2 mb-4">
                   {demoImages.map((image, index) => (
                     <button
                       key={index}
-                      onClick={() => setSelectedImage(index)}
+                      onClick={() => handleImageSelect(index)}
                       className={`aspect-square rounded overflow-hidden transition-all duration-300 ${
                         selectedImage === index
                           ? 'ring-2 ring-orange-400 scale-105'
@@ -211,7 +228,7 @@ export const FeaturesAndDemoSection = () => {
             </div>
 
             <Button
-              onClick={() => window.location.href = '/demo'}
+              onClick={handleDemoClick}
               size="lg"
               className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
             >
@@ -230,18 +247,19 @@ export const FeaturesAndDemoSection = () => {
             Join hundreds of agents who have increased their lead generation by 300% with our AI technology.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button 
-              onClick={() => window.location.href = '/demo'}
+            <Button 
+              onClick={handleDemoClick}
               className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-xl font-semibold transition-colors"
             >
               See Live Demo
-            </button>
-            <button 
-              onClick={() => window.location.href = '/submit'}
+            </Button>
+            <Button 
+              onClick={handleStartTrial}
+              variant="outline"
               className="border border-gray-300 text-gray-700 hover:bg-gray-50 px-8 py-3 rounded-xl font-semibold transition-colors"
             >
               Start Free Trial
-            </button>
+            </Button>
           </div>
         </div>
       </div>
