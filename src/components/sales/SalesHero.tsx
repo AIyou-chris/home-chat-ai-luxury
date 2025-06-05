@@ -9,8 +9,6 @@ export const SalesHero = () => {
   const handleTryDemo = () => {
     console.log('Try Free Demo clicked - starting navigation');
     try {
-      const currentLocation = window.location;
-      console.log('Current location:', currentLocation);
       console.log('About to navigate to /demo-scraping');
       window.location.href = '/demo-scraping';
       console.log('Navigation initiated successfully');
@@ -25,15 +23,13 @@ export const SalesHero = () => {
       console.log('Looking for pricing element with ID: pricing');
       const pricingElement = document.getElementById('pricing');
       console.log('Pricing element found:', pricingElement);
-      console.log('Element type:', typeof pricingElement);
-      console.log('Element classList:', pricingElement?.classList);
       
-      if (pricingElement) {
+      if (pricingElement && typeof pricingElement.scrollIntoView === 'function') {
         console.log('About to scroll to pricing element');
         pricingElement.scrollIntoView({ behavior: 'smooth' });
         console.log('Scroll initiated successfully');
       } else {
-        console.warn('Pricing element not found in DOM');
+        console.warn('Pricing element not found in DOM or scrollIntoView not available');
       }
     } catch (error) {
       console.error('Error in handleSeePricing:', error);
