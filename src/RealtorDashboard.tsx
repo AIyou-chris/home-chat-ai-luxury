@@ -1,23 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { useAuth } from './AuthContext';
-import { getRealtorAnalytics } from './supabaseClient';
-
-// Define the structure for the analytics data
-type AnalyticsData = {
-  activeListings: number;
-  totalLeads: number;
-  qrScans: number;
-  totalValue: number;
-  newLeads: number;
-  qualifiedLeads: number;
-  closedLeads: number;
-  conversionRate: number;
-  leadSources: Record<string, number>;
-  recentLeads: number;
-  recentScans: number;
-  averageLeadScore: number;
-};
+import { useAuth } from './contexts/AuthContext';
 
 const StatCard: React.FC<{ title: string; value: string | number; description: string }> = ({ title, value, description }) => (
   <div className="bg-white p-6 rounded-lg shadow-md">
@@ -29,45 +12,29 @@ const StatCard: React.FC<{ title: string; value: string | number; description: s
 
 export const RealtorDashboard: React.FC = () => {
   const { user } = useAuth();
-  const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  console.log('RealtorDashboard user:', user);
 
-  useEffect(() => {
-    const fetchAnalytics = async () => {
-      if (user) {
-        try {
-          setLoading(true);
-          const data = await getRealtorAnalytics(user.id);
-          setAnalytics(data);
-        } catch (err) {
-          setError('Failed to fetch analytics data.');
-        } finally {
-          setLoading(false);
-        }
-      } else {
-        setLoading(false);
-      }
-    };
-
-    fetchAnalytics();
-  }, [user]);
-
-  if (loading) {
+  // Show debug info if user is missing
+  if (!user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-600"></div>
+      <div className="min-h-screen flex flex-col items-center justify-center">
+        <div className="bg-white p-8 rounded-lg shadow-md text-center">
+          <h2 className="text-2xl font-bold mb-4">No user found</h2>
+          <p className="mb-4">You are not logged in or the user context is missing.</p>
+          <pre className="bg-gray-100 p-2 rounded text-xs text-left max-w-md overflow-x-auto">{JSON.stringify(user, null, 2)}</pre>
+          <Link to="/login" className="mt-4 inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">Go to Login</Link>
+        </div>
       </div>
     );
   }
 
-  if (error) {
-    return <div className="text-center py-10 text-red-500">{error}</div>;
-  }
-
-  if (!analytics) {
-    return <div className="text-center py-10">No analytics data available.</div>;
-  }
+  // Simplified dashboard with demo data for now
+  const analytics = {
+    activeListings: 3,
+    totalLeads: 12,
+    totalValue: 850000,
+    conversionRate: 25
+  };
   
   const formattedValue = new Intl.NumberFormat('en-US', {
     style: 'currency',
@@ -84,12 +51,18 @@ export const RealtorDashboard: React.FC = () => {
             Welcome back, {user?.user_metadata?.name || user?.email}! Here's your performance overview.
           </p>
         </div>
-        <div className="mt-4 sm:mt-0">
+        <div className="mt-4 sm:mt-0 flex space-x-3">
           <Link
             to="/add-listing"
             className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
           >
             Add New Listing
+          </Link>
+          <Link
+            to="/saved-listings"
+            className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            View Saved Listings
           </Link>
         </div>
       </div>
@@ -102,8 +75,19 @@ export const RealtorDashboard: React.FC = () => {
         <StatCard title="Conversion Rate" value={`${analytics.conversionRate}%`} description="Percentage of leads marked as 'closed'." />
       </div>
       
-      {/* More detailed analytics can be added here */}
-      
+      {/* Test Database Section */}
+      <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
+        <h2 className="text-lg font-semibold text-gray-900 mb-4">Test Database Save</h2>
+        <p className="text-gray-600 mb-4">
+          Ready to test the checkout flow and database save functionality!
+        </p>
+        <Link
+          to="/add-listing"
+          className="inline-flex items-center px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700"
+        >
+          Test Listing & Checkout Flow
+        </Link>
+      </div>
     </div>
   );
 }; 

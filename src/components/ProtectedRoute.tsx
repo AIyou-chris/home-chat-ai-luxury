@@ -1,6 +1,6 @@
 import type { ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { useEffect } from 'react';
 
 export const ProtectedRoute: React.FC<{ children: ReactNode }> = ({ children }) => {

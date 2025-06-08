@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const ForgotPasswordForm: React.FC = () => {
     const [email, setEmail] = useState('');

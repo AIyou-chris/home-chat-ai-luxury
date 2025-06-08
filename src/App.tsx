@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { AuthProvider, useAuth } from './AuthContext';
+import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { TestConnection } from './TestConnection';
 import { RealtorDashboard } from './RealtorDashboard';
 import { LoginForm } from './components/LoginForm';
@@ -8,6 +8,10 @@ import { SignupForm } from './components/SignupForm';
 import { ForgotPasswordForm } from './components/ForgotPasswordForm';
 import { ProtectedRoute } from './components/ProtectedRoute';
 import { UserProfile } from './components/UserProfile';
+import DemoWithScraping from './pages/DemoWithScraping';
+import DemoWithScrapingSimple from './pages/DemoWithScrapingSimple';
+import SavedListings from './pages/SavedListings';
+import { TestPage } from './TestPage';
 
 // Layout Components
 const Layout: React.FC<{ children: React.ReactNode }> = ({ children }) => (
@@ -146,7 +150,10 @@ const AppRoutes: React.FC = () => {
       <Route path="/forgot-password" element={<ForgotPasswordPage />} />
       <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
       <Route path="/dashboard" element={<ProtectedRoute><RealtorDashboard /></ProtectedRoute>} />
-      <Route path="/add-listing" element={<ProtectedRoute><PropertyScraper /></ProtectedRoute>} />
+      <Route path="/add-listing" element={<DemoWithScraping />} />
+      <Route path="/saved-listings" element={<ProtectedRoute><SavedListings /></ProtectedRoute>} />
+      <Route path="/demo" element={<ProtectedRoute><DemoWithScraping /></ProtectedRoute>} />
+      <Route path="/test" element={<TestPage />} />
       <Route path="/test-connection" element={<TestConnection />} />
     </Routes>
   );

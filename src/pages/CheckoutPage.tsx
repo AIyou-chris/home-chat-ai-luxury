@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
@@ -10,11 +9,14 @@ import { PaymentMethodSelector } from '@/components/checkout/PaymentMethodSelect
 import { PaymentForm } from '@/components/checkout/PaymentForm';
 import { OrderSummary } from '@/components/checkout/OrderSummary';
 import { SecurityBadges } from '@/components/checkout/SecurityBadges';
+import { saveListingToDatabase } from '@/integrations/supabase/database';
+import { useAuth } from '@/hooks/useAuth';
 
 const CheckoutPage = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user } = useAuth();
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentMethod, setPaymentMethod] = useState('card');
   
@@ -54,9 +56,16 @@ const CheckoutPage = () => {
       // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 2000));
       
+      // Save the listing to the database
+      if (user?.id) {
+        await saveListingToDatabase(formData, user.id);
+      } else {
+        throw new Error('User not authenticated');
+      }
+      
       toast({
         title: "Payment Successful!",
-        description: "Your listing is being generated. Redirecting to confirmation...",
+        description: "Your listing has been saved and is being generated. Redirecting to confirmation...",
       });
 
       // Navigate to confirmation page with form data and plan info
@@ -69,9 +78,10 @@ const CheckoutPage = () => {
         } 
       });
     } catch (error) {
+      console.error('Payment or database error:', error);
       toast({
-        title: "Payment Failed",
-        description: "There was an issue processing your payment. Please try again.",
+        title: "Error",
+        description: "There was an issue processing your payment or saving your listing. Please try again.",
         variant: "destructive"
       });
     } finally {

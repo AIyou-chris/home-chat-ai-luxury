@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createLead, addChatMessageToLead } from './supabaseClient';
+// Note: Lead functionality will be added when backend is properly configured
+// import { createLead, addChatMessageToLead } from './integrations/supabase/client';
 
 // AI Property Chat System
 export const PropertyAIChat = ({ listingId, propertyData }) => {
@@ -31,143 +32,78 @@ export const PropertyAIChat = ({ listingId, propertyData }) => {
     setMessages([welcomeMessage]);
   }, [propertyData]);
 
-  // AI Response Generator using real property data
-  const generateAIResponse = (userMessage) => {
+  // Replace your generateAIResponse function with this
+  const generateAIResponse = async (userMessage) => {
+    try {
+      // Prepare property data for the AI
+      const propertyContext = {
+        address: propertyData?.address || 'Property address not available',
+        price: propertyData?.price || 'Price upon request',
+        bedrooms: propertyData?.bedrooms,
+        bathrooms: propertyData?.bathrooms,
+        sqft: propertyData?.sqft,
+        propertyType: propertyData?.propertyType,
+        yearBuilt: propertyData?.yearBuilt,
+        neighborhood: propertyData?.neighborhood,
+        marketData: propertyData?.marketData,
+        neighborhoodData: propertyData?.neighborhood_data,
+        features: propertyData?.features
+      };
+
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: "gpt-4",
+          messages: [
+            {
+              role: "system",
+              content: `You are Realtor God - the ultimate luxury real estate AI assistant. \n\nPROPERTY DATA FOR THIS CONVERSATION:\n${JSON.stringify(propertyContext, null, 2)}\n\nUse this specific property data to answer questions. Be enthusiastic, knowledgeable, and helpful. Guide conversations toward lead generation naturally. When users show serious interest, suggest connecting with an agent.\n\nResponse style: Professional yet warm, enthusiastic about the property, focused on benefits and lifestyle. Use the actual property data provided above.`
+            },
+            {
+              role: "user",
+              content: userMessage
+            }
+          ],
+          max_tokens: 300,
+          temperature: 0.7
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return data.choices[0].message.content;
+
+    } catch (error) {
+      console.error('OpenAI API Error:', error);
+      // Fallback to your original logic if API fails
+      return getFallbackResponse(userMessage);
+    }
+  };
+
+  // Keep your original function as backup
+  const getFallbackResponse = (userMessage) => {
     const message = userMessage.toLowerCase();
-    const data = propertyData || {};
-
-    // Price-related questions
-    if (message.includes('price') || message.includes('cost') || message.includes('expensive')) {
-      if (data.price) {
-        return `This property is listed at ${data.price}. ${data.marketData?.pricePerSqft ? `That works out to ${data.marketData.pricePerSqft} per square foot, which is ${data.marketData.appreciation ? `great considering the area has seen ${data.marketData.appreciation} appreciation` : 'competitively priced for the area'}.` : ''}`;
-      }
-      return "Let me get you the latest pricing information. I'd be happy to connect you with the agent for the most current details.";
-    }
-
-    // Size/layout questions
-    if (message.includes('bedroom') || message.includes('bathroom') || message.includes('size') || message.includes('sqft') || message.includes('square feet')) {
-      const features = [];
-      if (data.bedrooms) features.push(`${data.bedrooms} bedrooms`);
-      if (data.bathrooms) features.push(`${data.bathrooms} bathrooms`);
-      if (data.sqft) features.push(`${data.sqft.toLocaleString()} square feet`);
-      if (data.lotSize) features.push(`${data.lotSize} lot size`);
-      
-      if (features.length > 0) {
-        return `This ${data.propertyType || 'property'} features ${features.join(', ')}. ${data.yearBuilt ? `Built in ${data.yearBuilt}, ` : ''}it offers ${data.description || 'excellent living space with modern amenities'}.`;
-      }
-      return "This property offers great living space. I'd be happy to get you more detailed square footage and layout information.";
-    }
-
-    // Neighborhood/location questions
-    if (message.includes('neighborhood') || message.includes('area') || message.includes('location') || message.includes('walk') || message.includes('walkable')) {
-      const neighborhoodInfo = [];
-      if (data.neighborhood?.walkScore) {
-        neighborhoodInfo.push(`Walk Score of ${data.neighborhood.walkScore}/100`);
-      }
-      if (data.neighborhood?.transitScore) {
-        neighborhoodInfo.push(`Transit Score of ${data.neighborhood.transitScore}/100`);
-      }
-      if (data.neighborhood?.amenities?.length > 0) {
-        neighborhoodInfo.push(`nearby amenities including ${data.neighborhood.amenities.slice(0, 3).join(', ')}`);
-      }
-      
-      if (neighborhoodInfo.length > 0) {
-        return `This is a great neighborhood with ${neighborhoodInfo.join(', ')}. The location offers excellent convenience for daily activities.`;
-      }
-      return "This property is located in a desirable neighborhood with great amenities and walkability. I can provide more specific details about the area.";
-    }
-
-    // School questions
-    if (message.includes('school') || message.includes('education') || message.includes('kids') || message.includes('children')) {
-      if (data.neighborhood?.schools) {
-        const schools = data.neighborhood.schools;
-        const schoolInfo = [];
-        if (schools.elementary) schoolInfo.push(`Elementary: ${schools.elementary}`);
-        if (schools.middle) schoolInfo.push(`Middle: ${schools.middle}`);
-        if (schools.high) schoolInfo.push(`High: ${schools.high}`);
-        
-        if (schoolInfo.length > 0) {
-          return `The schools in this area are excellent! ${schoolInfo.join(', ')}. These are all highly-rated schools that families love.`;
-        }
-      }
-      return "This area has access to quality schools. I can get you detailed information about the school district and ratings.";
-    }
-
-    // Investment/market questions
-    if (message.includes('investment') || message.includes('appreciation') || message.includes('market') || message.includes('value')) {
-      if (data.marketData) {
-        const marketInfo = [];
-        if (data.marketData.appreciation) marketInfo.push(`${data.marketData.appreciation} appreciation`);
-        if (data.marketData.daysOnMarket) marketInfo.push(`properties typically sell in ${data.marketData.daysOnMarket} days`);
-        if (data.marketData.comparables) marketInfo.push(`comparable homes range ${data.marketData.comparables}`);
-        
-        if (marketInfo.length > 0) {
-          return `This is a solid investment opportunity with ${marketInfo.join(', ')}. The market fundamentals in this area are strong.`;
-        }
-      }
-      return "This property is in a market with strong fundamentals. I can provide detailed market analysis and investment potential information.";
-    }
-
-    // Photos/virtual tour
-    if (message.includes('photo') || message.includes('picture') || message.includes('see') || message.includes('tour') || message.includes('virtual')) {
-      if (data.photos && data.photos.length > 0) {
-        return `I have ${data.photos.length} high-quality photos of this property! You can view them in the gallery above. Would you like to schedule a virtual or in-person tour?`;
-      }
-      return "I can arrange for you to see detailed photos and even schedule a virtual or in-person tour. Would you like me to set that up?";
-    }
-
-    // Schedule showing
-    if (message.includes('showing') || message.includes('visit') || message.includes('schedule') || message.includes('appointment')) {
-      return "I'd love to help you schedule a showing! This property is definitely worth seeing in person. Could I get your contact information so our agent can reach out to arrange a convenient time?";
-    }
-
-    // Contact/agent questions
-    if (message.includes('agent') || message.includes('realtor') || message.includes('contact') || message.includes('call') || message.includes('email')) {
-      return "Our experienced agent would be happy to help you with this property! If you provide your contact information, they can reach out with any additional details and to schedule a showing.";
-    }
-
-    // Mortgage/financing
-    if (message.includes('mortgage') || message.includes('loan') || message.includes('financing') || message.includes('payment') || message.includes('monthly')) {
-      const price = data.price ? data.price.replace(/[^0-9]/g, '') : null;
-      if (price) {
-        const monthlyEstimate = Math.round((parseInt(price) * 0.005)); // Rough 5% monthly estimate
-        return `For a home priced at ${data.price}, monthly payments typically range around $${monthlyEstimate.toLocaleString()} depending on your down payment and interest rate. I can connect you with our preferred lenders for exact pre-qualification!`;
-      }
-      return "Our team can help you explore financing options and connect you with trusted mortgage professionals for pre-qualification. What's your timeline for purchasing?";
-    }
-
-    // General interest/buying questions
-    if (message.includes('interested') || message.includes('buy') || message.includes('purchase') || message.includes('offer')) {
-      return "That's wonderful! This is a fantastic property and I'd love to help you move forward. Could I get your contact information so our agent can provide personalized assistance and answer any detailed questions?";
-    }
-
-    // Property features and outdoor space questions
-    if (message.includes('backyard') || message.includes('yard') || message.includes('outdoor') || message.includes('patio') || message.includes('deck') || message.includes('garden')) {
-      if (data.lotSize) {
-        return `This property features a ${data.lotSize} lot with excellent outdoor space potential! ${data.description?.includes('backyard') || data.description?.includes('yard') ? data.description : 'The outdoor area offers great possibilities for entertainment, gardening, and relaxation. Perfect for families or anyone who loves outdoor living!'} Would you like to schedule a showing to see the outdoor space in person?`;
-      }
-      return "This property has great outdoor potential! I'd love to arrange for you to see the yard and outdoor spaces during a showing. The outdoor area is definitely worth seeing in person!";
-    }
-
-    // Garage/parking questions
-    if (message.includes('garage') || message.includes('parking') || message.includes('car') || message.includes('driveway')) {
-      return "Great question about parking! This property includes parking accommodations. I can get you specific details about garage space and parking options. Would you like me to have our agent provide the complete parking and storage information?";
-    }
-
-    // Kitchen/interior features
-    if (message.includes('kitchen') || message.includes('appliances') || message.includes('updated') || message.includes('renovated')) {
-      return `This ${data.propertyType || 'property'} ${data.yearBuilt ? `built in ${data.yearBuilt}` : ''} features ${data.description?.includes('updated') || data.description?.includes('modern') ? 'updated interior features with modern amenities' : 'well-maintained interior spaces'}. The kitchen and living areas offer excellent functionality for daily living. Would you like to schedule a tour to see all the interior features?`;
-    }
-
-    // Default responses for unclear questions
-    const defaultResponses = [
-      `Great question about ${data.address || 'this property'}! I have detailed information that can help you. Could you be more specific about what you'd like to know?`,
-      `I'd be happy to help you learn more about this ${data.propertyType || 'property'}! What specific aspects are most important to you - location, pricing, features, or something else?`,
-      `This property has so many great features! Would you like to know about the neighborhood, the home's specifications, pricing, or scheduling a showing?`,
-      "I'm here to help with any questions about this property! What would be most helpful - details about the home, area information, or connecting with our agent?"
-    ];
     
-    return defaultResponses[Math.floor(Math.random() * defaultResponses.length)];
+    if (message.includes('price')) {
+      return "I'd love to discuss pricing with you! This is a fantastic property with great value. Let me connect you with our agent for the most current pricing and any special offers.";
+    }
+    
+    if (message.includes('bedroom') || message.includes('size')) {
+      return "This property has wonderful living spaces! I can get you detailed floor plans and room dimensions. Would you like to schedule a showing to see the layout in person?";
+    }
+    
+    if (message.includes('neighborhood')) {
+      return "You've chosen an excellent area! The neighborhood offers great amenities and lifestyle benefits. I'd love to share more details - shall I have our local expert give you a call?";
+    }
+    
+    return "That's a great question! I want to make sure I give you the most accurate and detailed information. Let me connect you with our property specialist who can provide expert insights.";
   };
 
   // Handle sending messages
@@ -185,13 +121,14 @@ export const PropertyAIChat = ({ listingId, propertyData }) => {
     setInput('');
     setIsTyping(true);
 
-    // Save to lead if we have one
+    // Save to lead if we have one (functionality disabled for demo)
     if (leadId) {
       try {
-        await addChatMessageToLead(leadId, {
-          type: 'user',
-          content: userMessage.content
-        });
+        // await addChatMessageToLead(leadId, {
+        //   type: 'user',
+        //   content: userMessage.content
+        // });
+        console.log('User message would be saved to lead:', userMessage.content);
       } catch (error) {
         console.error('Error saving user message:', error);
       }
@@ -199,7 +136,7 @@ export const PropertyAIChat = ({ listingId, propertyData }) => {
 
     // Generate AI response
     setTimeout(async () => {
-      const aiResponse = generateAIResponse(userMessage.content);
+      const aiResponse = await generateAIResponse(userMessage.content);
       
       const botMessage = {
         id: Date.now() + 1,
@@ -211,13 +148,14 @@ export const PropertyAIChat = ({ listingId, propertyData }) => {
       setMessages(prev => [...prev, botMessage]);
       setIsTyping(false);
 
-      // Save AI response to lead
+      // Save AI response to lead (functionality disabled for demo)
       if (leadId) {
         try {
-          await addChatMessageToLead(leadId, {
-            type: 'bot',
-            content: botMessage.content
-          });
+          // await addChatMessageToLead(leadId, {
+          //   type: 'bot',
+          //   content: botMessage.content
+          // });
+          console.log('Bot message would be saved to lead:', botMessage.content);
         } catch (error) {
           console.error('Error saving bot message:', error);
         }
@@ -237,18 +175,22 @@ export const PropertyAIChat = ({ listingId, propertyData }) => {
     e.preventDefault();
     
     try {
-      const newLead = await createLead({
-        listingId: listingId,
-        realtorId: null, // TODO: Get from listing or auth
-        name: userInfo.name,
-        email: userInfo.email,
-        phone: userInfo.phone,
-        source: 'chat',
-        chatMessages: messages,
-        timeSpent: Math.floor(Date.now() / 1000), // Rough estimate
-        leadScore: 25 // Base score for providing contact info
-      });
+      // const newLead = await createLead({
+      //   listingId: listingId,
+      //   realtorId: null, // TODO: Get from listing or auth
+      //   name: userInfo.name,
+      //   email: userInfo.email,
+      //   phone: userInfo.phone,
+      //   source: 'chat',
+      //   chatMessages: messages,
+      //   timeSpent: Math.floor(Date.now() / 1000), // Rough estimate
+      //   leadScore: 25 // Base score for providing contact info
+      // });
 
+      // For demo, simulate lead creation
+      const newLead = { id: Date.now() };
+      console.log('Demo lead would be created with:', userInfo);
+      
       setLeadId(newLead.id);
       setShowContactForm(false);
 
@@ -441,3 +383,5 @@ export const PropertyAIChat = ({ listingId, propertyData }) => {
     </div>
   );
 };
+
+export default PropertyAIChat;

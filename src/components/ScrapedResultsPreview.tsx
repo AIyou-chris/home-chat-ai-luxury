@@ -1,8 +1,7 @@
-
 import React from 'react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import { Button } from './ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from './ui/card';
+import { Badge } from './ui/badge';
 import { ArrowRight, Edit3, CheckCircle, AlertTriangle, User, Phone, Mail, MapPin, Home, DollarSign, Image, FileText } from 'lucide-react';
 
 interface ScrapedData {
@@ -43,16 +42,19 @@ export const ScrapedResultsPreview = ({ scrapedData, onContinue, onTryAgain }: S
                            scrapedData.description.length > 50 &&
                            !scrapedData.description.includes('Beautiful property with modern amenities');
   
-  const isRealAgent = scrapedData.agentName !== 'Professional Agent' && 
-                      scrapedData.agentName !== '' &&
-                      !scrapedData.agentName.includes('Professional Agent');
+  const isRealAgent = !!(scrapedData.agentName && 
+                         scrapedData.agentName !== 'Professional Agent' && 
+                         scrapedData.agentName !== '' &&
+                         !scrapedData.agentName.includes('Professional Agent'));
   
-  const isRealPhone = scrapedData.agentPhone !== '(555) 123-4567' && 
-                      scrapedData.agentPhone.length >= 10;
+  const isRealPhone = !!(scrapedData.agentPhone && 
+                         scrapedData.agentPhone !== '(555) 123-4567' && 
+                         scrapedData.agentPhone.length >= 10);
   
-  const isRealEmail = scrapedData.agentEmail !== 'agent@realestate.com' && 
-                      scrapedData.agentEmail.includes('@') &&
-                      !scrapedData.agentEmail.includes('agent@realestate.com');
+  const isRealEmail = !!(scrapedData.agentEmail && 
+                         scrapedData.agentEmail !== 'agent@realestate.com' && 
+                         scrapedData.agentEmail.includes('@') &&
+                         !scrapedData.agentEmail.includes('agent@realestate.com'));
 
   const hasRealImages = scrapedData.images.some(img => 
     !img.includes('unsplash.com/photo-1600596542815') &&
@@ -254,11 +256,78 @@ export const ScrapedResultsPreview = ({ scrapedData, onContinue, onTryAgain }: S
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
           <Button
+            onClick={async () => {
+              console.log('💾 Saving property to database...');
+              
+              // Save to Supabase database
+              const { supabase } = await import('../integrations/supabase/client');
+              
+              const propertyData = {
+                title: scrapedData.title,
+                listing_url: window.location.href,
+                address: scrapedData.address,
+                price: scrapedData.price,
+                beds: parseInt(scrapedData.beds) || 0,
+                baths: parseFloat(scrapedData.baths) || 0,
+                sqft: scrapedData.sqft,
+                description: scrapedData.description,
+                images: scrapedData.images,
+                agent_name: scrapedData.agentName,
+                agent_phone: scrapedData.agentPhone,
+                agent_email: scrapedData.agentEmail,
+                agent_photo: scrapedData.agentPhoto,
+                features: [
+                  `${scrapedData.beds} bedrooms`,
+                  `${scrapedData.baths} bathrooms`, 
+                  `${scrapedData.sqft} square feet`,
+                  'Recently scraped from web listing'
+                ],
+                market_data: {
+                  pricePerSqft: Math.round(parseInt(scrapedData.price.replace(/[^0-9]/g, '')) / parseInt(scrapedData.sqft.replace(/[^0-9]/g, '')) || 0),
+                  daysOnMarket: 1,
+                  priceHistory: 'Recently scraped',
+                  comparables: 'Data extracted from listing'
+                },
+                neighborhood_data: {
+                  schools: ['Local Schools (Rating TBD)'],
+                  nearby: [`Located in ${scrapedData.address}`],
+                  walkScore: 75,
+                  demographics: 'Area demographics available upon request'
+                }
+              };
+
+              try {
+                const { data, error } = await supabase
+                  .from('properties')
+                  .insert(propertyData)
+                  .select();
+
+                if (error) throw error;
+                
+                console.log('✅ Property saved successfully:', data);
+                alert('🎉 Property saved to database successfully! You can now find it in your listings.');
+                
+                // Continue to demo after saving
+                onContinue();
+              } catch (error) {
+                console.error('❌ Error saving property:', error);
+                alert('⚠️ Error saving property. Continuing to demo anyway...');
+                onContinue();
+              }
+            }}
+            size="lg"
+            className="bg-green-500 hover:bg-green-600 text-white px-8 py-4 text-lg font-semibold"
+          >
+            💾 Save & Continue to Demo
+            <ArrowRight className="ml-2" size={20} />
+          </Button>
+          
+          <Button
             onClick={onContinue}
             size="lg"
             className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 text-lg font-semibold"
           >
-            Continue to Demo
+            Continue to Demo Only
             <ArrowRight className="ml-2" size={20} />
           </Button>
           

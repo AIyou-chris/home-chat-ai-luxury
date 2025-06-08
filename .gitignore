@@ -86,3 +86,4 @@ web_modules/
 dist
 dist-ssr
 *.pem
+.env

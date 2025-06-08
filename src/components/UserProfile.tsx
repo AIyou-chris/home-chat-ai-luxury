@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const UserProfile: React.FC = () => {
     const { user, profile, updateProfile, uploadAvatar, loading, error, clearError } = useAuth();

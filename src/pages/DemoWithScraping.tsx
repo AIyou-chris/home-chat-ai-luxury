@@ -1,8 +1,8 @@
-
-import React, { useState } from 'react';
-import { DemoUrlInput } from '@/components/DemoUrlInput';
-import { ScrapedResultsPreview } from '@/components/ScrapedResultsPreview';
-import { useSampleProperty } from '@/hooks/useSampleProperty';
+import React, { useState } from "react";
+import { DemoUrlInput } from "../components/DemoUrlInput";
+import { ScrapedResultsPreview } from "../components/ScrapedResultsPreview";
+import { useSampleProperty } from "../hooks/useSampleProperty";
+import PropertyAIChat from "../PropertyAIChat.jsx";
 
 interface ScrapedData {
   title: string;
@@ -20,106 +20,100 @@ interface ScrapedData {
 }
 
 const DemoWithScraping = () => {
+  const [currentStep, setCurrentStep] = useState<'input' | 'preview' | 'chat'>('input');
   const [scrapedData, setScrapedData] = useState<ScrapedData | null>(null);
-  const [showPreview, setShowPreview] = useState(false);
   const [showDemo, setShowDemo] = useState(false);
 
-  // Transform scraped data to match the demo format
-  const transformedProperty = scrapedData ? {
-    id: 'scraped-demo',
-    title: scrapedData.title,
-    address: scrapedData.address,
-    price: scrapedData.price,
-    beds: parseInt(scrapedData.beds) || 3,
-    baths: parseFloat(scrapedData.baths) || 2,
-    sqft: scrapedData.sqft.replace(/,/g, ''),
-    description: scrapedData.description,
-    features: [
-      `${scrapedData.beds} bedrooms`,
-      `${scrapedData.baths} bathrooms`,
-      `${scrapedData.sqft} square feet`,
-      'Recently updated',
-      'Move-in ready'
-    ],
-    images: scrapedData.images,
-    neighborhood_data: {
-      schools: ['Contact agent for school information'],
-      nearby: ['Contact agent for nearby amenities'],
-      walkScore: 75,
-      demographics: scrapedData.address
-    },
-    market_data: {
-      pricePerSqft: Math.round((parseInt(scrapedData.price.replace(/[$,]/g, '')) || 0) / (parseInt(scrapedData.sqft.replace(/,/g, '')) || 1)),
-      daysOnMarket: 12,
-      priceHistory: 'Recently listed',
-      comparables: 'Contact agent for comparable properties'
-    },
-    agent: {
-      name: scrapedData.agentName || 'Professional Agent',
-      photo: scrapedData.agentPhoto || 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=400',
-      phone: scrapedData.agentPhone || '(555) 123-4567',
-      email: scrapedData.agentEmail || 'agent@realestate.com',
-      bio: `Professional real estate agent specializing in ${scrapedData.address?.split(',')[1]?.trim() || 'local'} area properties.`,
-      license: 'CA DRE #12345678',
-      experience: '10+ years',
-      specialties: ['Luxury Properties', 'First-Time Buyers', 'Investment Properties']
-    }
-  } : null;
+  // Debug logging
+  console.log('🔍 DemoWithScraping render - currentStep:', currentStep, 'scrapedData:', scrapedData, 'showDemo:', showDemo);
 
-  // Use the hook to potentially insert the transformed property data
-  useSampleProperty(transformedProperty);
+  // Use the useSampleProperty hook with scraped data when available
+  useSampleProperty(scrapedData);
 
   const handleDataScraped = (data: ScrapedData) => {
-    console.log('Data scraped:', data);
+    console.log('Data scraped successfully:', data);
     setScrapedData(data);
-    setShowPreview(true);
+    setCurrentStep('preview');
   };
 
-  const handleSkip = () => {
+  const handleSkipToDemo = () => {
+    console.log('Skipping to demo mode');
     setShowDemo(true);
+    setCurrentStep('chat');
   };
 
-  const handleContinueToDemo = () => {
-    setShowDemo(true);
+  const handleContinueToChat = () => {
+    console.log('Continuing to chat with scraped data');
+    setCurrentStep('chat');
   };
 
   const handleTryAgain = () => {
+    console.log('Trying again with new URL');
     setScrapedData(null);
-    setShowPreview(false);
-    setShowDemo(false);
+    setCurrentStep('input');
   };
 
-  // Show URL input form
-  if (!showPreview && !showDemo) {
-    return <DemoUrlInput onDataScraped={handleDataScraped} onSkip={handleSkip} />;
+  // Show the URL input form
+  if (currentStep === 'input') {
+    return (
+      <DemoUrlInput 
+        onDataScraped={handleDataScraped}
+        onSkip={handleSkipToDemo}
+      />
+    );
   }
 
-  // Show scraped results preview
-  if (showPreview && !showDemo && scrapedData) {
+  // Show the scraped results preview
+  if (currentStep === 'preview' && scrapedData) {
     return (
       <ScrapedResultsPreview
         scrapedData={scrapedData}
-        onContinue={handleContinueToDemo}
+        onContinue={handleContinueToChat}
         onTryAgain={handleTryAgain}
       />
     );
   }
 
-  // Redirect to main demo page with the property data
-  if (showDemo) {
-    window.location.href = '/demo';
-    
+  // Show the chat interface
+  if (currentStep === 'chat') {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100 flex items-center justify-center">
-        <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-4">Preparing Your Demo...</h2>
-          <p className="text-gray-600">Loading your personalized AI assistant</p>
-        </div>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-orange-100">
+        {showDemo && (
+          <div className="bg-blue-600 text-white text-center py-2 px-4">
+            <p className="font-medium">Demo Mode Active! Using sample property data for demonstration.</p>
+          </div>
+        )}
+        {scrapedData && !showDemo && (
+          <div className="bg-green-600 text-white text-center py-2 px-4">
+            <p className="font-medium">Using your real property data from URL scraping!</p>
+          </div>
+        )}
+        <PropertyAIChat />
       </div>
     );
   }
 
-  return null;
+  // Fallback - should never reach here
+  return (
+    <div className="min-h-screen bg-red-100 flex items-center justify-center">
+      <div className="bg-white p-8 rounded-lg shadow-lg">
+        <h2 className="text-xl font-bold text-red-600 mb-4">Debug: Unexpected State</h2>
+        <p>CurrentStep: {currentStep}</p>
+        <p>ScrapedData: {scrapedData ? 'Yes' : 'No'}</p>
+        <p>ShowDemo: {showDemo ? 'Yes' : 'No'}</p>
+        <button 
+          onClick={() => {
+            setCurrentStep('input');
+            setScrapedData(null);
+            setShowDemo(false);
+          }}
+          className="mt-4 px-4 py-2 bg-blue-600 text-white rounded"
+        >
+          Reset to Input
+        </button>
+      </div>
+    </div>
+  );
 };
 
 export default DemoWithScraping;

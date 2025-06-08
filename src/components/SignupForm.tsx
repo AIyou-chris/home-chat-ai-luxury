@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../AuthContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export const SignupForm: React.FC = () => {
     const [email, setEmail] = useState('');
@@ -19,7 +19,7 @@ export const SignupForm: React.FC = () => {
             return;
         }
 
-        const { error } = await signUp(email, password, { full_name: fullName });
+        const { error } = await signUp(email, password, fullName);
         if (!error) {
             alert('Account created successfully! You are now logged in.');
             navigate('/dashboard');
